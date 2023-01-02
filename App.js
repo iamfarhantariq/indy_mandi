@@ -7,28 +7,24 @@
  */
 
 import React from 'react';
-import {
-  StatusBar,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { StatusBar, View } from 'react-native';
+import store from './src/store';
+import { Provider } from 'react-redux';
+import AppNavigation from './src/navigations/AppNavigation';
+import { persistStore } from 'redux-persist';
+import { PersistGate } from 'redux-persist/integration/react';
 
-import {
-  Colors,
-} from 'react-native/Libraries/NewAppScreen';
+let persistor = persistStore(store);
 
 const App = () => {
-  // const isDarkMode = useColorScheme() === 'dark';
-
-  // const backgroundStyle = {
-  //   backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  // };
-
   return (
-    <View style={{marginTop: StatusBar.currentHeight, flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>Hello World</Text>
-    </View>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <View style={{ flex: 1, marginTop: StatusBar.currentHeight }}>
+          <AppNavigation />
+        </View>
+      </PersistGate>
+    </Provider>
   );
 };
 

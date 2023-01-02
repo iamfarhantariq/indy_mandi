@@ -1,25 +1,23 @@
 const _colorSet = {
-  primaryColor: '#091E30',
-  secondaryColor: '#05CE78',
-  grayColor: '#596C7F',
+  primaryColorA: '#1D2451',
+  primaryColorB: '#1D2451',
+  primaryColorC: '#F4988A',
+  BGColor: '#1D2451',
+  borderLightGrayColor: '#EEEEEE',
+  textSecondary: '#858585',
+  textPlaceholderColor: '#B3B3B3',
+  redColor: '#F03D3E',
   blackColor: '#000000',
-  greenColorOne: '#1FE79656',
   whiteColor: '#FFFFFF',
 };
 
 const _fontFamily = {
-  popins: {
+  Noto: {
     regular: {
-      family: 'Poppins-Regular',
-    },
-    semiBold: {
-      family: 'Poppins-SemiBold',
-    },
-    medium: {
-      family: 'Poppins-Medium',
+      family: 'NotoSans-Regular',
     },
     bold: {
-      family: 'Poppins-Bold',
+      family: 'NotoSans-Bold',
     },
   },
 };
@@ -51,7 +49,7 @@ const _fontLineHeight = {
 };
 
 const _iconSet = {
-  homeBackground: require('../images/app_background.png'),
+  // homeBackground: require('../images/app_background.png'),
 };
 
 const AppStyle = {

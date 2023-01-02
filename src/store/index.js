@@ -1,25 +1,16 @@
-import { configureStore } from '@reduxjs/toolkit';
-import appconfigSlice from '../features/appconfig/appconfigSlice';
-import loginconfigSlice from '../features/appconfig/loginconfigSlice';
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { persistReducer } from 'redux-persist';
-import { combineReducers } from 'redux';
-import thunk from 'redux-thunk';
-import searchFilterSlice from '../features/appconfig/searchFilterSlice';
-import bookingSlice from '../features/appconfig/bookingSlice';
-
+import appConfigSlice from './slices/appConfigSlice';
 
 const reducers = combineReducers({
-  appconfig: appconfigSlice,
-  loginconfig: loginconfigSlice,
-  searchfilters: searchFilterSlice,
-  booking: bookingSlice
+  appConfig: appConfigSlice,
 });
 
 const persistConfig = {
-  key: 'gt:rootApp',
+  key: 'im:rootApp',
   storage: AsyncStorage,
-  whitelist: ['loginconfig', 'searchfilters'],
+  whitelist: ['appConfig'],
 };
 
 const persistedReducer = persistReducer(persistConfig, reducers);
@@ -27,7 +18,10 @@ const persistedReducer = persistReducer(persistConfig, reducers);
 const store = configureStore({
   reducer: persistedReducer,
   devTools: process.env.NODE_ENV !== 'production',
-  middleware: [thunk],
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    })
 });
 
 export default store;
