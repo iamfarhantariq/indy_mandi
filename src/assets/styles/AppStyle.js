@@ -1,8 +1,8 @@
 const _colorSet = {
   primaryColorA: '#1D2451',
-  primaryColorB: '#1D2451',
+  primaryColorB: '#713A74',
   primaryColorC: '#F4988A',
-  BGColor: '#1D2451',
+  BGColor: '#FBFBFB',
   borderLightGrayColor: '#EEEEEE',
   textSecondary: '#858585',
   textPlaceholderColor: '#B3B3B3',

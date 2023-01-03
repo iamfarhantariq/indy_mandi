@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { StatusBar, useColorScheme, ImageBackground } from 'react-native';
+import { StatusBar, useColorScheme, ImageBackground, View } from 'react-native';
 import StyleApp from '../assets/styles/AppStyle';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useSelector } from 'react-redux';
@@ -14,6 +14,13 @@ import SplashScreen from 'react-native-splash-screen';
 import Home from '../screens/home/Home';
 import TabHomeActive from '../assets/images/tab/home-active.svg';
 import TabHomeInActive from '../assets/images/tab/home-inactive.svg';
+import TabExploreActive from '../assets/images/tab/explore-active.svg';
+import TabExploreInActive from '../assets/images/tab/explore-inactive.svg';
+import TabProfileActive from '../assets/images/tab/profile-active.svg';
+import TabProfileInActive from '../assets/images/tab/profile-inactive.svg';
+import AppStyle from '../assets/styles/AppStyle';
+import Explore from '../screens/explore/Explore';
+import Profile from '../screens/profile/Profile';
 
 const Tab = createBottomTabNavigator();
 
@@ -41,29 +48,69 @@ function AppTabs() {
         };
     }, []);
 
+    const tabScreenProps = {
+        tabBarActiveTintColor: StyleApp.colorSet.primaryColorC,
+        tabBarInactiveTintColor: StyleApp.colorSet.borderLightGrayColor,
+        tabBarLabelPosition: 'below-icon',
+        tabBarLabelStyle: {
+            marginTop: 20,
+            fontSize: 11
+        },
+    }
+
     return (
         <Tab.Navigator
             initialRouteName="Home"
             screenOptions={{
                 tabBarStyle: {
-                    borderTopWidth: 0,
-                    backgroundColor: '#091E30',
-                    padding: 10,
+                    height: 82,
+                    backgroundColor: AppStyle.colorSet.primaryColorA,
+                    alignItems: 'center',
+                    paddingTop: 20,
+                    flexDirection: 'row'
                 },
-                title: '',
-                tabBarActiveTintColor: StyleApp.colorSet.primaryColorC,
                 headerShown: false,
             }}>
             <Tab.Screen
                 name="Home"
                 component={HomeStackScreen}
                 options={{
+                    ...tabScreenProps,
                     title: 'Home',
                     tabBarIcon: ({ focused, color, size }) =>
                         focused ? (
-                            <TabHomeActive/>
+                            <TabHomeActive />
                         ) : (
-                            <TabHomeInActive/>
+                            <TabHomeInActive />
+                        ),
+                }}
+            />
+            <Tab.Screen
+                name="Explore"
+                component={ExploreStackScreen}
+                options={{
+                    ...tabScreenProps,
+                    title: 'Explore',
+                    tabBarIcon: ({ focused, color, size }) =>
+                        focused ? (
+                            <TabExploreActive />
+                        ) : (
+                            <TabExploreInActive />
+                        ),
+                }}
+            />
+            <Tab.Screen
+                name="Profile"
+                component={ProflieStackScreen}
+                options={{
+                    ...tabScreenProps,
+                    title: 'Profile',
+
+                    tabBarIcon: ({ focused, color, size }) =>
+                        focused ? (
+                            <TabProfileActive />
+                        ) : (
+                            <TabProfileInActive />
                         ),
                 }}
             />
@@ -73,7 +120,7 @@ function AppTabs() {
 
 const HomeStack = createNativeStackNavigator();
 
-function HomeStackScreen({ navigation, route }) {
+const HomeStackScreen = ({ navigation, route }) => {
     return (
         <HomeStack.Navigator screenOptions={{ headerShown: false }}>
             <HomeStack.Screen name="HomeScreen" component={Home} />
@@ -81,31 +128,30 @@ function HomeStackScreen({ navigation, route }) {
     );
 }
 
-// const FavoriteStack = createNativeStackNavigator();
+const ExploreStack = createNativeStackNavigator();
 
-// function FavoriteStackScreen() {
-//     return (
-//         <FavoriteStack.Navigator screenOptions={{ headerShown: false }}>
-//             <FavoriteStack.Screen name="FavoriteScreen" component={Favorite} />
-//             <FavoriteStack.Screen name="ShareTrip" component={ShareTrip} />
-//         </FavoriteStack.Navigator>
-//     );
-// }
+const ExploreStackScreen = ({ navigation, route }) => {
+    return (
+        <ExploreStack.Navigator screenOptions={{ headerShown: false }}>
+            <ExploreStack.Screen name="ExploreScreen" component={Explore} />
+        </ExploreStack.Navigator>
+    );
+}
 
-// const ProfileStack = createNativeStackNavigator();
+const ProflieStack = createNativeStackNavigator();
 
-// function ProfileStackScreen() {
-//     return (
-//         <ProfileStack.Navigator screenOptions={{ headerShown: false }}>
-//             <ProfileStack.Screen name="ProfileMainScreen" component={ProfileMain} />
-//         </ProfileStack.Navigator>
-//     );
-// }
+const ProflieStackScreen = ({ navigation, route }) => {
+    return (
+        <ProflieStack.Navigator screenOptions={{ headerShown: false }}>
+            <ProflieStack.Screen name="ProfileScreen" component={Profile} />
+        </ProflieStack.Navigator>
+    );
+}
 
 const AppStack = createNativeStackNavigator();
 
-function AppNavigation() {
-    const isDarkMode = useColorScheme() === 'dark';
+const AppNavigation = () => {
+    // const isDarkMode = useColorScheme() === 'dark';
     // const appconfig = useSelector(state => state.appconfig);
 
     // const CustomToast = (props) => {
@@ -134,9 +180,9 @@ function AppNavigation() {
     return (
         <React.Fragment>
             <StatusBar
-                backgroundColor={'transparent'}
+                backgroundColor={AppStyle.colorSet.BGColor}
                 translucent={true}
-                barStyle={'light-content'}
+                barStyle="dark-content" 
             />
             <NavigationContainer>
                 <AppStack.Navigator screenOptions={{ headerShown: false }}>

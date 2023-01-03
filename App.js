@@ -20,7 +20,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <View style={{ flex: 1, marginTop: StatusBar.currentHeight }}>
+        <View style={{ flex: 1 }}>
           <AppNavigation />
         </View>
       </PersistGate>
