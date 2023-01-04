@@ -35,7 +35,7 @@ const ProductCategories = () => {
             <FlatList
                 horizontal
                 data={items}
-                key={(index) => 'header' + index + 'chip'}
+                key={(index) => 'category' + index + 'chip'}
                 renderItem={_renderItem}
                 showsHorizontalScrollIndicator={false}
             />
