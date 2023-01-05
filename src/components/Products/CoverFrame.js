@@ -1,8 +1,8 @@
-import { ImageBackground, Platform, StyleSheet, Text, View } from 'react-native'
+import { ImageBackground, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import AppStyle from '../../assets/styles/AppStyle'
 
-const CoverFrame = ({ item, index }) => {
+const CoverFrame = ({ item, index, detailed = true }) => {
     return (
         <View>
             <ImageBackground
@@ -12,17 +12,24 @@ const CoverFrame = ({ item, index }) => {
                 imageStyle={{ borderRadius: 8 }}
             >
                 <View style={styles.insideContainer}>
-                    <Text style={styles.priceText}>
-                        {item?.price}
-                    </Text>
-                    <Text style={styles.nameText}>
-                        {item?.name}
-                    </Text>
-                    <Text style={styles.subtitleText}>
-                        {item?.subtitle}
-                    </Text>
+                    {detailed ?
+                        <>
+                            <Text style={styles.priceText}>
+                                {item?.price}
+                            </Text>
+                            <Text style={styles.nameText}>
+                                {item?.name}
+                            </Text>
+                            <Text style={styles.subtitleText}>
+                                {item?.subtitle}
+                            </Text>
+                        </> :
+                        <Text style={styles.nameText}>
+                            {item?.name}
+                        </Text>
+                    }
                 </View>
-                <View style={styles.darkBackground} />
+                <View style={{ ...styles.darkBackground, height: detailed ? 70 : 35 }} />
             </ImageBackground>
         </View>
     )
@@ -47,7 +54,6 @@ const styles = StyleSheet.create({
         bottom: 0,
         left: 0,
         right: 0,
-        height: 70,
         borderBottomLeftRadius: 8,
         borderBottomRightRadius: 8,
         backgroundColor: AppStyle.colorSet.blackColor + '50'

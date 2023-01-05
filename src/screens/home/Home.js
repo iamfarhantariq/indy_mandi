@@ -5,6 +5,11 @@ import HomeHeader from '../../components/Headers/HomeHeader';
 import ProductCategories from '../../components/ProductCategories';
 import CoverSection from '../../components/Products/CoverSection';
 import ProductSection from '../../components/Products/ProductSection';
+import SellerStory from '../../components/SellerStory';
+import Email from '../../assets/images/email-icon.svg';
+import Facebook from '../../assets/images/facebook-icon.svg';
+import Instagram from '../../assets/images/insta-icon.svg';
+
 
 const Home = () => {
 
@@ -30,20 +35,35 @@ const Home = () => {
         </View>
 
         <View style={{ marginBottom: 25.5 }}>
-          <ProductSection items={items} title={'Curated for you'} />
+          <ProductSection items={items} title={'Curated for you'} color={AppStyle.colorSet.primaryColorC} />
         </View>
 
         <View style={{ marginBottom: 25.5, marginHorizontal: 16 }}>
-          <CoverSection />
+          <CoverSection title={'Indyview'} detailed={true} discoverOption={false} />
         </View>
 
         <View style={{ marginBottom: 25.5 }}>
           <ProductSection items={items} title={"Best of Editor's Pick"}
             BG={require('../../assets/images/product-section-bg.png')} />
         </View>
+
+        <View style={{ marginBottom: 25.5, marginHorizontal: 16 }}>
+          <CoverSection title={'Blogs'} detailed={false} discoverOption={true} />
+        </View>
+
+        <View style={{ marginHorizontal: 16 }}>
+          <SellerStory />
+        </View>
+
+        <View style={{ marginVertical: 45, flexDirection: 'row', marginHorizontal: '20%', justifyContent: 'space-evenly' }}>
+          <Email />
+          <Facebook />
+          <Instagram />
+        </View>
+
       </ScrollView>
     </View>
   )
 }
 
-export default Home
+export default Home;

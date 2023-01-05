@@ -4,7 +4,7 @@ import { FlatList } from 'react-native-gesture-handler'
 import AppStyle from '../../assets/styles/AppStyle'
 import GeneralProduct from './GeneralProduct'
 
-const ProductSection = ({ title, items = [], BG = '' }) => {
+const ProductSection = ({ title, items = [], BG = '', color = null }) => {
     const _renderItem = ({ item, index }) => {
         return (
             <GeneralProduct item={item} key={index} index={index} />
@@ -15,7 +15,10 @@ const ProductSection = ({ title, items = [], BG = '' }) => {
         <ImageBackground
             resizeMode='contain'
             source={BG}
-            style={{ paddingVertical: BG ? 10 : 0 }}
+            style={{
+                paddingVertical: BG || color ? 10 : 0,
+                backgroundColor: color ? color : 'transparent'
+            }}
         >
             <View>
                 <Text style={styles.heading}>{title}</Text>
