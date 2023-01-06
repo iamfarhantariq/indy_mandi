@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import AppConfig from '../../helpers/config';
 import AppLogo from '../../assets/images/app-logo.svg';
 import AppStyle from '../../assets/styles/AppStyle';

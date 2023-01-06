@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { StatusBar, useColorScheme, ImageBackground, View } from 'react-native';
+import { StatusBar, useColorScheme, ImageBackground, View, Platform } from 'react-native';
 import StyleApp from '../assets/styles/AppStyle';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useSelector } from 'react-redux';
@@ -64,7 +64,7 @@ function AppTabs() {
             initialRouteName="Home"
             screenOptions={{
                 tabBarStyle: {
-                    height: 82,
+                    height: Platform.OS === 'ios' ? 100 : 82,
                     backgroundColor: AppStyle.colorSet.primaryColorA,
                     alignItems: 'center',
                     paddingTop: 20,

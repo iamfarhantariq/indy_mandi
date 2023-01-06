@@ -1,5 +1,7 @@
-import { Dimensions, StatusBar } from 'react-native';
-
+import { Dimensions, Platform, StatusBar } from 'react-native';
+// import { useSafeAreaInsets } from 'react-native-safe-area-context';
+// const insets = useSafeAreaInsets();
+// const statusBarHeight = insets.top;
 // const BASE_API_URL = 'https://develop-geniustravel.cherimoya.be/v1';
 
 const SCREEN_WIDTH = Dimensions.get('screen').width;
@@ -7,7 +9,7 @@ const SCREEN_HEIGHT = Dimensions.get('screen').height;
 
 const WINDOW_WIDTH = Dimensions.get('window').width;
 const WINDOW_HEIGHT = Dimensions.get('window').height;
-const STATUS_BAR_HEIGHT = StatusBar.currentHeight;
+const STATUS_BAR_HEIGHT = Platform.OS === 'ios' ? 45 : StatusBar.currentHeight;
 
 const _EMAIL_REG_EXP = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
 
