@@ -2,23 +2,28 @@ import { ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react
 import React from 'react'
 import WishIcon from '../../assets/images/wish-icon.svg';
 import AppStyle from '../../assets/styles/AppStyle';
+import AppConfig from '../../helpers/config';
 
-const GeneralProduct = ({ item, index }) => {
+const GeneralProduct = ({ item, index, flex = false }) => {
+
+  const flexStyle = flex ? { ...styles.flexImageContainer } :
+    { ...styles.imageContainer, marginLeft: index === 0 ? 16 : 0 }
+
   return (
     <View>
       <ImageBackground
         resizeMode='cover'
         source={item.imageSource}
-        style={{ ...styles.imageContainer, marginLeft: index === 0 ? 16 : 0 }}
+        style={flexStyle}
         imageStyle={{ borderRadius: 8 }}
       >
         <TouchableOpacity style={{ position: 'absolute', right: 0, top: 0 }}>
           <WishIcon />
         </TouchableOpacity>
       </ImageBackground>
-      <Text style={{ ...styles.name, marginLeft: index === 0 ? 16 : 0 }}>{item?.name}</Text>
-      <View style={{ flexDirection: 'row'}}>
-        <Text style={{ ...styles.priceText, marginLeft: index === 0 ? 16 : 0 }}>
+      <Text style={{ ...styles.name, marginLeft: index === 0 && !flex ? 16 : 0 }}>{item?.name}</Text>
+      <View style={{ flexDirection: 'row' }}>
+        <Text style={{ ...styles.priceText, marginLeft: index === 0 && !flex ? 16 : 0 }}>
           {item?.price}
         </Text>
         <Text style={styles.secondPrice}>
@@ -37,6 +42,10 @@ const styles = StyleSheet.create({
     width: 136,
     marginRight: 12,
     marginBottom: 2
+  },
+  flexImageContainer: {
+    height: (AppConfig.windowWidth / 2) - 24,
+    width: (AppConfig.windowWidth / 2) - 24,
   },
   name: {
     fontSize: 12,

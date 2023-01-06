@@ -11,8 +11,7 @@ import Facebook from '../../assets/images/facebook-icon.svg';
 import Instagram from '../../assets/images/insta-icon.svg';
 
 
-const Home = () => {
-
+const Home = ({route}) => {
   const items = [
     { name: 'New Nike girl shoe', price: '$80.77', imageSource: require('../../assets/images/demo-category-image.jpeg') },
     { name: 'New Nike girl shoe', price: '$80.77', imageSource: require('../../assets/images/demo-category-image.jpeg') },
@@ -24,7 +23,7 @@ const Home = () => {
 
   return (
     <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }}>
-      <HomeHeader />
+      <HomeHeader route={route}/>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ marginTop: 16, marginBottom: 24 }}>
           <ProductCategories />

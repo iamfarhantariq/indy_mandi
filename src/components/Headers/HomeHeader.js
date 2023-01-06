@@ -1,10 +1,13 @@
 import React from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import AppConfig from '../../helpers/config';
 import AppLogo from '../../assets/images/app-logo.svg';
 import AppStyle from '../../assets/styles/AppStyle';
+import { useNavigation } from '@react-navigation/native';
 
-const HomeHeader = () => {
+const HomeHeader = ({ route }) => {
+    // const { categoryIndex } = route.params;
+    const navigation = useNavigation();
 
     const items = [
         { name: 'Clothing', color: '#C5F1C4' },
@@ -19,9 +22,11 @@ const HomeHeader = () => {
 
     const _renderItem = ({ item, index }) => {
         return (
-            <View style={{ ...styles.chipContainer, backgroundColor: item?.color, marginLeft: index === 0 ? 16 : 0 }}>
-                <Text style={styles.chipText}>{item?.name}</Text>
-            </View>
+            <TouchableOpacity onPress={() => navigation.navigate('MainCategoryScreen')}>
+                <View style={{ ...styles.chipContainer, backgroundColor: item?.color, marginLeft: index === 0 ? 16 : 0 }}>
+                    <Text style={styles.chipText}>{item?.name}</Text>
+                </View>
+            </TouchableOpacity>
         )
     }
 

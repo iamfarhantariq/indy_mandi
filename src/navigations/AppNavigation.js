@@ -21,6 +21,7 @@ import TabProfileInActive from '../assets/images/tab/profile-inactive.svg';
 import AppStyle from '../assets/styles/AppStyle';
 import Explore from '../screens/explore/Explore';
 import Profile from '../screens/profile/Profile';
+import MainCategoryScreen from '../screens/mainCategory/MainCategoryScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -124,6 +125,7 @@ const HomeStackScreen = ({ navigation, route }) => {
     return (
         <HomeStack.Navigator screenOptions={{ headerShown: false }}>
             <HomeStack.Screen name="HomeScreen" component={Home} />
+            <HomeStack.Screen name="MainCategoryScreen" component={MainCategoryScreen} />
         </HomeStack.Navigator>
     );
 }
