@@ -22,6 +22,8 @@ import AppStyle from '../assets/styles/AppStyle';
 import Explore from '../screens/explore/Explore';
 import Profile from '../screens/profile/Profile';
 import MainCategoryScreen from '../screens/mainCategory/MainCategoryScreen';
+import Blogs from '../screens/blogs/Blogs';
+import AppConfig from '../helpers/config';
 
 const Tab = createBottomTabNavigator();
 
@@ -64,7 +66,7 @@ function AppTabs() {
             initialRouteName="Home"
             screenOptions={{
                 tabBarStyle: {
-                    height: Platform.OS === 'ios' ? 100 : 82,
+                    height: AppConfig.bottomTabsHeight,
                     backgroundColor: AppStyle.colorSet.primaryColorA,
                     alignItems: 'center',
                     paddingTop: 20,
@@ -136,6 +138,7 @@ const ExploreStackScreen = ({ navigation, route }) => {
     return (
         <ExploreStack.Navigator screenOptions={{ headerShown: false }}>
             <ExploreStack.Screen name="ExploreScreen" component={Explore} />
+            <ExploreStack.Screen name="BlogsScreen" component={Blogs} />
         </ExploreStack.Navigator>
     );
 }
@@ -184,7 +187,7 @@ const AppNavigation = () => {
             <StatusBar
                 backgroundColor={AppStyle.colorSet.BGColor}
                 translucent={true}
-                barStyle="dark-content" 
+                barStyle="dark-content"
             />
             <NavigationContainer>
                 <AppStack.Navigator screenOptions={{ headerShown: false }}>

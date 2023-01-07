@@ -1,14 +1,19 @@
 import { ImageBackground, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import AppStyle from '../../assets/styles/AppStyle'
+import AppConfig from '../../helpers/config'
 
-const CoverFrame = ({ item, index, detailed = true }) => {
+const CoverFrame = ({ item, index, detailed = true, flex = false }) => {
+
+    const flexStyle = flex ? { ...styles.flexImageContainer } :
+        { ...styles.imageContainer }
+
     return (
         <View>
             <ImageBackground
                 resizeMode='cover'
                 source={require('../../assets/images/demo-cover-bg.png')}
-                style={styles.imageContainer}
+                style={flexStyle}
                 imageStyle={{ borderRadius: 8 }}
             >
                 <View style={styles.insideContainer}>
@@ -42,6 +47,10 @@ const styles = StyleSheet.create({
         height: 303,
         width: 303,
         marginRight: 12,
+    },
+    flexImageContainer: {
+        height: AppConfig.windowWidth - (16 * 2),
+        width: AppConfig.windowWidth - (16 * 2),
     },
     insideContainer: {
         position: 'absolute',
