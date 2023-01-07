@@ -1,9 +1,11 @@
-import { FlatList, ImageBackground, StyleSheet, Text, View } from 'react-native'
+import { FlatList, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import AppStyle from '../../assets/styles/AppStyle'
 import CoverFrame from './CoverFrame'
+import { useNavigation } from '@react-navigation/native'
 
 const CoverSection = ({ title, detailed = true, discoverOption }) => {
+    const navigation = useNavigation();
 
     const items = [
         { price: '$89.99', name: 'Floran shiffon dress', subtitle: 'All birds Couture, Calcutta', imageSource: require('../../assets/images/demo-cover-bg.png') },
@@ -12,7 +14,9 @@ const CoverSection = ({ title, detailed = true, discoverOption }) => {
 
     const _renderItem = ({ item, index }) => {
         return (
-            <CoverFrame item={item} key={index} index={index} detailed={detailed} />
+            <TouchableOpacity onPress={() => navigation.navigate('BlogContentScreen')}>
+                <CoverFrame item={item} index={index} detailed={detailed} />
+            </TouchableOpacity>
         )
     }
 

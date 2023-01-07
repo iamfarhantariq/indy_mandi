@@ -51,9 +51,9 @@ const Blogs = () => {
             <ScrollView showsVerticalScrollIndicator={false} style={{ marginHorizontal: 16 }}>
                 {coverItems?.map((item, index) => {
                     return (
-                        <View style={{ marginBottom: 16 }}>
+                        <TouchableOpacity onPress={() => navigation.navigate('BlogContentScreen')} key={index} style={{ marginBottom: 16 }}>
                             <CoverFrame item={item} key={index} index={index} detailed={false} flex={true} />
-                        </View>
+                        </TouchableOpacity>
                     )
                 })}
             </ScrollView>

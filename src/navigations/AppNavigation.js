@@ -1,15 +1,10 @@
 import React, { useEffect } from 'react';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { StatusBar, useColorScheme, ImageBackground, View, Platform } from 'react-native';
+import { StatusBar} from 'react-native';
 import StyleApp from '../assets/styles/AppStyle';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useSelector } from 'react-redux';
-// import LoadingScreen from '../components/LoadingScreen';
 import { BackHandler } from 'react-native';
-import { useDispatch } from 'react-redux';
-// import Toast, {BaseToast} from 'react-native-toast-message';
-// import {setActivityIndicator} from '../features/appconfig/appconfigSlice';
 import SplashScreen from 'react-native-splash-screen';
 import Home from '../screens/home/Home';
 import TabHomeActive from '../assets/images/tab/home-active.svg';
@@ -24,15 +19,14 @@ import Profile from '../screens/profile/Profile';
 import MainCategoryScreen from '../screens/mainCategory/MainCategoryScreen';
 import Blogs from '../screens/blogs/Blogs';
 import AppConfig from '../helpers/config';
+import BlogContent from '../screens/blogContent/BlogContent';
 
 const Tab = createBottomTabNavigator();
 
 function AppTabs() {
     const navigation = useNavigation();
-    const dispatch = useDispatch();
 
     function handleBackButtonClick() {
-        dispatch(setActivityIndicator(false));
         if (navigation.canGoBack()) {
             navigation.goBack();
         } else {
@@ -128,6 +122,7 @@ const HomeStackScreen = ({ navigation, route }) => {
         <HomeStack.Navigator screenOptions={{ headerShown: false }}>
             <HomeStack.Screen name="HomeScreen" component={Home} />
             <HomeStack.Screen name="MainCategoryScreen" component={MainCategoryScreen} />
+            <ExploreStack.Screen name="BlogContentScreen" component={BlogContent} />
         </HomeStack.Navigator>
     );
 }
@@ -139,6 +134,7 @@ const ExploreStackScreen = ({ navigation, route }) => {
         <ExploreStack.Navigator screenOptions={{ headerShown: false }}>
             <ExploreStack.Screen name="ExploreScreen" component={Explore} />
             <ExploreStack.Screen name="BlogsScreen" component={Blogs} />
+            <ExploreStack.Screen name="BlogContentScreen" component={BlogContent} />
         </ExploreStack.Navigator>
     );
 }
@@ -185,7 +181,7 @@ const AppNavigation = () => {
     return (
         <React.Fragment>
             <StatusBar
-                backgroundColor={AppStyle.colorSet.BGColor}
+                backgroundColor={'transparent'}
                 translucent={true}
                 barStyle="dark-content"
             />
