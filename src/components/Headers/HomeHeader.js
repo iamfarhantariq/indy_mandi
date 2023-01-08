@@ -22,7 +22,7 @@ const HomeHeader = ({ route }) => {
 
     const _renderItem = ({ item, index }) => {
         return (
-            <TouchableOpacity onPress={() => navigation.navigate('MainCategoryScreen')}>
+            <TouchableOpacity onPress={() => navigation.navigate('NestedCategoriesTypeScreen')}>
                 <View style={{ ...styles.chipContainer, backgroundColor: item?.color, marginLeft: index === 0 ? 16 : 0 }}>
                     <Text style={styles.chipText}>{item?.name}</Text>
                 </View>

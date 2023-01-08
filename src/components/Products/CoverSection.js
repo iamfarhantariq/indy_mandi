@@ -24,7 +24,11 @@ const CoverSection = ({ title, detailed = true, discoverOption }) => {
         <View>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Text style={styles.heading}>{title}</Text>
-                {discoverOption && <Text style={styles.discoverText}>Discover</Text>}
+                {discoverOption &&
+                    <TouchableOpacity onPress={() => navigation.navigate('BlogsScreen')}>
+                        <Text style={styles.discoverText}>Discover</Text>
+                    </TouchableOpacity>
+                }
             </View>
             <FlatList
                 horizontal

@@ -51,7 +51,7 @@ const Home = ({route}) => {
         </View>
 
         <View style={{ marginHorizontal: 16 }}>
-          <SellerStory />
+          <SellerStory title={'Seller Story'}/>
         </View>
 
         <View style={{ marginVertical: 45, flexDirection: 'row', marginHorizontal: '20%', justifyContent: 'space-evenly' }}>

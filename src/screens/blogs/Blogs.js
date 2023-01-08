@@ -35,7 +35,7 @@ const Blogs = () => {
 
     return (
         <View style={{ backgroundColor: AppStyle.colorSet.BGColor, flex: 1 }}>
-            <HeaderWithBack title={'Blogs'} />
+            <HeaderWithBack title={'Blogs'} cross={true}/>
             <View style={{ marginHorizontal: 16, marginVertical: 18 }}>
                 <InputField value={search} onTextChange={(t) => setSearch(t)} filterIcon={true} />
             </View>

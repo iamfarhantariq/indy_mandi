@@ -1,11 +1,13 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import AppStyle from '../assets/styles/AppStyle'
+import { useNavigation } from '@react-navigation/native'
 
-const SellerStory = () => {
+const SellerStory = ({ title = null }) => {
+    const navigation = useNavigation();
     return (
         <View>
-            <Text style={styles.heading}>Seller Story</Text>
+            {title && <Text style={styles.heading}>{title}</Text>}
             <View style={styles.container}>
                 <View style={styles.imageContainer}>
                     <Image resizeMode='contain'
@@ -22,9 +24,9 @@ const SellerStory = () => {
                     <Text style={styles.whiteText}>
                         {"Read Rohit's story >"}
                     </Text>
-                    <View style={styles.button}>
+                    <TouchableOpacity onPress={() => navigation.navigate('SellerStoriesScreen')} style={styles.button}>
                         <Text style={styles.whiteText}>Become a Seller</Text>
-                    </View>
+                    </TouchableOpacity>
                 </View>
             </View>
         </View>

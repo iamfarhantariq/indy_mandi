@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { StatusBar} from 'react-native';
+import { StatusBar } from 'react-native';
 import StyleApp from '../assets/styles/AppStyle';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { BackHandler } from 'react-native';
@@ -20,10 +20,13 @@ import MainCategoryScreen from '../screens/mainCategory/MainCategoryScreen';
 import Blogs from '../screens/blogs/Blogs';
 import AppConfig from '../helpers/config';
 import BlogContent from '../screens/blogContent/BlogContent';
+import NestedCategoryScreen from '../screens/nestedCategories/NestedCategoryScreen';
+import SellerStories from '../screens/sellerStories/SellerStories';
+import SellerStoryContent from '../screens/sellerStoryContent/SellerStoryContent';
 
 const Tab = createBottomTabNavigator();
 
-function AppTabs() {
+const AppTabs = () => {
     const navigation = useNavigation();
 
     function handleBackButtonClick() {
@@ -122,7 +125,8 @@ const HomeStackScreen = ({ navigation, route }) => {
         <HomeStack.Navigator screenOptions={{ headerShown: false }}>
             <HomeStack.Screen name="HomeScreen" component={Home} />
             <HomeStack.Screen name="MainCategoryScreen" component={MainCategoryScreen} />
-            <ExploreStack.Screen name="BlogContentScreen" component={BlogContent} />
+            <HomeStack.Screen name="BlogsScreen" component={Blogs} />
+            <HomeStack.Screen name="SellerStoriesScreen" component={SellerStories} />
         </HomeStack.Navigator>
     );
 }
@@ -134,7 +138,6 @@ const ExploreStackScreen = ({ navigation, route }) => {
         <ExploreStack.Navigator screenOptions={{ headerShown: false }}>
             <ExploreStack.Screen name="ExploreScreen" component={Explore} />
             <ExploreStack.Screen name="BlogsScreen" component={Blogs} />
-            <ExploreStack.Screen name="BlogContentScreen" component={BlogContent} />
         </ExploreStack.Navigator>
     );
 }
@@ -192,6 +195,9 @@ const AppNavigation = () => {
                         name="AppTabs"
                         component={AppTabs}
                     />
+                    <AppStack.Screen name="BlogContentScreen" component={BlogContent} />
+                    <AppStack.Screen name="NestedCategoriesTypeScreen" component={NestedCategoryScreen} />
+                    <AppStack.Screen name="SellerStoryContentScreen" component={SellerStoryContent} />
                 </AppStack.Navigator>
             </NavigationContainer>
 
