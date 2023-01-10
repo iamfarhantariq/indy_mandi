@@ -43,7 +43,8 @@ const Home = ({route}) => {
 
         <View style={{ marginBottom: 25.5 }}>
           <ProductSection items={items} title={"Best of Editor's Pick"}
-            BG={require('../../assets/images/product-section-bg.png')} />
+            BG={require('../../assets/images/product-section-bg.png')}
+            route={'EditorChoiceScreen'} />
         </View>
 
         <View style={{ marginBottom: 25.5, marginHorizontal: 16 }}>

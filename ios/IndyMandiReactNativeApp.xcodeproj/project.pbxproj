@@ -13,6 +13,8 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		417658ECC74444FD9A12DBB2 /* NotoSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E703F401FC13448E832C5F89 /* NotoSans-Bold.ttf */; };
+		4C8FCE8D296DEBC200A62F4D /* NotoSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E703F401FC13448E832C5F89 /* NotoSans-Bold.ttf */; };
+		4C8FCE8E296DEBC200A62F4D /* NotoSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E42B74F6FD724209B78F5517 /* NotoSans-Regular.ttf */; };
 		7699B88040F8A987B510C191 /* libPods-IndyMandiReactNativeApp-IndyMandiReactNativeAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-IndyMandiReactNativeApp-IndyMandiReactNativeAppTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		F74729D95C8B48D2B4514D60 /* NotoSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E42B74F6FD724209B78F5517 /* NotoSans-Regular.ttf */; };
@@ -249,6 +251,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C8FCE8D296DEBC200A62F4D /* NotoSans-Bold.ttf in Resources */,
+				4C8FCE8E296DEBC200A62F4D /* NotoSans-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
