@@ -51,13 +51,13 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1
     },
     imageContainer: {
-        height: 56,
-        width: 56,
+        height: 70,
+        width: 70,
         marginRight: 8,
     },
     chipContainer: {
-        height: 56,
-        width: 56,
+        height: 70,
+        width: 70,
         borderRadius: 50,
         alignItems: 'center',
         justifyContent: 'center',

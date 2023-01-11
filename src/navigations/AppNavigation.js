@@ -24,6 +24,7 @@ import NestedCategoryScreen from '../screens/nestedCategories/NestedCategoryScre
 import SellerStories from '../screens/sellerStories/SellerStories';
 import SellerStoryContent from '../screens/sellerStoryContent/SellerStoryContent';
 import EditorChoiceScreen from '../screens/editorChoice/EditorChoiceScreen';
+import CuratedForYou from '../screens/curatedForYou/CuratedForYou';
 
 const Tab = createBottomTabNavigator();
 
@@ -200,6 +201,7 @@ const AppNavigation = () => {
                     <AppStack.Screen name="NestedCategoriesTypeScreen" component={NestedCategoryScreen} />
                     <AppStack.Screen name="SellerStoryContentScreen" component={SellerStoryContent} />
                     <AppStack.Screen name="EditorChoiceScreen" component={EditorChoiceScreen} />
+                    <AppStack.Screen name="CuratedForYouScreen" component={CuratedForYou} />
                 </AppStack.Navigator>
             </NavigationContainer>
 

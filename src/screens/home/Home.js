@@ -11,7 +11,7 @@ import Facebook from '../../assets/images/facebook-icon.svg';
 import Instagram from '../../assets/images/insta-icon.svg';
 
 
-const Home = ({route}) => {
+const Home = ({ route }) => {
   const items = [
     { name: 'New Nike girl shoe', price: '$80.77', imageSource: require('../../assets/images/demo-category-image.jpeg') },
     { name: 'New Nike girl shoe', price: '$80.77', imageSource: require('../../assets/images/demo-category-image.jpeg') },
@@ -23,7 +23,7 @@ const Home = ({route}) => {
 
   return (
     <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }}>
-      <HomeHeader route={route}/>
+      <HomeHeader route={route} />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ marginTop: 16, marginBottom: 24 }}>
           <ProductCategories />
@@ -34,7 +34,8 @@ const Home = ({route}) => {
         </View>
 
         <View style={{ marginBottom: 25.5 }}>
-          <ProductSection items={items} title={'Curated for you'} color={AppStyle.colorSet.primaryColorC} />
+          <ProductSection items={items} title={'Curated for you'} color={AppStyle.colorSet.primaryColorC}
+            route={'CuratedForYouScreen'} />
         </View>
 
         <View style={{ marginBottom: 25.5, marginHorizontal: 16 }}>
@@ -52,7 +53,7 @@ const Home = ({route}) => {
         </View>
 
         <View style={{ marginHorizontal: 16 }}>
-          <SellerStory title={'Seller Story'}/>
+          <SellerStory title={'Seller Story'} />
         </View>
 
         <View style={{ marginVertical: 45, flexDirection: 'row', marginHorizontal: '20%', justifyContent: 'space-evenly' }}>
