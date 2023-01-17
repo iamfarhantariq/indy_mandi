@@ -3,14 +3,15 @@ import React from 'react'
 import WishIcon from '../../assets/images/wish-icon.svg';
 import AppStyle from '../../assets/styles/AppStyle';
 import AppConfig from '../../helpers/config';
+import { useNavigation } from '@react-navigation/native';
 
 const GeneralProduct = ({ item, index, flex = false }) => {
-
+  const navigation = useNavigation();
   const flexStyle = flex ? { ...styles.flexImageContainer } :
     { ...styles.imageContainer, marginLeft: index === 0 ? 16 : 0 }
 
   return (
-    <View>
+    <TouchableOpacity onPress={()=> navigation.navigate('ProductDetailScreen')}>
       <ImageBackground
         resizeMode='cover'
         source={item.imageSource}
@@ -30,7 +31,7 @@ const GeneralProduct = ({ item, index, flex = false }) => {
           $98.99
         </Text>
       </View>
-    </View>
+    </TouchableOpacity>
   )
 }
 
