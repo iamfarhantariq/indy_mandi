@@ -1,8 +1,9 @@
 import { Image, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import AppConfig from '../../helpers/config';
-import Back from '../../assets/images/back-icon.svg';
-import Carousel from 'react-native-snap-carousel';
+// import Back from '../../assets/images/back-icon.svg';
+// import Carousel from 'react-native-snap-carousel';
+import ImageHeader from '../Headers/ImageHeader';
 
 const ImagesSlider = () => {
   const [activeSlide, setActiveSlider] = useState(0);
@@ -13,37 +14,37 @@ const ImagesSlider = () => {
     "https://source.unsplash.com/1024x768/?tree",
   ]
 
-  const _renderItem = ({ item, index }) => (
-    <Image source={item} resizeMode='cover' />
-  )
+  // const _renderItem = ({ item, index }) => (
+  //   <Image source={item} resizeMode='cover' />
+  // )
 
-  const Pagination = () => {
-    const { entries, activeSlide } = this.state;
-    return (
-      <Pagination
-        dotsLength={images.length}
-        activeDotIndex={activeSlide}
-        containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }}
-        dotStyle={{
-          width: 10,
-          height: 10,
-          borderRadius: 5,
-          marginHorizontal: 8,
-          backgroundColor: 'rgba(255, 255, 255, 0.92)'
-        }}
-        inactiveDotStyle={{
-          // Define styles for inactive dots here
-        }}
-        inactiveDotOpacity={0.4}
-        inactiveDotScale={0.6}
-      />
-    );
-  }
+  // const Pagination = () => {
+  //   const { entries, activeSlide } = this.state;
+  //   return (
+  //     <Pagination
+  //       dotsLength={images.length}
+  //       activeDotIndex={activeSlide}
+  //       containerStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.75)' }}
+  //       dotStyle={{
+  //         width: 10,
+  //         height: 10,
+  //         borderRadius: 5,
+  //         marginHorizontal: 8,
+  //         backgroundColor: 'rgba(255, 255, 255, 0.92)'
+  //       }}
+  //       inactiveDotStyle={{
+  //         // Define styles for inactive dots here
+  //       }}
+  //       inactiveDotOpacity={0.4}
+  //       inactiveDotScale={0.6}
+  //     />
+  //   );
+  // }
 
 
   return (
     <View>
-      <View style={styles.imageSliderContainer}>
+      {/* <View style={styles.imageSliderContainer}>
         <Carousel
           data={images}
           renderItem={_renderItem}
@@ -53,9 +54,8 @@ const ImagesSlider = () => {
         <TouchableOpacity onPress={() => navigation.pop()}>
           <Back />
         </TouchableOpacity>
-      </View>
-
-      <Text>ImagesSlider</Text>
+      </View> */}
+      <ImageHeader />
     </View>
   )
 }

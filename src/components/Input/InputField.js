@@ -10,6 +10,7 @@ import {
 import AppStyle from '../../assets/styles/AppStyle';
 import ClearAll from '../../assets/images/clear-all-icon.svg';
 import SortIcon from '../../assets/images/sort-icon.svg'
+import SmallButton from '../SmallButton';
 
 function InputField({
     value = '',
@@ -19,13 +20,20 @@ function InputField({
     onTextChange,
     secure = false,
     dark = false,
-    handleDone = null
+    handleDone = null,
+    leftButton = false,
+    leftButtonText = '',
+    handleLeftButton = null,
+    solidBorder = false,
 }) {
     const [openFilters, setOpenFilters] = useState(false);
 
     return (
         <View style={styles.container}>
-            <View style={{ ...styles.inputView, height: dark ? 44 : 40 }}>
+            <View style={{
+                ...styles.inputView, height: dark ? 44 : 40,
+                borderColor: solidBorder ? AppStyle.colorSet.primaryColorB : AppStyle.colorSet.borderLightGrayColor
+            }}>
                 <TextInput style={styles.input} secureTextEntry={secure} value={value} placeholder={placeholder}
                     placeholderTextColor={AppStyle.colorSet.textPlaceholderColor}
                     onSubmitEditing={(i) => {
@@ -41,6 +49,10 @@ function InputField({
                     <TouchableOpacity style={{ padding: 10 }} onPress={() => onTextChange('')}>
                         <ClearAll />
                     </TouchableOpacity>}
+                {leftButton &&
+                    <View style={{ marginRight: 10 }}>
+                        <SmallButton text={leftButtonText} fill={true} handleClick={handleLeftButton} />
+                    </View>}
             </View>
             {filterIcon &&
                 <TouchableOpacity onPress={() => setOpenFilters(true)} style={{ marginLeft: 8 }}>
@@ -59,10 +71,9 @@ const styles = StyleSheet.create({
     inputView: {
         flex: 1,
         borderWidth: 1,
-        borderColor: AppStyle.colorSet.borderLightGrayColor,
         borderRadius: 20,
         backgroundColor: AppStyle.colorSet.BGColor,
-        alignItems: 'flex-end',
+        alignItems: 'center',
         justifyContent: 'space-between',
         flexDirection: 'row',
     },

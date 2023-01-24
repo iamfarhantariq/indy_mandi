@@ -1,4 +1,5 @@
 import moment from 'moment';
+import AppStyle from '../assets/styles/AppStyle';
 
 /**
  * Get random package from array.
@@ -66,3 +67,7 @@ export const getPager = (totalItems, currentPage = 1, pageSize = 15) => {
     pages: pages,
   };
 };
+
+export const commonStyle = (fontWeight, fontSize, color) => ({
+  fontWeight, fontSize, color: AppStyle.colorSet[color]
+})
