@@ -1,4 +1,4 @@
-import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import AppStyle from '../../assets/styles/AppStyle'
 import BackLarge from '../../assets/images/back-large.svg';
@@ -15,40 +15,42 @@ const Store = () => {
 
     return (
         <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }}>
-            <ImageBackground
-                resizeMode='cover'
-                source={require('../../assets/images/demo-cover-bg.png')}
-                style={styles.imageContainer}
-            >
-                <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.pop()}>
-                    <BackLarge />
-                </TouchableOpacity>
+            {/* <ScrollView style={{ borderColor: 'red', borderWidth: 6 }} showsVerticalScrollIndicator={false}> */}
+                <ImageBackground
+                    resizeMode='cover'
+                    source={require('../../assets/images/demo-cover-bg.png')}
+                    style={styles.imageContainer}
+                >
+                    <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.pop()}>
+                        <BackLarge />
+                    </TouchableOpacity>
 
-                <View style={styles.profileContainer}>
-                    <Image
-                        source={require('../../assets/images/demo-category-image.jpeg')}
-                        resizeMode='cover'
-                        style={styles.imageStyle}
-                    />
-                </View>
-            </ImageBackground>
-            <View style={{ marginHorizontal: 16, marginBottom: 16 }}>
-                <Text style={styles.name}>Nike - Original store</Text>
-                <Text style={styles.description}>From men to ladies, wide range of variety</Text>
-                <Text style={styles.description}>Ahmedabad, Gujarat</Text>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <View style={{ height: 20, width: 90 }}>
-                        <StarRating rating={4} />
+                    <View style={styles.profileContainer}>
+                        <Image
+                            source={require('../../assets/images/demo-category-image.jpeg')}
+                            resizeMode='cover'
+                            style={styles.imageStyle}
+                        />
                     </View>
-                    <Text style={styles.ratingText}>(4/5) 500 sales</Text>
+                </ImageBackground>
+                <View style={{ marginHorizontal: 16, marginBottom: 16 }}>
+                    <Text style={styles.name}>Nike - Original store</Text>
+                    <Text style={styles.description}>From men to ladies, wide range of variety</Text>
+                    <Text style={styles.description}>Ahmedabad, Gujarat</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <View style={{ height: 20, width: 90 }}>
+                            <StarRating rating={4} />
+                        </View>
+                        <Text style={styles.ratingText}>(4/5) 500 sales</Text>
+                    </View>
                 </View>
-            </View>
-            <View style={{ marginHorizontal: 16, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <StoreDetail Icon={<Van />} text={'Smooth Dispatcher'} description='Has a history of dispatching orders on time' />
-                <StoreDetail Icon={<Response />} text={'Speedy Replies'} description='Has a history of dispatching orders on time' />
-            </View>
-
-            <TabViewSection />
+                <View style={{ marginHorizontal: 16, flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <StoreDetail Icon={<Van />} text={'Smooth Dispatcher'} description='Has a history of dispatching orders on time' />
+                    <StoreDetail Icon={<Response />} text={'Speedy Replies'} description='Has a history of dispatching orders on time' />
+                </View>
+                
+                <TabViewSection />
+            {/* </ScrollView> */}
         </View>
     )
 }

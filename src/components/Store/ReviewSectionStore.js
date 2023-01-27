@@ -1,11 +1,11 @@
-import { FlatList, Image, StyleSheet, Text, View } from 'react-native'
+import { FlatList, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { commonStyle } from '../../helpers/common'
-import AppStyle from '../../assets/styles/AppStyle'
-import SmallButton from '../SmallButton'
-import ReviewItem from './ReviewItem'
+import InputField from '../Input/InputField'
+import { useState } from 'react';
+import ReviewItem from './ReviewItem';
 
-const Reviews = () => {
+const ReviewSectionStore = () => {
+    const [search, setSearch] = useState('');
 
     const data = [
         {
@@ -39,28 +39,24 @@ const Reviews = () => {
     )
 
     return (
-        <View style={{ marginHorizontal: 16 }}>
-            <Text style={styles.title}>Reviews (487)</Text>
-            <FlatList
-                data={data}
-                nestedScrollEnabled
-                key={index => 'review' + index + 'item'}
-                renderItem={_renderItem}
-                horizontal={false}
-                showsHorizontalScrollIndicator={false}
-            />
-            <View style={{ marginVertical: 8 }}>
-                <SmallButton text={'See all reviews'} />
+        <View style={{ marginVertical: 16 }}>
+            <InputField value={search} onTextChange={(t) => setSearch(t)} placeholder={'Search'}
+                filterIcon={true} filterHandler={() => null} />
+
+            <View style={{ marginVertical: 16 }}>
+                <FlatList
+                    data={data}
+                    nestedScrollEnabled
+                    key={index => 'review' + index + 'item'}
+                    renderItem={_renderItem}
+                    horizontal={false}
+                    showsHorizontalScrollIndicator={false}
+                />
             </View>
         </View>
     )
 }
 
-export default Reviews
+export default ReviewSectionStore
 
-const styles = StyleSheet.create({
-    title: {
-        ...commonStyle('600', 14, 'primaryColorA'),
-        marginBottom: 8
-    }
-})
+const styles = StyleSheet.create({})
