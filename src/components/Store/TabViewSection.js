@@ -1,4 +1,4 @@
-import { StyleSheet, Text, useWindowDimensions, View } from 'react-native'
+import { Platform, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { TabView, SceneMap } from 'react-native-tab-view';
 import TabBar from 'react-native-tab-view/src/TabBar';
@@ -8,9 +8,9 @@ import ProductSectionStore from './ProductSectionStore';
 import ReviewSectionStore from './ReviewSectionStore';
 import AboutSectionStore from './AboutSectionStore';
 import PolicySectionStore from './PolicySectionStore';
+import AppConfig from '../../helpers/config';
 
 const TabViewSection = () => {
-    const layout = useWindowDimensions();
 
     const [index, setIndex] = React.useState(0);
     const [routes] = React.useState([
@@ -52,30 +52,34 @@ const TabViewSection = () => {
     });
 
     return (
-        <TabView
-            navigationState={{ index, routes }}
-            renderScene={renderScene}
-            onIndexChange={setIndex}
-            initialLayout={{ width: layout.width }}
-            renderTabBar={props => (
-                <TabBar
-                    {...props} style={styles.tabBarStyle}
-                    indicatorStyle={{
-                        backgroundColor: AppStyle.colorSet.blackColor,
-                    }}
-                    renderLabel={({ focused, route }) => (
-                        <Text
-                            style={{
-                                ...styles.tabBarLabel,
-                                opacity: focused ? 1 : 0.5
-                            }}>
-                            {route.title}
-                        </Text>
-                    )}
-                />
-            )}
-            style={{ marginTop: 20, marginHorizontal: 16 }}
-        />
+        <View style={{
+            height: AppConfig.screenHeight - (Platform.OS === 'ios' ? 20 : 50)
+        }}>
+            <TabView
+                navigationState={{ index, routes }}
+                renderScene={renderScene}
+                onIndexChange={setIndex}
+                initialLayout={{ width: AppConfig.screenWidth, flex: 1 }}
+                renderTabBar={props => (
+                    <TabBar
+                        {...props} style={styles.tabBarStyle}
+                        indicatorStyle={{
+                            backgroundColor: AppStyle.colorSet.blackColor,
+                        }}
+                        renderLabel={({ focused, route }) => (
+                            <Text
+                                style={{
+                                    ...styles.tabBarLabel,
+                                    opacity: focused ? 1 : 0.5
+                                }}>
+                                {route.title}
+                            </Text>
+                        )}
+                    />
+                )}
+                style={{ marginTop: 20, marginHorizontal: 16 }}
+            />
+        </View>
     )
 }
 
@@ -84,9 +88,6 @@ export default TabViewSection
 const styles = StyleSheet.create({
     tabBarStyle: {
         backgroundColor: AppStyle.colorSet.BGColor,
-        // flex: 1, 
-        // borderColor: 'red', 
-        // borderWidth: 1
     },
     tabBarLabel: {
         ...commonStyle('500', 12, 'blackColor')

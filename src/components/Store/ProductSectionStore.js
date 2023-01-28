@@ -15,6 +15,11 @@ const ProductSectionStore = () => {
         { name: 'New Nike girl shoe', price: '$80.77', imageSource: require('../../assets/images/demo-category-image.jpeg') },
         { name: 'New Nike girl shoe', price: '$80.77', imageSource: require('../../assets/images/demo-category-image.jpeg') },
         { name: 'New Nike girl shoe', price: '$80.77', imageSource: require('../../assets/images/demo-category-image.jpeg') },
+        { name: 'New Nike girl shoe', price: '$80.77', imageSource: require('../../assets/images/demo-category-image.jpeg') },
+        { name: 'New Nike girl shoe', price: '$80.77', imageSource: require('../../assets/images/demo-category-image.jpeg') },
+        { name: 'New Nike girl shoe', price: '$80.77', imageSource: require('../../assets/images/demo-category-image.jpeg') },
+        { name: 'New Nike girl shoe', price: '$80.77', imageSource: require('../../assets/images/demo-category-image.jpeg') },
+        { name: 'New Nike girl shoe', price: '$80.77', imageSource: require('../../assets/images/demo-category-image.jpeg') },
     ]
 
     const _renderItem = ({ item, index }) => {
@@ -34,18 +39,19 @@ const ProductSectionStore = () => {
     )
 
     return (
-        <View style={{ marginVertical: 16 }}>
+        <View style={{ flex: 1, paddingTop: 16 }}>
             <InputField value={search} onTextChange={(t) => setSearch(t)} placeholder={'Search'} />
-            <FlatList
-                data={['All', 'On-sale', 'New year']}
-                horizontal
-                renderItem={ProductType}
-                key={index => 'type' + index + 'product'}
-                showsHorizontalScrollIndicator={false}
-                style={{ marginTop: 16 }}
-                nestedScrollEnabled
-            />
-            <View style={{height: 'auto'}}>
+            <View style={{ marginVertical: 16 }}>
+                <FlatList
+                    data={['All', 'On-sale', 'New year']}
+                    horizontal
+                    renderItem={ProductType}
+                    key={index => 'type' + index + 'product'}
+                    showsHorizontalScrollIndicator={false}
+                    nestedScrollEnabled
+                />
+            </View>
+            <View style={{ flex: 1, marginBottom: 16 }}>
                 <FlatList
                     data={items}
                     nestedScrollEnabled
@@ -53,7 +59,9 @@ const ProductSectionStore = () => {
                     renderItem={_renderItem}
                     horizontal={false}
                     numColumns={2}
+                    scrollEnabled
                     showsVerticalScrollIndicator={false}
+                    style={{ paddingVertical: 16 }}
                 />
             </View>
         </View>

@@ -15,7 +15,10 @@ const Store = () => {
 
     return (
         <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }}>
-            {/* <ScrollView style={{ borderColor: 'red', borderWidth: 6 }} showsVerticalScrollIndicator={false}> */}
+            <ScrollView
+            // style={{backgroundColor: 'red'}}
+                // contentContainerStyle={{ height: AppConfig.screenHeight }}
+                showsVerticalScrollIndicator={false}>
                 <ImageBackground
                     resizeMode='cover'
                     source={require('../../assets/images/demo-cover-bg.png')}
@@ -48,9 +51,8 @@ const Store = () => {
                     <StoreDetail Icon={<Van />} text={'Smooth Dispatcher'} description='Has a history of dispatching orders on time' />
                     <StoreDetail Icon={<Response />} text={'Speedy Replies'} description='Has a history of dispatching orders on time' />
                 </View>
-                
                 <TabViewSection />
-            {/* </ScrollView> */}
+            </ScrollView>
         </View>
     )
 }

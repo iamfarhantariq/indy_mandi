@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native'
+import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import InputField from '../Input/InputField'
 import { useState } from 'react';
@@ -39,11 +39,11 @@ const ReviewSectionStore = () => {
     )
 
     return (
-        <View style={{ marginVertical: 16 }}>
+        <View style={{ flex: 1, marginVertical: 16 }}>
             <InputField value={search} onTextChange={(t) => setSearch(t)} placeholder={'Search'}
                 filterIcon={true} filterHandler={() => null} />
 
-            <View style={{ marginVertical: 16 }}>
+            <View style={{ flex: 1, marginVertical: 16 }}>
                 <FlatList
                     data={data}
                     nestedScrollEnabled
