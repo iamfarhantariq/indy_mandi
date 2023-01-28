@@ -25,17 +25,26 @@ function InputField({
     leftButtonText = '',
     handleLeftButton = null,
     solidBorder = false,
+    numberOfLines = 1,
+    inputMode = 'text',
+    keyboardType = 'default'
 }) {
     const [openFilters, setOpenFilters] = useState(false);
 
     return (
         <View style={styles.container}>
             <View style={{
-                ...styles.inputView, height: dark ? 44 : 40,
+                ...styles.inputView, height: numberOfLines > 1 ? 44 * numberOfLines : dark ? 44 : 40,
+                paddingVertical: numberOfLines > 1 ? 8 : 0,
                 borderColor: solidBorder ? AppStyle.colorSet.primaryColorB : AppStyle.colorSet.borderLightGrayColor
             }}>
-                <TextInput style={styles.input} secureTextEntry={secure} value={value} placeholder={placeholder}
+                <TextInput style={styles.input}
+                    secureTextEntry={secure} value={value} placeholder={placeholder}
                     placeholderTextColor={AppStyle.colorSet.textPlaceholderColor}
+                    numberOfLines={numberOfLines}
+                    multiline={numberOfLines > 1}
+                    inputMode={inputMode}
+                    keyboardType={keyboardType}
                     onSubmitEditing={(i) => {
                         Keyboard.dismiss();
                         if (handleDone) {
@@ -73,7 +82,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 20,
         backgroundColor: AppStyle.colorSet.BGColor,
-        alignItems: 'center',
+        alignItems: 'flex-start',
         justifyContent: 'space-between',
         flexDirection: 'row',
     },
@@ -84,7 +93,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         color: AppStyle.colorSet.primaryColorA,
         fontSize: 14,
-        fontWeight: '400'
+        lineHeight: 16.34,
+        fontWeight: '400',
     },
     rightIconContainer: {
         backgroundColor: '#fff',

@@ -27,6 +27,9 @@ import EditorChoiceScreen from '../screens/editorChoice/EditorChoiceScreen';
 import CuratedForYou from '../screens/curatedForYou/CuratedForYou';
 import ProductDetail from '../screens/productDetail/ProductDetail';
 import Store from '../screens/store/Store';
+import ContactUs from '../screens/contactUs/ContactUs';
+import RaiseDispute from '../screens/raiseDispute/RaiseDispute';
+import RenderContentScreen from '../screens/renderContent/RenderContentScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -205,6 +208,9 @@ const AppNavigation = () => {
                     <AppStack.Screen name="CuratedForYouScreen" component={CuratedForYou} />
                     <AppStack.Screen name="ProductDetailScreen" component={ProductDetail} />
                     <AppStack.Screen name="StoreScreen" component={Store} />
+                    <AppStack.Screen name="ContactUs" component={ContactUs} />
+                    <AppStack.Screen name="RaiseDispute" component={RaiseDispute} />
+                    <AppStack.Screen name="RenderContentScreen" component={RenderContentScreen} />
                 </AppStack.Navigator>
             </NavigationContainer>
 

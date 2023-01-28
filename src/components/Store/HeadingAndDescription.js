@@ -6,7 +6,7 @@ const HeadingAndDescription = ({ heading, description }) => {
     return (
         <View style={{ marginHorizontal: 16, marginBottom: 24 }}>
             <Text style={styles.title}>{heading}</Text>
-            <Text style={styles.bottomT}>{description}</Text>
+            {description && <Text style={styles.bottomT}>{description}</Text>}
         </View>
     )
 }
