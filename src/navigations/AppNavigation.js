@@ -141,7 +141,6 @@ const ExploreStackScreen = ({ navigation, route }) => {
     return (
         <ExploreStack.Navigator screenOptions={{ headerShown: false }}>
             <ExploreStack.Screen name="ExploreScreen" component={Explore} />
-            <ExploreStack.Screen name="BlogsScreen" component={Blogs} />
         </ExploreStack.Navigator>
     );
 }
