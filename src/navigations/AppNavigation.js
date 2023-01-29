@@ -11,6 +11,14 @@ import TabHomeActive from '../assets/images/tab/home-active.svg';
 import TabHomeInActive from '../assets/images/tab/home-inactive.svg';
 import TabExploreActive from '../assets/images/tab/explore-active.svg';
 import TabExploreInActive from '../assets/images/tab/explore-inactive.svg';
+import TabAnalyticsActive from '../assets/images/tab/analytics-active.svg';
+import TabAnalyticsInActive from '../assets/images/tab/analytics-inactive.svg';
+import TabChatActive from '../assets/images/tab/chat-active.svg';
+import TabChatInActive from '../assets/images/tab/chat-inactive.svg';
+import TabMyShopActive from '../assets/images/tab/myshop-active.svg';
+import TabMyShopInActive from '../assets/images/tab/myshop-inactive.svg';
+import TabCartActive from '../assets/images/tab/cart-active.svg';
+import TabCartInActive from '../assets/images/tab/cart-inactive.svg';
 import TabProfileActive from '../assets/images/tab/profile-active.svg';
 import TabProfileInActive from '../assets/images/tab/profile-inactive.svg';
 import AppStyle from '../assets/styles/AppStyle';
@@ -30,6 +38,10 @@ import Store from '../screens/store/Store';
 import ContactUs from '../screens/contactUs/ContactUs';
 import RaiseDispute from '../screens/raiseDispute/RaiseDispute';
 import RenderContentScreen from '../screens/renderContent/RenderContentScreen';
+import ChatScreen from '../screens/chat/ChatScreen';
+import MyShop from '../screens/myShop/MyShop';
+import AnalyticsPage from '../screens/analytics/AnalyticsPage';
+import Cart from '../screens/cart/Cart';
 
 const Tab = createBottomTabNavigator();
 
@@ -107,6 +119,62 @@ const AppTabs = () => {
                 }}
             />
             <Tab.Screen
+                name="Analytics"
+                component={AnalyticsStackScreen}
+                options={{
+                    ...tabScreenProps,
+                    title: 'Analytics',
+                    tabBarIcon: ({ focused, color, size }) =>
+                        focused ? (
+                            <TabAnalyticsActive />
+                        ) : (
+                            <TabAnalyticsInActive />
+                        ),
+                }}
+            />
+             <Tab.Screen
+                name="Chat"
+                component={ChatStackScreen}
+                options={{
+                    ...tabScreenProps,
+                    title: 'Chat',
+                    tabBarIcon: ({ focused, color, size }) =>
+                        focused ? (
+                            <TabChatActive />
+                        ) : (
+                            <TabChatInActive />
+                        ),
+                }}
+            />
+            <Tab.Screen
+                name="MyShop"
+                component={MyShopStackScreen}
+                options={{
+                    ...tabScreenProps,
+                    title: 'My Shop',
+                    tabBarIcon: ({ focused, color, size }) =>
+                        focused ? (
+                            <TabMyShopActive />
+                        ) : (
+                            <TabMyShopInActive />
+                        ),
+                }}
+            />
+            <Tab.Screen
+                name="Cart"
+                component={CartStackScreen}
+                options={{
+                    ...tabScreenProps,
+                    title: 'Cart',
+                    tabBarIcon: ({ focused, color, size }) =>
+                        focused ? (
+                            <TabCartActive />
+                        ) : (
+                            <TabCartInActive />
+                        ),
+                }}
+            />
+            <Tab.Screen
                 name="Profile"
                 component={ProflieStackScreen}
                 options={{
@@ -145,6 +213,46 @@ const ExploreStackScreen = ({ navigation, route }) => {
         <ExploreStack.Navigator screenOptions={{ headerShown: false }}>
             <ExploreStack.Screen name="ExploreScreen" component={Explore} />
         </ExploreStack.Navigator>
+    );
+}
+
+const AnalyticsStack = createNativeStackNavigator();
+
+const AnalyticsStackScreen = ({ navigation, route }) => {
+    return (
+        <AnalyticsStack.Navigator screenOptions={{ headerShown: false }}>
+            <AnalyticsStack.Screen name="AnalyticsScreen" component={AnalyticsPage} />
+        </AnalyticsStack.Navigator>
+    );
+}
+
+const ChatStack = createNativeStackNavigator();
+
+const ChatStackScreen = ({ navigation, route }) => {
+    return (
+        <ChatStack.Navigator screenOptions={{ headerShown: false }}>
+            <ChatStack.Screen name="ChatScreen" component={ChatScreen} />
+        </ChatStack.Navigator>
+    );
+}
+
+const MyShopStack = createNativeStackNavigator();
+
+const MyShopStackScreen = ({ navigation, route }) => {
+    return (
+        <MyShopStack.Navigator screenOptions={{ headerShown: false }}>
+            <MyShopStack.Screen name="MyShopScreen" component={MyShop} />
+        </MyShopStack.Navigator>
+    );
+}
+
+const CartStack = createNativeStackNavigator();
+
+const CartStackScreen = ({ navigation, route }) => {
+    return (
+        <CartStack.Navigator screenOptions={{ headerShown: false }}>
+            <CartStack.Screen name="CartScreen" component={Cart} />
+        </CartStack.Navigator>
     );
 }
 
