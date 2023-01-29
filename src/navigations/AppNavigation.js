@@ -42,6 +42,7 @@ import ChatScreen from '../screens/chat/ChatScreen';
 import MyShop from '../screens/myShop/MyShop';
 import AnalyticsPage from '../screens/analytics/AnalyticsPage';
 import Cart from '../screens/cart/Cart';
+import ChatDetail from '../screens/chatDetail/ChatDetail';
 
 const Tab = createBottomTabNavigator();
 
@@ -319,6 +320,7 @@ const AppNavigation = () => {
                     <AppStack.Screen name="ContactUs" component={ContactUs} />
                     <AppStack.Screen name="RaiseDispute" component={RaiseDispute} />
                     <AppStack.Screen name="RenderContentScreen" component={RenderContentScreen} />
+                    <AppStack.Screen name="ChatDetail" component={ChatDetail} />
                 </AppStack.Navigator>
             </NavigationContainer>
 
