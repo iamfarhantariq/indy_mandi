@@ -5,6 +5,7 @@ import Back from '../../assets/images/back-icon.svg';
 import Cross from '../../assets/images/cross-icon.svg';
 import AppStyle from '../../assets/styles/AppStyle';
 import { useNavigation } from '@react-navigation/native';
+import { commonStyle } from '../../helpers/common';
 
 const HeaderWithBack = ({ title, cross = false }) => {
     const navigation = useNavigation();
@@ -33,8 +34,8 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1
     },
     title: {
-        fontWeight: '500',
-        fontSize: 20,
+        ...commonStyle('500', 20, 'primaryColorA'),
+        color: '#003166',
         textAlign: 'center',
         flex: 1
     }

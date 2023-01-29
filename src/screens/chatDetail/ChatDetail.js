@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
         padding: 8,
         borderRadius: 8,
         flexDirection: 'row',
-        marginBottom: 16,
+        marginVertical: 8,
         justifyContent: 'flex-start',
         height: 'auto',
     },
