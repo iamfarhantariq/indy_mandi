@@ -27,7 +27,8 @@ function InputField({
     solidBorder = false,
     numberOfLines = 1,
     inputMode = 'text',
-    keyboardType = 'default'
+    keyboardType = 'default',
+    editable=true,
 }) {
     const [openFilters, setOpenFilters] = useState(false);
 
@@ -45,6 +46,7 @@ function InputField({
                     multiline={numberOfLines > 1}
                     inputMode={inputMode}
                     keyboardType={keyboardType}
+                    editable={editable}
                     onSubmitEditing={(i) => {
                         Keyboard.dismiss();
                         if (handleDone) {
@@ -54,7 +56,7 @@ function InputField({
                     onChangeText={(it) => {
                         onTextChange(it);
                     }} />
-                {value &&
+                {value && editable &&
                     <TouchableOpacity style={{ padding: 10 }} onPress={() => onTextChange('')}>
                         <ClearAll />
                     </TouchableOpacity>}
@@ -82,7 +84,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 20,
         backgroundColor: AppStyle.colorSet.BGColor,
-        alignItems: 'flex-start',
+        alignItems: 'center',
         justifyContent: 'space-between',
         flexDirection: 'row',
     },
