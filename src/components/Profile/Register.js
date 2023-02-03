@@ -63,10 +63,6 @@ const Register = ({ setView }) => {
         </View>
 
         <View style={{ marginVertical: 16 }}>
-          <Button text={'Raise a dispute'} handleClick={() => navigation.navigate('RaiseDispute')} />
-        </View>
-
-        <View style={{ marginVertical: 16 }}>
           <Button text={'About, Careers, Terms, Privacy'} handleClick={() => navigation.navigate('RenderContentScreen')} />
         </View>
 

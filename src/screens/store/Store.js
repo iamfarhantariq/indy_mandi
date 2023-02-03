@@ -16,8 +16,6 @@ const Store = () => {
     return (
         <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }}>
             <ScrollView
-            // style={{backgroundColor: 'red'}}
-                // contentContainerStyle={{ height: AppConfig.screenHeight }}
                 showsVerticalScrollIndicator={false}>
                 <ImageBackground
                     resizeMode='cover'

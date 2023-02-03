@@ -8,8 +8,10 @@ import { commonStyle } from '../../helpers/common';
 import InputFieldBase from '../Input/InputFieldBase';
 import { useState } from 'react';
 import Button from '../Button';
+import { useNavigation } from '@react-navigation/native';
 
 const SignIn = ({ setView }) => {
+    const navigation = useNavigation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [staySigned, setStaySigned] = useState(true);
@@ -62,7 +64,7 @@ const SignIn = ({ setView }) => {
                 </View>
 
                 <View style={{ marginVertical: 16 }}>
-                    <Button text={'Sign In'} handleClick={() => null} fill={true} />
+                    <Button text={'Sign In'} handleClick={() => navigation.navigate('UserScreen')} fill={true} />
                 </View>
 
                 <View style={{ marginVertical: 16 }}>

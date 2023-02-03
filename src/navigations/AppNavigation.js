@@ -43,6 +43,9 @@ import MyShop from '../screens/myShop/MyShop';
 import AnalyticsPage from '../screens/analytics/AnalyticsPage';
 import Cart from '../screens/cart/Cart';
 import ChatDetail from '../screens/chatDetail/ChatDetail';
+import UserScreen from '../screens/userScreen/UserScreen';
+import AccountSettings from '../screens/accountSettings/AccountSettings';
+import OrderEnquiries from '../screens/orderEnquiries/OrderEnquiries';
 
 const Tab = createBottomTabNavigator();
 
@@ -263,6 +266,7 @@ const ProflieStackScreen = ({ navigation, route }) => {
     return (
         <ProflieStack.Navigator screenOptions={{ headerShown: false }}>
             <ProflieStack.Screen name="ProfileScreen" component={Profile} />
+            <ProflieStack.Screen name="UserScreen" component={UserScreen} />
         </ProflieStack.Navigator>
     );
 }
@@ -321,6 +325,8 @@ const AppNavigation = () => {
                     <AppStack.Screen name="RaiseDispute" component={RaiseDispute} />
                     <AppStack.Screen name="RenderContentScreen" component={RenderContentScreen} />
                     <AppStack.Screen name="ChatDetail" component={ChatDetail} />
+                    <AppStack.Screen name="AccountSettings" component={AccountSettings} />
+                    <AppStack.Screen name="OrderEnquiries" component={OrderEnquiries} />
                 </AppStack.Navigator>
             </NavigationContainer>
 
