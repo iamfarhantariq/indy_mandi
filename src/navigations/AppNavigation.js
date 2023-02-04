@@ -46,6 +46,15 @@ import ChatDetail from '../screens/chatDetail/ChatDetail';
 import UserScreen from '../screens/userScreen/UserScreen';
 import AccountSettings from '../screens/accountSettings/AccountSettings';
 import OrderEnquiries from '../screens/orderEnquiries/OrderEnquiries';
+import WishList from '../screens/wishtList/WishList';
+import WishListDetail from '../screens/wishListDetail/WishListDetail';
+import CreateWishList from '../screens/createWishList/CreateWishList';
+import Addresses from '../screens/addresses/Addresses';
+import CreateAddress from '../screens/createAddress/CreateAddress';
+import PaymentHistory from '../screens/paymentHistory/PaymentHistory';
+import Invoice from '../screens/invoice/Invoice';
+import ResetPassword from '../screens/resetPassword/ResetPassword';
+import ProfileSettings from '../screens/profileSettings/ProfileSettings';
 
 const Tab = createBottomTabNavigator();
 
@@ -327,6 +336,15 @@ const AppNavigation = () => {
                     <AppStack.Screen name="ChatDetail" component={ChatDetail} />
                     <AppStack.Screen name="AccountSettings" component={AccountSettings} />
                     <AppStack.Screen name="OrderEnquiries" component={OrderEnquiries} />
+                    <AppStack.Screen name="WishList" component={WishList} />
+                    <AppStack.Screen name="WishListDetail" component={WishListDetail} />
+                    <AppStack.Screen name="CreateWishList" component={CreateWishList} />
+                    <AppStack.Screen name="Addresses" component={Addresses} />
+                    <AppStack.Screen name="CreateAddress" component={CreateAddress} />
+                    <AppStack.Screen name="PaymentHistory" component={PaymentHistory} />
+                    <AppStack.Screen name="Invoice" component={Invoice} />
+                    <AppStack.Screen name="ResetPassword" component={ResetPassword} />
+                    <AppStack.Screen name="ProfileSettings" component={ProfileSettings} />
                 </AppStack.Navigator>
             </NavigationContainer>
 

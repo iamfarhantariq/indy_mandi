@@ -10,11 +10,11 @@ const UserScreen = () => {
     const navigation = useNavigation();
     const items = [
         { title: 'Order enquiries', func: () => navigation.navigate('OrderEnquiries') },
-        { title: 'Indyviews payments', func: () => null },
-        { title: 'Wishlist', func: () => null },
-        { title: 'Addresses', func: () => null },
+        { title: 'Indyviews payments', func: () => navigation.navigate('PaymentHistory') },
+        { title: 'Wishlist', func: () => navigation.navigate('WishList') },
+        { title: 'Addresses', func: () => navigation.navigate('Addresses') },
         { title: 'Account settings', func: () => navigation.navigate('AccountSettings') },
-        { title: 'Become a seller', func: () => null },
+        { title: 'Become a seller', func: () => navigation.navigate('BecomeSeller') },
         { title: 'Raise a dispute', func: () => navigation.navigate('RaiseDispute') },
         { title: 'Logout', func: () => navigation.navigate('ProfileScreen') },
     ]

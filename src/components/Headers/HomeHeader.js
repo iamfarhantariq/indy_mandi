@@ -33,7 +33,7 @@ const HomeHeader = ({ route }) => {
     return (
         <View style={styles.container}>
             <View style={{ marginHorizontal: 16, marginTop: 8, marginBottom: 18 }}>
-                <AppLogo />
+                <AppLogo height={26.35} width={69} />
             </View>
             <View style={{ marginBottom: 8 }}>
                 <FlatList

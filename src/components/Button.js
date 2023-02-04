@@ -3,12 +3,13 @@ import React from 'react'
 import AppStyle from '../assets/styles/AppStyle'
 import { commonStyle } from '../helpers/common'
 
-const Button = ({ fill = false, text, handleClick = null }) => {
+const Button = ({ fill = false, text, handleClick = null, height = 44 }) => {
     return (
         <TouchableOpacity
             onPress={() => handleClick && handleClick()}
             style={{
                 ...styles.container,
+                height,
                 backgroundColor: fill ? AppStyle.colorSet.primaryColorB : 'transparent',
 
             }}>
@@ -24,12 +25,10 @@ export default Button;
 
 const styles = StyleSheet.create({
     container: {
-        // marginHorizontal: 16,
         borderColor: AppStyle.colorSet.primaryColorB,
         borderWidth: 1,
         borderRadius: 50,
         justifyContent: 'center',
-        height: 44
     },
     buttonText: {
         ...commonStyle('500', 16, 'primaryColorB'),

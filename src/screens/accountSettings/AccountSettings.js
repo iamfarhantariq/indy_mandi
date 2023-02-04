@@ -10,8 +10,8 @@ import HeaderWithBack from '../../components/Headers/HeaderWithBack'
 const AccountSettings = () => {
     const navigation = useNavigation();
     const items = [
-        { title: 'Profile settings', func: () => null },
-        { title: 'Reset password', func: () => null },
+        { title: 'Profile settings', func: () => navigation.navigate('ProfileSettings') },
+        { title: 'Reset password', func: () => navigation.navigate('ResetPassword') },
     ]
 
     const Option = ({ item, index }) => (
@@ -22,7 +22,7 @@ const AccountSettings = () => {
 
     return (
         <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }}>
-            <HeaderWithBack title={'Account settings'}/>
+            <HeaderWithBack title={'Account settings'} />
             <View style={{ flex: 1, marginHorizontal: 16 }}>
                 <FlatList
                     horizontal={false}

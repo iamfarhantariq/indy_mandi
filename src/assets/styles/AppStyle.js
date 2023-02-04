@@ -1,3 +1,5 @@
+import AppConfig from "../../helpers/config";
+
 const _colorSet = {
   primaryColorA: '#1D2451',
   primaryColorB: '#713A74',
@@ -52,12 +54,24 @@ const _iconSet = {
   // homeBackground: require('../images/app_background.png'),
 };
 
+const _bottom_container_button_style = {
+  position: 'absolute',
+  bottom: 0,
+  height: 108,
+  paddingTop: 16,
+  width: AppConfig.windowWidth,
+  paddingHorizontal: 16,
+  borderTopColor: _colorSet.borderLightGrayColor,
+  borderTopWidth: 1
+}
+
 const AppStyle = {
   colorSet: _colorSet,
   iconSet: _iconSet,
   fontSet: _fontSet,
-  fontLineHeight : _fontLineHeight,
+  fontLineHeight: _fontLineHeight,
   fontFamily: _fontFamily,
+  buttonContainerBottom: _bottom_container_button_style
 };
 
 export default AppStyle;
