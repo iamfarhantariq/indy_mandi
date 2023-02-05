@@ -62,7 +62,8 @@ const _bottom_container_button_style = {
   width: AppConfig.windowWidth,
   paddingHorizontal: 16,
   borderTopColor: _colorSet.borderLightGrayColor,
-  borderTopWidth: 1
+  borderTopWidth: 1,
+  backgroundColor: _colorSet.BGColor
 }
 
 const AppStyle = {

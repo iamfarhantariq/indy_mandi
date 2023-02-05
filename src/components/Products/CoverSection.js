@@ -3,6 +3,8 @@ import React from 'react'
 import AppStyle from '../../assets/styles/AppStyle'
 import CoverFrame from './CoverFrame'
 import { useNavigation } from '@react-navigation/native'
+import RedirectImage from '../../assets/images/redirect-with-indyviews.svg';
+import AppConfig from '../../helpers/config'
 
 const CoverSection = ({ title, detailed = true, discoverOption }) => {
     const navigation = useNavigation();
@@ -10,13 +12,20 @@ const CoverSection = ({ title, detailed = true, discoverOption }) => {
     const items = [
         { price: '$89.99', name: 'Floran shiffon dress', subtitle: 'All birds Couture, Calcutta', imageSource: require('../../assets/images/demo-cover-bg.png') },
         { price: '$89.99', name: 'Floran shiffon dress', subtitle: 'All birds Couture, Calcutta', imageSource: require('../../assets/images/demo-cover-bg.png') },
+        { view: true }
     ]
 
     const _renderItem = ({ item, index }) => {
         return (
-            <TouchableOpacity onPress={() => navigation.navigate('BlogContentScreen')}>
-                <CoverFrame item={item} index={index} detailed={detailed} />
-            </TouchableOpacity>
+            <>
+                {item?.view ?
+                    <TouchableOpacity onPress={() => navigation.navigate('IndyViews')}>
+                        <RedirectImage height={303} width={303} />
+                    </TouchableOpacity> :
+                    <TouchableOpacity onPress={() => navigation.navigate('BlogContentScreen')}>
+                        <CoverFrame item={item} index={index} detailed={detailed} />
+                    </TouchableOpacity>}
+            </>
         )
     }
 

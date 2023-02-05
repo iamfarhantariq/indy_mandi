@@ -55,6 +55,10 @@ import PaymentHistory from '../screens/paymentHistory/PaymentHistory';
 import Invoice from '../screens/invoice/Invoice';
 import ResetPassword from '../screens/resetPassword/ResetPassword';
 import ProfileSettings from '../screens/profileSettings/ProfileSettings';
+import IndyViews from '../screens/indyViews/IndyViews';
+import UploadAd from '../screens/uploadAd/UploadAd';
+import CropImage from '../screens/cropImage/CropImage';
+import PaymentScreen from '../screens/paymentScreen/PaymentScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -345,6 +349,10 @@ const AppNavigation = () => {
                     <AppStack.Screen name="Invoice" component={Invoice} />
                     <AppStack.Screen name="ResetPassword" component={ResetPassword} />
                     <AppStack.Screen name="ProfileSettings" component={ProfileSettings} />
+                    <AppStack.Screen name="IndyViews" component={IndyViews} />
+                    <AppStack.Screen name="UploadAd" component={UploadAd} />
+                    <AppStack.Screen name="CropImage" component={CropImage} />
+                    <AppStack.Screen name="PaymentScreen" component={PaymentScreen} />
                 </AppStack.Navigator>
             </NavigationContainer>
 
