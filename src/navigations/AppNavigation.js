@@ -59,6 +59,7 @@ import IndyViews from '../screens/indyViews/IndyViews';
 import UploadAd from '../screens/uploadAd/UploadAd';
 import CropImage from '../screens/cropImage/CropImage';
 import PaymentScreen from '../screens/paymentScreen/PaymentScreen';
+import BecomeSeller from '../screens/becomeSeller/BecomeSeller';
 
 const Tab = createBottomTabNavigator();
 
@@ -353,6 +354,7 @@ const AppNavigation = () => {
                     <AppStack.Screen name="UploadAd" component={UploadAd} />
                     <AppStack.Screen name="CropImage" component={CropImage} />
                     <AppStack.Screen name="PaymentScreen" component={PaymentScreen} />
+                    <AppStack.Screen name="BecomeSeller" component={BecomeSeller} />
                 </AppStack.Navigator>
             </NavigationContainer>
 
