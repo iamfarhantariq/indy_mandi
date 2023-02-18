@@ -7,7 +7,7 @@ import { commonStyle } from '../../helpers/common';
 const UploadImages = () => {
     return (
         <TouchableOpacity style={styles.container}>
-            <UploadIcon />
+            <UploadIcon style={{ color: '#713A74' }} />
             <Text style={styles.text}>Upload image</Text>
         </TouchableOpacity>
     )

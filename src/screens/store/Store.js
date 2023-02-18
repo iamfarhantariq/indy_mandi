@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import Van from '../../assets/images/store-van.svg';
 import Response from '../../assets/images/store-response.svg';
 import TabViewSection from '../../components/Store/TabViewSection';
+import Button from '../../components/Button';
 
 const Store = () => {
     const navigation = useNavigation();
@@ -43,6 +44,14 @@ const Store = () => {
                             <StarRating rating={4} />
                         </View>
                         <Text style={styles.ratingText}>(4/5) 500 sales</Text>
+                    </View>
+                </View>
+                <View style={{ flexDirection: 'row', marginHorizontal: 16, justifyContent: 'space-between', marginBottom: 16 }}>
+                    <View style={{ width: '49%' }}>
+                        <Button text={'Manage products'} handleClick={()=> navigation.navigate('ManageProducts')}/>
+                    </View>
+                    <View style={{ width: '49%' }}>
+                        <Button text={'Edit profile'} />
                     </View>
                 </View>
                 <View style={{ marginHorizontal: 16, flexDirection: 'row', justifyContent: 'space-between' }}>

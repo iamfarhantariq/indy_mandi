@@ -3,19 +3,20 @@ import React from 'react'
 import AppStyle from '../assets/styles/AppStyle'
 import { commonStyle } from '../helpers/common'
 
-const Button = ({ fill = false, text, handleClick = null, height = 44 }) => {
+const Button = ({ fill = false, text, handleClick = null,
+    height = 44, bg = AppStyle.colorSet.primaryColorB,
+    textColor = AppStyle.colorSet.whiteColor }) => {
     return (
         <TouchableOpacity
             onPress={() => handleClick && handleClick()}
             style={{
                 ...styles.container,
                 height,
-                backgroundColor: fill ? AppStyle.colorSet.primaryColorB : 'transparent',
-
+                backgroundColor: fill ? bg : 'transparent',
             }}>
             <Text style={{
                 ...styles.buttonText,
-                color: fill ? AppStyle.colorSet.whiteColor : AppStyle.colorSet.primaryColorB,
+                color: fill ? textColor : AppStyle.colorSet.primaryColorB,
             }}>{text}</Text>
         </TouchableOpacity>
     )

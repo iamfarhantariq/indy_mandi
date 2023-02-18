@@ -60,6 +60,12 @@ import UploadAd from '../screens/uploadAd/UploadAd';
 import CropImage from '../screens/cropImage/CropImage';
 import PaymentScreen from '../screens/paymentScreen/PaymentScreen';
 import BecomeSeller from '../screens/becomeSeller/BecomeSeller';
+import BuyPlan from '../screens/buyPlan/BuyPlan';
+import PaymentSubscription from '../screens/paymentSubscription/PaymentSubscription';
+import ManageProducts from '../screens/manageProducts/ManageProducts';
+import AddProduct from '../screens/addProduct/AddProduct';
+import ManageCollection from '../screens/manageCollection/ManageCollection';
+import CreateCollection from '../screens/createCollection/CreateCollection';
 
 const Tab = createBottomTabNavigator();
 
@@ -355,6 +361,12 @@ const AppNavigation = () => {
                     <AppStack.Screen name="CropImage" component={CropImage} />
                     <AppStack.Screen name="PaymentScreen" component={PaymentScreen} />
                     <AppStack.Screen name="BecomeSeller" component={BecomeSeller} />
+                    <AppStack.Screen name="BuyPlan" component={BuyPlan} />
+                    <AppStack.Screen name="PaymentSubscription" component={PaymentSubscription} />
+                    <AppStack.Screen name="ManageProducts" component={ManageProducts} />
+                    <AppStack.Screen name="AddProduct" component={AddProduct} />
+                    <AppStack.Screen name="ManageCollection" component={ManageCollection} />
+                    <AppStack.Screen name="CreateCollection" component={CreateCollection} />
                 </AppStack.Navigator>
             </NavigationContainer>
 

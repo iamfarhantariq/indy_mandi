@@ -14,7 +14,19 @@ const HeaderWithBack = ({ title, cross = false, iconType = '', route = '' }) => 
 
     const icons = [
         { name: 'add', icon: <Add />, func: () => navigation.navigate(route) },
-        { name: 'options', icon: <Option />, func: () => null }
+        { name: 'options', icon: <Option />, func: () => null },
+        {
+            name: 'manageProducts',
+            icon: <View style={{ flexDirection: 'row', width: 70, justifyContent: 'space-between' }}>
+                <TouchableOpacity onPress={() => navigation.navigate('AddProduct')}>
+                    <Add />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate('ManageCollection')}>
+                    <Option />
+                </TouchableOpacity>
+            </View>,
+            func: () => null
+        },
     ]
 
     const GetIcon = () => {
