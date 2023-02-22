@@ -1,19 +1,22 @@
 import React, { useState } from 'react';
 import {
     StyleSheet,
-    Image,
     View,
     TextInput,
     TouchableOpacity,
     Keyboard,
+    Text,
 } from 'react-native';
 import AppStyle from '../../assets/styles/AppStyle';
 import ClearAll from '../../assets/images/clear-all-icon.svg';
 import SortIcon from '../../assets/images/sort-icon.svg'
 import SmallButton from '../SmallButton';
+import { commonStyle } from '../../helpers/common';
 
 function InputField({
+    otherProps = null,
     value = '',
+    name = '',
     placeholder = 'Search',
     filterIcon = false,
     filterHandler = null,
@@ -28,48 +31,77 @@ function InputField({
     numberOfLines = 1,
     inputMode = 'text',
     keyboardType = 'default',
-    editable=true,
+    editable = true,
 }) {
+    // const { values, errors, touched, setFieldTouched, setFieldValue, handleBlur } = otherProps;
     const [openFilters, setOpenFilters] = useState(false);
 
+    console.log(otherProps, name);
+
     return (
-        <View style={styles.container}>
-            <View style={{
-                ...styles.inputView, height: numberOfLines > 1 ? 44 * numberOfLines : dark ? 44 : 40,
-                paddingVertical: numberOfLines > 1 ? 8 : 0,
-                borderColor: solidBorder ? AppStyle.colorSet.primaryColorB : AppStyle.colorSet.borderLightGrayColor
-            }}>
-                <TextInput style={styles.input}
-                    secureTextEntry={secure} value={value} placeholder={placeholder}
-                    placeholderTextColor={AppStyle.colorSet.textPlaceholderColor}
-                    numberOfLines={numberOfLines}
-                    multiline={numberOfLines > 1}
-                    inputMode={inputMode}
-                    keyboardType={keyboardType}
-                    editable={editable}
-                    onSubmitEditing={(i) => {
-                        Keyboard.dismiss();
-                        if (handleDone) {
-                            handleDone(value);
-                        }
-                    }}
-                    onChangeText={(it) => {
-                        onTextChange(it);
-                    }} />
-                {value && editable &&
-                    <TouchableOpacity style={{ padding: 10 }} onPress={() => onTextChange('')}>
-                        <ClearAll />
-                    </TouchableOpacity>}
-                {leftButton &&
-                    <View style={{ marginRight: 10 }}>
-                        <SmallButton text={leftButtonText} fill={true} handleClick={handleLeftButton} />
-                    </View>}
+        <View>
+            <View style={styles.container}>
+                <View style={{
+                    ...styles.inputView, height: numberOfLines > 1 ? 44 * numberOfLines : dark ? 44 : 40,
+                    paddingVertical: numberOfLines > 1 ? 8 : 0,
+                    borderColor: solidBorder ?
+                        otherProps && otherProps?.errors[name] && otherProps?.touched[name] ?
+                            '#E67F7F' : AppStyle.colorSet.primaryColorB :
+                        AppStyle.colorSet.borderLightGrayColor
+                }}>
+                    <TextInput style={styles.input}
+                        secureTextEntry={secure}
+                        value={otherProps ? otherProps?.values[name] : value}
+                        placeholder={placeholder}
+                        placeholderTextColor={otherProps &&
+                             otherProps?.errors[name] && otherProps?.touched[name] ?
+                            '#E67F7F' : AppStyle.colorSet.textPlaceholderColor}
+                        numberOfLines={numberOfLines}
+                        multiline={numberOfLines > 1}
+                        inputMode={inputMode}
+                        keyboardType={keyboardType}
+                        editable={editable}
+                        autoCorrect={false}
+                        autoComplete={'off'}
+                        onSubmitEditing={(i) => {
+                            Keyboard.dismiss();
+                            if (handleDone) {
+                                handleDone(value);
+                            }
+                        }}
+                        onChangeText={(it) => {
+                            if (otherProps) {
+                                otherProps.setFieldValue(name, it, true);
+                                otherProps.setFieldTouched(name, true, true);
+                            } else {
+                                onTextChange(it);
+                            }
+                        }} />
+                    {(otherProps && otherProps?.values[name]?.length) || (value && editable) ?
+                        <TouchableOpacity style={{ padding: 10 }}
+                            onPress={() => {
+                                if (otherProps) {
+                                    otherProps.setFieldValue(name, '', true);
+                                    otherProps.setFieldTouched(name, true, true);
+                                } else {
+                                    onTextChange('');
+                                }
+                            }}>
+                            <ClearAll />
+                        </TouchableOpacity> : null}
+                    {leftButton &&
+                        <View style={{ marginRight: 10 }}>
+                            <SmallButton text={leftButtonText} fill={true} handleClick={handleLeftButton} />
+                        </View>}
+                </View>
+                {filterIcon &&
+                    <TouchableOpacity onPress={() => setOpenFilters(true)} style={{ marginLeft: 8 }}>
+                        <SortIcon />
+                    </TouchableOpacity>
+                }
             </View>
-            {filterIcon &&
-                <TouchableOpacity onPress={() => setOpenFilters(true)} style={{ marginLeft: 8 }}>
-                    <SortIcon />
-                </TouchableOpacity>
-            }
+            {otherProps && otherProps?.errors[name] && otherProps?.touched[name] ?
+                <Text style={styles.errorText}>{otherProps?.errors[name]}</Text> : null}
         </View>
     );
 }
@@ -112,6 +144,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    errorText: {
+        ...commonStyle('400', 11, 'primaryColorA'),
+        color: '#E67F7F',
+        textAlign: 'right',
+        marginTop: 4,
+    }
 });
 
 export default InputField;

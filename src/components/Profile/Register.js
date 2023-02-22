@@ -3,7 +3,9 @@ import React from 'react'
 import InputFieldBase from '../Input/InputFieldBase'
 import { useState } from 'react';
 import Button from '../Button';
+import { useFormik } from "formik";
 import { useNavigation } from '@react-navigation/native';
+import { registerFormSchema } from '../../validation';
 
 const Register = ({ setView }) => {
   const navigation = useNavigation();
@@ -14,39 +16,62 @@ const Register = ({ setView }) => {
   const [password, setPassword] = useState('');
   const [cPassword, setCPassword] = useState('');
 
+  const {
+    errors,
+    touched,
+    values,
+    setFieldValue,
+    setFieldTouched,
+    handleBlur,
+    handleSubmit,
+    handleReset,
+  } = useFormik({
+    initialValues: { name: "", email: "", mobile: "", password: "", password_confirmation: "", device_name: "" },
+    onSubmit: (values) => {
+      console.log({ values });
+    },
+    validationSchema: registerFormSchema,
+  });
+
+  const otherProps = { values, errors, touched, setFieldValue, setFieldTouched, handleBlur };
+
   return (
     <View style={{ flex: 1, marginTop: 26, marginHorizontal: 16 }}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <InputFieldBase
+          otherProps={otherProps}
           title={'Name'}
+          name={'name'}
           placeholder={'Name'}
-          value={name}
-          onTextChange={(t) => setName(t)}
         />
         <InputFieldBase
+          otherProps={otherProps}
           title={'Email'}
+          name={'email'}
+          inputMode={'email'} // email, text, none, decimal, numeric, tel, search, url
+          keyboardType={'email-address'} // default - numeric - email-address - phone-pad
           placeholder={'Email'}
-          value={email}
-          onTextChange={(t) => setEmail(t)}
         />
         <InputFieldBase
+          otherProps={otherProps}
           title={'Phone'}
+          name={'mobile'}
+          inputMode={'tel'} // email, text, none, decimal, numeric, tel, search, url
+          keyboardType={'phone-pad'} // default - numeric - email-address - phone-pad
           placeholder={'Phone'}
-          value={phone}
-          onTextChange={(t) => setPhone(t)}
         />
         <InputFieldBase
+          otherProps={otherProps}
           title={'Password'}
+          name={'password'}
           placeholder={'Password'}
-          value={password}
-          onTextChange={(t) => setPassword(t)}
           secure={true}
         />
         <InputFieldBase
+          otherProps={otherProps}
           title={'Confirm Password'}
+          name={'password_confirmation'}
           placeholder={'Confirm Password'}
-          value={cPassword}
-          onTextChange={(t) => setCPassword(t)}
           secure={true}
         />
 
