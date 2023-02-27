@@ -3,7 +3,7 @@ import { Dimensions, Platform, StatusBar } from 'react-native';
 // const insets = useSafeAreaInsets();
 // const statusBarHeight = insets.top;
 
-const BASE_API_URL = 'http://indymandi-laravel-new-installation.test/api';
+const BASE_API_URL = 'https://indymandi.com/api';
 
 const SCREEN_WIDTH = Dimensions.get('screen').width;
 const SCREEN_HEIGHT = Dimensions.get('screen').height;

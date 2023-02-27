@@ -66,6 +66,7 @@ import ManageProducts from '../screens/manageProducts/ManageProducts';
 import AddProduct from '../screens/addProduct/AddProduct';
 import ManageCollection from '../screens/manageCollection/ManageCollection';
 import CreateCollection from '../screens/createCollection/CreateCollection';
+import LoadingScreen from '../screens/LoadingScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -156,7 +157,7 @@ const AppTabs = () => {
                         ),
                 }}
             />
-             <Tab.Screen
+            <Tab.Screen
                 name="Chat"
                 component={ChatStackScreen}
                 options={{
@@ -370,8 +371,9 @@ const AppNavigation = () => {
                 </AppStack.Navigator>
             </NavigationContainer>
 
-            {/* <LoadingScreen />
+            <LoadingScreen />
 
+            {/*
             <Toast
                 config={toastConfig}
                 autoHide={true}

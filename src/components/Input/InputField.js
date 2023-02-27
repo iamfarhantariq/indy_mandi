@@ -36,7 +36,7 @@ function InputField({
     // const { values, errors, touched, setFieldTouched, setFieldValue, handleBlur } = otherProps;
     const [openFilters, setOpenFilters] = useState(false);
 
-    console.log(otherProps, name);
+    // console.log(otherProps, name);
 
     return (
         <View>

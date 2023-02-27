@@ -1,20 +1,18 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import InputFieldBase from '../Input/InputFieldBase'
-import { useState } from 'react';
 import Button from '../Button';
 import { useFormik } from "formik";
 import { useNavigation } from '@react-navigation/native';
 import { registerFormSchema } from '../../validation';
+import DeviceInfo from 'react-native-device-info';
+import { ServiceRegisterUser } from '../../services/AuthServices';
+import { useDispatch } from 'react-redux';
+import { setActivityIndicator } from '../../store/slices/appConfigSlice';
 
 const Register = ({ setView }) => {
   const navigation = useNavigation();
-
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [password, setPassword] = useState('');
-  const [cPassword, setCPassword] = useState('');
+  const dispatch = useDispatch();
 
   const {
     errors,
@@ -26,9 +24,18 @@ const Register = ({ setView }) => {
     handleSubmit,
     handleReset,
   } = useFormik({
-    initialValues: { name: "", email: "", mobile: "", password: "", password_confirmation: "", device_name: "" },
+    initialValues: { name: "", email: "", mobile: "", password: "", password_confirmation: "", device_name: DeviceInfo.getBrand() },
     onSubmit: (values) => {
       console.log({ values });
+      dispatch(setActivityIndicator(true));
+      ServiceRegisterUser(values).then(response => {
+        dispatch(setActivityIndicator(false));
+        console.log({ response });
+      }).catch(e => {
+        dispatch(setActivityIndicator(false));
+        console.log(JSON.stringify(e));
+      })
+
     },
     validationSchema: registerFormSchema,
   });
@@ -76,7 +83,7 @@ const Register = ({ setView }) => {
         />
 
         <View style={{ marginVertical: 16 }}>
-          <Button text={'Register new account'} handleClick={() => null} fill={true} />
+          <Button text={'Register new account'} handleClick={handleSubmit} fill={true} />
         </View>
 
         <View style={{ marginVertical: 16 }}>

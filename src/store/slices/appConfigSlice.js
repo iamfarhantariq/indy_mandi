@@ -14,6 +14,9 @@ export const appConfigSlice = createSlice({
   },
 });
 
+// This will return complete state of this slice.
+export const getAppConfig = (state) => state.appConfig;
+
 // Action creators are generated for each case reducer function
 export const {
   setActivityIndicator,
