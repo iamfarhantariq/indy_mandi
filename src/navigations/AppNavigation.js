@@ -5,6 +5,7 @@ import { StatusBar } from 'react-native';
 import StyleApp from '../assets/styles/AppStyle';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { BackHandler } from 'react-native';
+import Toast, { BaseToast } from 'react-native-toast-message';
 import SplashScreen from 'react-native-splash-screen';
 import Home from '../screens/home/Home';
 import TabHomeActive from '../assets/images/tab/home-active.svg';
@@ -67,6 +68,7 @@ import AddProduct from '../screens/addProduct/AddProduct';
 import ManageCollection from '../screens/manageCollection/ManageCollection';
 import CreateCollection from '../screens/createCollection/CreateCollection';
 import LoadingScreen from '../screens/LoadingScreen';
+import VerifyEmail from '../screens/verifyEmail/VerifyEmail';
 
 const Tab = createBottomTabNavigator();
 
@@ -298,24 +300,24 @@ const AppNavigation = () => {
     // const isDarkMode = useColorScheme() === 'dark';
     // const appconfig = useSelector(state => state.appconfig);
 
-    // const CustomToast = (props) => {
-    //     return <BaseToast
-    //         {...props}
-    //         text2NumberOfLines={2}
-    //         style={{ borderLeftColor: props.type === 'error' ? 'red' : 'gray' }}
-    //         text1Style={{ fontSize: StyleApp.fontSet.normal, fontFamily: StyleApp.fontFamily.popins.bold.family }}
-    //         text2Style={{ fontSize: StyleApp.fontSet.small, fontFamily: StyleApp.fontFamily.popins.regular.family }}
-    //     />
-    // }
+    const CustomToast = (props) => {
+        return <BaseToast
+            {...props}
+            text2NumberOfLines={2}
+            style={{ borderLeftColor: props.type === 'error' ? AppStyle.colorSet.redColor : AppStyle.colorSet.textSecondary }}
+            text1Style={{ fontSize: 14, fontWeight: '600' }}
+            text2Style={{ fontSize: 12, fontWeight: '400' }}
+        />
+    }
 
-    // const toastConfig = {
-    //     info: (props) => (
-    //         <CustomToast {...props} />
-    //     ),
-    //     error: (props) => (
-    //         <CustomToast {...props} />
-    //     ),
-    // }
+    const toastConfig = {
+        info: (props) => (
+            <CustomToast {...props} />
+        ),
+        error: (props) => (
+            <CustomToast {...props} />
+        ),
+    }
 
     useEffect(() => {
         SplashScreen.hide();
@@ -368,20 +370,19 @@ const AppNavigation = () => {
                     <AppStack.Screen name="AddProduct" component={AddProduct} />
                     <AppStack.Screen name="ManageCollection" component={ManageCollection} />
                     <AppStack.Screen name="CreateCollection" component={CreateCollection} />
+                    <AppStack.Screen name="VerifyEmail" component={VerifyEmail} />
                 </AppStack.Navigator>
             </NavigationContainer>
 
             <LoadingScreen />
 
-            {/*
             <Toast
                 config={toastConfig}
                 autoHide={true}
-                visibilityTime={6000}
+                visibilityTime={4000}
                 position="bottom"
                 bottomOffset={20}
-
-            /> */}
+            />
         </React.Fragment>
     );
 }

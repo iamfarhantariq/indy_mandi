@@ -44,6 +44,7 @@
     "react-native-svg": "^12.1.1",
     "react-native-svg-transformer": "^1.0.0",
     "react-native-tab-view": "^3.3.4",
+    "react-native-toast-message": "^2.1.6",
     "react-redux": "^8.0.5",
     "redux": "^4.2.1",
     "redux-persist": "^6.0.0",

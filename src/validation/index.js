@@ -8,3 +8,8 @@ export const registerFormSchema = Yup.object().shape({
     password_confirmation: Yup.string().trim().required('Confrim Password is required').oneOf([Yup.ref('password'), null], 'Passwords must match'),
     device_name: Yup.string().trim(),
 });
+
+export const verifyEmailSchema = Yup.object().shape({
+    email: Yup.string().trim().email("Email is invalid").required('Email is required'),
+    pincode: Yup.string().trim().required('Code is required'),
+});

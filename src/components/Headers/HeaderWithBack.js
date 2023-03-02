@@ -9,7 +9,7 @@ import { commonStyle } from '../../helpers/common';
 import Add from '../../assets/images/add-icon.svg';
 import Option from '../../assets/images/options-icon.svg';
 
-const HeaderWithBack = ({ title, cross = false, iconType = '', route = '' }) => {
+const HeaderWithBack = ({ title, cross = false, iconType = '', route = '', shouldBack = true }) => {
     const navigation = useNavigation();
 
     const icons = [
@@ -40,9 +40,10 @@ const HeaderWithBack = ({ title, cross = false, iconType = '', route = '' }) => 
 
     return (
         <View style={styles.headerContainer}>
-            <TouchableOpacity onPress={() => navigation.pop()}>
-                {cross ? <Cross /> : <Back />}
-            </TouchableOpacity>
+            {shouldBack &&
+                <TouchableOpacity onPress={() => navigation.pop()}>
+                    {cross ? <Cross /> : <Back />}
+                </TouchableOpacity>}
             <Text style={styles.title}>{title}</Text>
             {iconType && <GetIcon />}
         </View>

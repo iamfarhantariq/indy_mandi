@@ -9,6 +9,7 @@ import DeviceInfo from 'react-native-device-info';
 import { ServiceRegisterUser } from '../../services/AuthServices';
 import { useDispatch } from 'react-redux';
 import { setActivityIndicator } from '../../store/slices/appConfigSlice';
+import Toast from 'react-native-toast-message';
 
 const Register = ({ setView }) => {
   const navigation = useNavigation();
@@ -29,13 +30,19 @@ const Register = ({ setView }) => {
       console.log({ values });
       dispatch(setActivityIndicator(true));
       ServiceRegisterUser(values).then(response => {
-        dispatch(setActivityIndicator(false));
         console.log({ response });
+        dispatch(setActivityIndicator(false));
+        navigation.navigate('VerifyEmail', { user: response });
+        handleReset();
       }).catch(e => {
         dispatch(setActivityIndicator(false));
-        console.log(JSON.stringify(e));
-      })
-
+        console.log(e);
+        Toast.show({
+          type: 'error',
+          text1: e?.message,
+          text2: e?.errors ? e.errors[Object.keys(e.errors)[0]][0] : '',
+        });
+      });
     },
     validationSchema: registerFormSchema,
   });
