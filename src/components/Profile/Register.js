@@ -3,7 +3,7 @@ import React from 'react'
 import InputFieldBase from '../Input/InputFieldBase'
 import Button from '../Button';
 import { useFormik } from "formik";
-import { useNavigation, StackActions } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { registerFormSchema } from '../../validation';
 import DeviceInfo from 'react-native-device-info';
 import { ServiceRegisterUser } from '../../services/AuthServices';

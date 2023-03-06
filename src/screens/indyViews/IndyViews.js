@@ -6,19 +6,50 @@ import { commonStyle } from '../../helpers/common'
 import { useState } from 'react'
 import Button from '../../components/Button'
 import { useNavigation } from '@react-navigation/native'
+import { useDispatch } from 'react-redux'
+import { setActivityIndicator } from '../../store/slices/appConfigSlice'
+import { ServiceGetDaysSlots } from '../../services/IndyViewService'
+import Toast from 'react-native-toast-message';
+import { useEffect } from 'react'
 
 const IndyViews = () => {
     const navigation = useNavigation();
+    const dispatch = useDispatch();
+    const [items, setItems] = useState([]);
 
-    const items = [
-        { text: 'Dec - Week ', period: { startDate: '16 Dec', startDay: 'Friday', endDate: '22 Dec', endDay: 'Thursday' }, isSelected: false, disabled: false },
-        { text: 'Dec - Week ', period: { startDate: '16 Dec', startDay: 'Friday', endDate: '22 Dec', endDay: 'Thursday' }, isSelected: true, disabled: false },
-        { text: 'Dec - Week ', period: { startDate: '16 Dec', startDay: 'Friday', endDate: '22 Dec', endDay: 'Thursday' }, isSelected: false, disabled: false },
-        { text: 'Dec - Week ', period: { startDate: '16 Dec', startDay: 'Friday', endDate: '22 Dec', endDay: 'Thursday' }, isSelected: false, disabled: true },
-        { text: 'Dec - Week ', period: { startDate: '16 Dec', startDay: 'Friday', endDate: '22 Dec', endDay: 'Thursday' }, isSelected: false, disabled: false },
-    ];
+    // const items = [
+    //     { text: 'Dec - Week ', period: { startDate: '16 Dec', startDay: 'Friday', endDate: '22 Dec', endDay: 'Thursday' }, isSelected: false, disabled: false },
+    //     { text: 'Dec - Week ', period: { startDate: '16 Dec', startDay: 'Friday', endDate: '22 Dec', endDay: 'Thursday' }, isSelected: true, disabled: false },
+    //     { text: 'Dec - Week ', period: { startDate: '16 Dec', startDay: 'Friday', endDate: '22 Dec', endDay: 'Thursday' }, isSelected: false, disabled: false },
+    //     { text: 'Dec - Week ', period: { startDate: '16 Dec', startDay: 'Friday', endDate: '22 Dec', endDay: 'Thursday' }, isSelected: false, disabled: true },
+    //     { text: 'Dec - Week ', period: { startDate: '16 Dec', startDay: 'Friday', endDate: '22 Dec', endDay: 'Thursday' }, isSelected: false, disabled: false },
+    // ];
 
-    const [daysPeriod, setDaysPeriod] = useState(items);
+    const [daysPeriod, setDaysPeriod] = useState([]);
+
+    useEffect(() => {
+        GetDaysSlot();
+    }, []);
+
+    const GetDaysSlot = () => {
+        dispatch(setActivityIndicator(true));
+        ServiceGetDaysSlots().then(response => {
+            console.log({ response });
+            dispatch(setActivityIndicator(false));
+            setDaysPeriod(response?.data?.map(f => ({ ...f, isSelected: false })));
+        }).catch(e => {
+            dispatch(setActivityIndicator(false));
+            console.log(e);
+            const errors = e?.response?.data?.errors;
+            Toast.show({
+                type: 'error',
+                text1: e?.response?.data?.message || e?.message,
+                text2: errors ? errors[Object.keys(errors)[0]][0] : '',
+            });
+            navigation.pop();
+        })
+    }
+
 
     const _renderItem = ({ item, index }) => {
 
@@ -28,12 +59,12 @@ const IndyViews = () => {
                     outerContainer: { backgroundColor: AppStyle.colorSet.primaryColorA },
                     innerText: { color: AppStyle.colorSet.primaryColorC }
                 }
-            } else if (!item.isSelected && !item.disabled) {
+            } else if (!item.isSelected && !item.is_reserved) {
                 return {
                     outerContainer: { borderColor: AppStyle.colorSet.borderLightGrayColor, borderWidth: 1, backgroundColor: AppStyle.colorSet.textSecondary + '05' },
                     innerText: { color: AppStyle.colorSet.primaryColorA }
                 }
-            } else if (!item.isSelected && item.disabled) {
+            } else if (!item.isSelected && item.is_reserved) {
                 return {
                     outerContainer: { borderColor: AppStyle.colorSet.borderLightGrayColor, borderWidth: 1, opacity: 0.5, backgroundColor: AppStyle.colorSet.textSecondary + '05' },
                     innerText: { color: AppStyle.colorSet.primaryColorA }
@@ -44,13 +75,13 @@ const IndyViews = () => {
         return (
             <View style={styles.itemContainer}>
                 <View>
-                    <Text style={styles.wText}>{item.text} {index}</Text>
-                    {item.isSelected && <Text style={styles.wDescription}>(3 days left)</Text>}
+                    <Text style={styles.wText}>{item?.month} - {item?.week}</Text>
+                    <Text style={styles.wDescription}>{item?.leftdays}</Text>
                 </View>
                 <TouchableOpacity
                     onPress={() => {
-                        if (!item.disabled) {
-                            let _items = [...items].map(f => ({...f, isSelected: false}));
+                        if (!item.is_reserved) {
+                            let _items = [...daysPeriod].map(f => ({ ...f, isSelected: false }));
                             _items[index] = { ...item, isSelected: true };
                             setDaysPeriod(_items);
                         }
@@ -63,12 +94,12 @@ const IndyViews = () => {
                         ...styles.dateSContainer,
                         borderRightColor: AppStyle.colorSet.borderLightGrayColor, borderRightWidth: 1
                     }}>
-                        <Text style={{ ...styles.sDate, ...getStyles().innerText }}>{item.period.startDate}</Text>
-                        <Text style={{ ...styles.sDay, ...getStyles().innerText }}>{item.period.startDay}</Text>
+                        <Text style={{ ...styles.sDate, ...getStyles().innerText }}>{item?.show_start_date}</Text>
+                        <Text style={{ ...styles.sDay, ...getStyles().innerText }}>{item?.show_start_day}</Text>
                     </View>
                     <View style={{ width: 80, ...styles.dateSContainer }}>
-                        <Text style={{ ...styles.sDate, ...getStyles().innerText }}>{item.period.endDate}</Text>
-                        <Text style={{ ...styles.sDay, ...getStyles().innerText }}>{item.period.endDay}</Text>
+                        <Text style={{ ...styles.sDate, ...getStyles().innerText }}>{item?.show_end_date}</Text>
+                        <Text style={{ ...styles.sDay, ...getStyles().innerText }}>{item?.show_end_day}</Text>
                     </View>
                 </TouchableOpacity>
             </View >
@@ -91,9 +122,10 @@ const IndyViews = () => {
                     />
                 </View>
             </View>
-            <View style={AppStyle.buttonContainerBottom}>
-                <Button text={'Next'} fill={true} handleClick={() => navigation.navigate('UploadAd')} />
-            </View>
+            {daysPeriod?.find(f => f.isSelected) &&
+                <View style={AppStyle.buttonContainerBottom}>
+                    <Button text={'Next'} fill={true} handleClick={() => navigation.navigate('UploadAd', { slot: daysPeriod?.find(f => f.isSelected) })} />
+                </View>}
         </View>
     )
 }

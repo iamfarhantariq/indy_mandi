@@ -39,9 +39,11 @@ export const remove = (api) => {
 axiosApiInstance.interceptors.request.use(async config => {
     const value = await AsyncStorage.getItem("auth_token");
     config.headers = {
-        'Authorization': `Bearer ${value}`,
         'Content-Type': 'application/json',
         'Accept': 'application/json'
+    }
+    if(value){
+        config.headers['Authorization'] = `Bearer ${value}`
     }
     return config;
 },

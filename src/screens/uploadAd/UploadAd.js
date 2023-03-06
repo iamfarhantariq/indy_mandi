@@ -8,7 +8,9 @@ import Button from '../../components/Button'
 import { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 
-const UploadAd = () => {
+const UploadAd = ({ route }) => {
+    const { slot } = route.params;
+    console.log({slot});
     const navigation = useNavigation();
     const [gstin, setGstin] = useState('');
     const [coupen, setCoupen] = useState('');

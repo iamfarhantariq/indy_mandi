@@ -9,3 +9,6 @@ export const API_AUTH_RESEND_CODE = `${BASE_URL}/auth/verify/email/resend`;
 export const API_AUTH_VERIFY_EMAIL = `${BASE_URL}/auth/verify/email`;
 export const API_AUTH_FORGOT_PASSWORD = `${BASE_URL}/auth/forgot/password`;
 export const API_AUTH_RESET_PASSWORD = `${BASE_URL}/auth/reset/password`;
+
+// IndyView 
+export const API_GET_DAYS_SLOTS = `${BASE_URL}/indyviews/getdates`;
