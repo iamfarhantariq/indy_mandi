@@ -3,13 +3,15 @@ import React from 'react'
 import InputFieldBase from '../Input/InputFieldBase'
 import Button from '../Button';
 import { useFormik } from "formik";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, StackActions } from '@react-navigation/native';
 import { registerFormSchema } from '../../validation';
 import DeviceInfo from 'react-native-device-info';
 import { ServiceRegisterUser } from '../../services/AuthServices';
 import { useDispatch } from 'react-redux';
 import { setActivityIndicator } from '../../store/slices/appConfigSlice';
 import Toast from 'react-native-toast-message';
+import { setUser } from '../../store/slices/loginConfigSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Register = ({ setView }) => {
   const navigation = useNavigation();
@@ -28,19 +30,23 @@ const Register = ({ setView }) => {
     initialValues: { name: "", email: "", mobile: "", password: "", password_confirmation: "", device_name: DeviceInfo.getBrand() },
     onSubmit: (values) => {
       console.log({ values });
+
       dispatch(setActivityIndicator(true));
-      ServiceRegisterUser(values).then(response => {
+      ServiceRegisterUser(values).then(async (response) => {
         console.log({ response });
         dispatch(setActivityIndicator(false));
-        navigation.navigate('VerifyEmail', { user: response });
+        await AsyncStorage.setItem("auth_token", response?.data?.token);
+        dispatch(setUser(response?.data));
+        navigation.navigate('VerifyEmail', { user: response?.data });
         handleReset();
       }).catch(e => {
         dispatch(setActivityIndicator(false));
         console.log(e);
+        const errors = e?.response?.data?.errors;
         Toast.show({
           type: 'error',
-          text1: e?.message,
-          text2: e?.errors ? e.errors[Object.keys(e.errors)[0]][0] : '',
+          text1: e?.response?.data?.message || e?.message,
+          text2: errors ? errors[Object.keys(errors)[0]][0] : '',
         });
       });
     },
@@ -97,13 +103,13 @@ const Register = ({ setView }) => {
           <Button text={'Sign In'} handleClick={() => setView('login')} />
         </View>
 
-        <View style={{ marginVertical: 16 }}>
+        {/* <View style={{ marginVertical: 16 }}>
           <Button text={'Demo Contact US'} handleClick={() => navigation.navigate('ContactUs')} />
         </View>
 
         <View style={{ marginVertical: 16 }}>
           <Button text={'About, Careers, Terms, Privacy'} handleClick={() => navigation.navigate('RenderContentScreen')} />
-        </View>
+        </View> */}
 
       </ScrollView>
     </View>

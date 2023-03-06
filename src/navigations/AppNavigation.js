@@ -69,11 +69,18 @@ import ManageCollection from '../screens/manageCollection/ManageCollection';
 import CreateCollection from '../screens/createCollection/CreateCollection';
 import LoadingScreen from '../screens/LoadingScreen';
 import VerifyEmail from '../screens/verifyEmail/VerifyEmail';
+import { useSelector } from 'react-redux';
+import { getLoginConfig } from '../store/slices/loginConfigSlice';
+import { useState } from 'react';
+import ForgotPassword from '../screens/forgotPassword/ForgotPassword';
+import ResetPasswordWithCode from '../screens/resetPasswordWithCode/ResetPasswordWithCode';
 
 const Tab = createBottomTabNavigator();
 
 const AppTabs = () => {
     const navigation = useNavigation();
+    const loginConfig = useSelector(getLoginConfig);
+    const [role, setRole] = useState(null);
 
     function handleBackButtonClick() {
         if (navigation.canGoBack()) {
@@ -93,6 +100,14 @@ const AppTabs = () => {
             );
         };
     }, []);
+
+    useEffect(() => {
+        if (loginConfig?.user) {
+            setRole(loginConfig?.user?.role);
+        } else {
+            setRole(null);
+        }
+    }, [loginConfig]);
 
     const tabScreenProps = {
         tabBarActiveTintColor: StyleApp.colorSet.primaryColorC,
@@ -145,7 +160,7 @@ const AppTabs = () => {
                         ),
                 }}
             />
-            <Tab.Screen
+            {(role === 's' || role === 'v') && <Tab.Screen
                 name="Analytics"
                 component={AnalyticsStackScreen}
                 options={{
@@ -158,8 +173,8 @@ const AppTabs = () => {
                             <TabAnalyticsInActive />
                         ),
                 }}
-            />
-            <Tab.Screen
+            />}
+            {role && <Tab.Screen
                 name="Chat"
                 component={ChatStackScreen}
                 options={{
@@ -172,8 +187,8 @@ const AppTabs = () => {
                             <TabChatInActive />
                         ),
                 }}
-            />
-            <Tab.Screen
+            />}
+            {(role === 's' || role === 'v') && <Tab.Screen
                 name="MyShop"
                 component={MyShopStackScreen}
                 options={{
@@ -186,8 +201,8 @@ const AppTabs = () => {
                             <TabMyShopInActive />
                         ),
                 }}
-            />
-            <Tab.Screen
+            />}
+            {role === 'u' && <Tab.Screen
                 name="Cart"
                 component={CartStackScreen}
                 options={{
@@ -200,14 +215,13 @@ const AppTabs = () => {
                             <TabCartInActive />
                         ),
                 }}
-            />
+            />}
             <Tab.Screen
                 name="Profile"
                 component={ProflieStackScreen}
                 options={{
                     ...tabScreenProps,
                     title: 'Profile',
-
                     tabBarIcon: ({ focused, color, size }) =>
                         focused ? (
                             <TabProfileActive />
@@ -286,10 +300,13 @@ const CartStackScreen = ({ navigation, route }) => {
 const ProflieStack = createNativeStackNavigator();
 
 const ProflieStackScreen = ({ navigation, route }) => {
+    const loginConfig = useSelector(getLoginConfig);
+
     return (
-        <ProflieStack.Navigator screenOptions={{ headerShown: false }}>
-            <ProflieStack.Screen name="ProfileScreen" component={Profile} />
-            <ProflieStack.Screen name="UserScreen" component={UserScreen} />
+        <ProflieStack.Navigator initialRouteName={loginConfig?.isLogin && loginConfig?.isAutherized ? 'UserScreen' : 'ProfileScreen'}
+            screenOptions={{ headerShown: false }}>
+            <ProflieStack.Screen name='ProfileScreen' component={Profile} />
+            <ProflieStack.Screen name='UserScreen' component={UserScreen} />
         </ProflieStack.Navigator>
     );
 }
@@ -298,7 +315,6 @@ const AppStack = createNativeStackNavigator();
 
 const AppNavigation = () => {
     // const isDarkMode = useColorScheme() === 'dark';
-    // const appconfig = useSelector(state => state.appconfig);
 
     const CustomToast = (props) => {
         return <BaseToast
@@ -371,6 +387,8 @@ const AppNavigation = () => {
                     <AppStack.Screen name="ManageCollection" component={ManageCollection} />
                     <AppStack.Screen name="CreateCollection" component={CreateCollection} />
                     <AppStack.Screen name="VerifyEmail" component={VerifyEmail} />
+                    <AppStack.Screen name="ForgotPassword" component={ForgotPassword} />
+                    <AppStack.Screen name="ResetPasswordWithCode" component={ResetPasswordWithCode} />
                 </AppStack.Navigator>
             </NavigationContainer>
 

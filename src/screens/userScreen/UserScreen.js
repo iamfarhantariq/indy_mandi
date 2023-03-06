@@ -5,9 +5,18 @@ import { commonPageStyle, commonStyle } from '../../helpers/common'
 import AppConfig from '../../helpers/config'
 import UserAvatar from '../../assets/images/user-avatar.svg';
 import { useNavigation } from '@react-navigation/native'
+import { useDispatch, useSelector } from 'react-redux'
+import { getLoginConfig, setLogout } from '../../store/slices/loginConfigSlice'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { setActivityIndicator } from '../../store/slices/appConfigSlice'
+import { ServiceLogout } from '../../services/AuthServices'
+import Toast from 'react-native-toast-message';
 
 const UserScreen = () => {
     const navigation = useNavigation();
+    const dispatch = useDispatch();
+    const loginConfig = useSelector(getLoginConfig);
+
     const items = [
         { title: 'Order enquiries', func: () => navigation.navigate('OrderEnquiries') },
         { title: 'Indyviews payments', func: () => navigation.navigate('PaymentHistory') },
@@ -16,7 +25,35 @@ const UserScreen = () => {
         { title: 'Account settings', func: () => navigation.navigate('AccountSettings') },
         { title: 'Become a seller', func: () => navigation.navigate('BecomeSeller') },
         { title: 'Raise a dispute', func: () => navigation.navigate('RaiseDispute') },
-        { title: 'Logout', func: () => navigation.navigate('ProfileScreen') },
+        {
+            title: 'Logout', func: () => {
+                dispatch(setActivityIndicator(true));
+                ServiceLogout({ email: loginConfig?.user?.email }).then(async response => {
+                    console.log({ response });
+                    Toast.show({
+                        type: 'info',
+                        text1: 'Success',
+                        text2: 'You have been logged out!',
+                    });
+                    dispatch(setLogout());
+                    await AsyncStorage.removeItem("auth_token");
+                    navigation.reset({
+                        index: 0,
+                        routes: [{ name: 'ProfileScreen' }]
+                    });
+                    dispatch(setActivityIndicator(false));
+                }).catch(e => {
+                    dispatch(setActivityIndicator(false));
+                    console.log(e);
+                    const errors = e?.response?.data?.errors;
+                    Toast.show({
+                        type: 'error',
+                        text1: e?.response?.data?.message || e?.message,
+                        text2: errors ? errors[Object.keys(errors)[0]][0] : '',
+                    });
+                });
+            }
+        },
     ]
 
     const Option = ({ item, index }) => (

@@ -7,14 +7,13 @@ import { useNavigation } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
 import { useFormik } from "formik";
 import { setActivityIndicator } from '../../store/slices/appConfigSlice'
-import { ServiceVerifyEmail } from '../../services/AuthServices'
-import { verifyEmailSchema } from '../../validation'
+import { ServiceResetPasswordWithCode } from '../../services/AuthServices'
+import { resetPasswordWithCodeFormSchema } from '../../validation'
 import Button from '../../components/Button'
 import Toast from 'react-native-toast-message';
-import { setIsAuthorized, setIsLogin } from '../../store/slices/loginConfigSlice'
 
-const VerifyEmail = ({ route }) => {
-    const { user } = route.params;
+const ResetPasswordWithCode = ({ route }) => {
+    const { email } = route.params;
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
@@ -28,19 +27,19 @@ const VerifyEmail = ({ route }) => {
         handleSubmit,
         handleReset,
     } = useFormik({
-        initialValues: { email: user?.email, pincode: "" },
+        initialValues: { email, token: '', password: '', password_confirmation: '' },
         onSubmit: (values) => {
             console.log({ values });
             dispatch(setActivityIndicator(true));
-            ServiceVerifyEmail(values).then(response => {
+            ServiceResetPasswordWithCode(values).then(response => {
                 console.log({ response });
                 dispatch(setActivityIndicator(false));
-                dispatch(setIsLogin(true));
-                dispatch(setIsAuthorized(true));
-                navigation.reset({
-                    index: 0,
-                    routes: [{ name: 'UserScreen' }]
+                Toast.show({
+                    type: 'info',
+                    text1: 'Success',
+                    text2: response?.message,
                 });
+                navigation.pop(2);
             }).catch(e => {
                 dispatch(setActivityIndicator(false));
                 console.log(e);
@@ -52,14 +51,14 @@ const VerifyEmail = ({ route }) => {
                 });
             });
         },
-        validationSchema: verifyEmailSchema,
+        validationSchema: resetPasswordWithCodeFormSchema,
     });
 
     const otherProps = { values, errors, touched, setFieldValue, setFieldTouched, handleBlur };
 
     return (
         <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }}>
-            <HeaderWithBack title={'Verify Email'} shouldBack={false} />
+            <HeaderWithBack title={'New Password'} />
 
             <View style={{ marginHorizontal: 16, marginVertical: 16 }}>
                 <InputFieldBase
@@ -69,22 +68,35 @@ const VerifyEmail = ({ route }) => {
                     editable={false}
                     placeholder={'Email'}
                 />
-
                 <InputFieldBase
                     otherProps={otherProps}
                     title={'Pin Code'}
-                    name={'pincode'}
+                    name={'token'}
                     placeholder={'Pin Code'}
+                />
+                <InputFieldBase
+                    otherProps={otherProps}
+                    title={'Password'}
+                    name={'password'}
+                    placeholder={'Password'}
+                    secure={true}
+                />
+                <InputFieldBase
+                    otherProps={otherProps}
+                    title={'Confirm Password'}
+                    name={'password_confirmation'}
+                    placeholder={'Confirm Password'}
+                    secure={true}
                 />
             </View>
 
             <View style={AppStyle.buttonContainerBottom}>
-                <Button text={'Save'} fill={true} handleClick={handleSubmit} />
+                <Button text={'Change'} fill={true} handleClick={handleSubmit} />
             </View>
         </View>
     )
 }
 
-export default VerifyEmail
+export default ResetPasswordWithCode
 
 const styles = StyleSheet.create({})

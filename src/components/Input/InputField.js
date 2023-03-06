@@ -47,14 +47,15 @@ function InputField({
                     borderColor: solidBorder ?
                         otherProps && otherProps?.errors[name] && otherProps?.touched[name] ?
                             '#E67F7F' : AppStyle.colorSet.primaryColorB :
-                        AppStyle.colorSet.borderLightGrayColor
+                        AppStyle.colorSet.borderLightGrayColor,
+                    backgroundColor: !editable ? AppStyle.colorSet.borderLightGrayColor + '90' : 'transparent'
                 }}>
                     <TextInput style={styles.input}
                         secureTextEntry={secure}
                         value={otherProps ? otherProps?.values[name] : value}
                         placeholder={placeholder}
                         placeholderTextColor={otherProps &&
-                             otherProps?.errors[name] && otherProps?.touched[name] ?
+                            otherProps?.errors[name] && otherProps?.touched[name] ?
                             '#E67F7F' : AppStyle.colorSet.textPlaceholderColor}
                         numberOfLines={numberOfLines}
                         multiline={numberOfLines > 1}
@@ -77,7 +78,7 @@ function InputField({
                                 onTextChange(it);
                             }
                         }} />
-                    {(otherProps && otherProps?.values[name]?.length) || (value && editable) ?
+                    {(otherProps && otherProps?.values[name]?.length) && (value && editable) ?
                         <TouchableOpacity style={{ padding: 10 }}
                             onPress={() => {
                                 if (otherProps) {

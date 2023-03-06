@@ -17,7 +17,14 @@ export const loginConfigSlice = createSlice({
             state.isAutherized = action.payload;
         },
         setUser: (state, action) => {
-            state.user = action.payload;
+            let payload = action.payload;
+            delete payload.token;
+            state.user = payload;
+        },
+        setLogout: (state, action) => {
+            state.isLogin = false;
+            state.isAutherized = false;
+            state.user = null;
         },
     },
 });
@@ -29,7 +36,8 @@ export const getLoginConfig = (state) => state.loginConfig;
 export const {
     setIsLogin,
     setIsAuthorized,
-    setUser
+    setUser,
+    setLogout
 } = loginConfigSlice.actions;
 
 export default loginConfigSlice.reducer;

@@ -9,12 +9,62 @@ import InputFieldBase from '../Input/InputFieldBase';
 import { useState } from 'react';
 import Button from '../Button';
 import { useNavigation } from '@react-navigation/native';
+import { useFormik } from "formik";
+import DeviceInfo from 'react-native-device-info';
+import { ServiceLoginUser } from '../../services/AuthServices';
+import Toast from 'react-native-toast-message';
+import { loginFormSchema } from '../../validation';
+import { useDispatch } from 'react-redux';
+import { setActivityIndicator } from '../../store/slices/appConfigSlice';
+import { setIsAuthorized, setIsLogin, setUser } from '../../store/slices/loginConfigSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignIn = ({ setView }) => {
     const navigation = useNavigation();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const dispatch = useDispatch();
     const [staySigned, setStaySigned] = useState(true);
+
+    const {
+        errors,
+        touched,
+        values,
+        setFieldValue,
+        setFieldTouched,
+        handleBlur,
+        handleSubmit,
+        handleReset,
+    } = useFormik({
+        initialValues: { email: "", password: "", device_name: DeviceInfo.getBrand() },
+        onSubmit: (values) => {
+            console.log({ values });
+            dispatch(setActivityIndicator(true));
+            ServiceLoginUser(values).then(async (response) => {
+                console.log({ response });
+                dispatch(setActivityIndicator(false));
+                await AsyncStorage.setItem("auth_token", response?.data?.token);
+                dispatch(setUser(response?.data));
+                dispatch(setIsLogin(true));
+                dispatch(setIsAuthorized(response?.data?.is_verified === 1));
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'UserScreen' }]
+                });
+                handleReset();
+            }).catch(e => {
+                dispatch(setActivityIndicator(false));
+                console.log(e);
+                const errors = e?.response?.data?.errors;
+                Toast.show({
+                    type: 'error',
+                    text1: e?.response?.data?.message || e?.message,
+                    text2: errors ? errors[Object.keys(errors)[0]][0] : '',
+                });
+            });
+        },
+        validationSchema: loginFormSchema,
+    });
+
+    const otherProps = { values, errors, touched, setFieldValue, setFieldTouched, handleBlur };
 
     return (
         <View style={{ marginHorizontal: 16, flex: 1 }}>
@@ -32,20 +82,22 @@ const SignIn = ({ setView }) => {
                 </View>
 
                 <InputFieldBase
+                    otherProps={otherProps}
                     title={'Email'}
+                    name={'email'}
+                    inputMode={'email'} // email, text, none, decimal, numeric, tel, search, url
+                    keyboardType={'email-address'} // default - numeric - email-address - phone-pad
                     placeholder={'Email'}
-                    value={email}
-                    onTextChange={(t) => setEmail(t)}
                 />
                 <InputFieldBase
+                    otherProps={otherProps}
                     title={'Password'}
+                    name={'password'}
                     placeholder={'Password'}
-                    value={password}
-                    onTextChange={(t) => setPassword(t)}
                     secure={true}
                 />
 
-                <TouchableOpacity>
+                <TouchableOpacity onPress={()=> navigation.navigate('ForgotPassword')}>
                     <Text style={styles.forgotText}>Forgot your password?</Text>
                 </TouchableOpacity>
 
@@ -64,7 +116,7 @@ const SignIn = ({ setView }) => {
                 </View>
 
                 <View style={{ marginVertical: 16 }}>
-                    <Button text={'Sign In'} handleClick={() => navigation.navigate('UserScreen')} fill={true} />
+                    <Button text={'Sign In'} handleClick={handleSubmit} fill={true} />
                 </View>
 
                 <View style={{ marginVertical: 16 }}>
