@@ -15,16 +15,6 @@ import { useEffect } from 'react'
 const IndyViews = () => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
-    const [items, setItems] = useState([]);
-
-    // const items = [
-    //     { text: 'Dec - Week ', period: { startDate: '16 Dec', startDay: 'Friday', endDate: '22 Dec', endDay: 'Thursday' }, isSelected: false, disabled: false },
-    //     { text: 'Dec - Week ', period: { startDate: '16 Dec', startDay: 'Friday', endDate: '22 Dec', endDay: 'Thursday' }, isSelected: true, disabled: false },
-    //     { text: 'Dec - Week ', period: { startDate: '16 Dec', startDay: 'Friday', endDate: '22 Dec', endDay: 'Thursday' }, isSelected: false, disabled: false },
-    //     { text: 'Dec - Week ', period: { startDate: '16 Dec', startDay: 'Friday', endDate: '22 Dec', endDay: 'Thursday' }, isSelected: false, disabled: true },
-    //     { text: 'Dec - Week ', period: { startDate: '16 Dec', startDay: 'Friday', endDate: '22 Dec', endDay: 'Thursday' }, isSelected: false, disabled: false },
-    // ];
-
     const [daysPeriod, setDaysPeriod] = useState([]);
 
     useEffect(() => {

@@ -76,3 +76,11 @@ export const commonStyle = (fontWeight, fontSize, color) => ({
 export const commonPageStyle = {
   flex: 1, marginTop: AppConfig.statusBarHeight, backgroundColor: AppStyle.colorSet.BGColor
 };
+
+export const convertToFormDataObject = (values) => {
+    const formData = new FormData();
+    Object.keys(values).forEach(key => {
+      formData.append(key, values[key])
+    });
+    return formData;
+}

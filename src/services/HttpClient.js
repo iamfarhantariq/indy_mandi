@@ -12,6 +12,17 @@ export const post = (api, data, source) => {
     return axiosApiInstance.post(api, data);
 };
 
+export const postMultipartData = async (api, data) => {
+    const value = await AsyncStorage.getItem("auth_token");
+    return axios.post(api, data, {
+        headers:{
+            "Content-Type": "multipart/form-data",
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${value}`
+        }
+    });
+};
+
 export const postWithoutBody = (api) => {
     return axiosApiInstance.post(api);
 };

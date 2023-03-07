@@ -5,8 +5,11 @@ import HeaderWithBack from '../../components/Headers/HeaderWithBack'
 import Button from '../../components/Button'
 import { useNavigation } from '@react-navigation/native'
 
-const CropImage = () => {
+const CropImage = ({ route }) => {
+    const { image } = route.params;
     const navigation = useNavigation();
+
+    console.log({image});
 
     return (
         <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }}>

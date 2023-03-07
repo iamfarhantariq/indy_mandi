@@ -12,3 +12,4 @@ export const API_AUTH_RESET_PASSWORD = `${BASE_URL}/auth/reset/password`;
 
 // IndyView 
 export const API_GET_DAYS_SLOTS = `${BASE_URL}/indyviews/getdates`;
+export const API_POST_INDY_MANDI_AD = `${BASE_URL}/indyviews/store`;

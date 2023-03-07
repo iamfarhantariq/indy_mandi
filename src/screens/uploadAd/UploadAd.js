@@ -7,17 +7,82 @@ import InputFieldBase from '../../components/Input/InputFieldBase'
 import Button from '../../components/Button'
 import { useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
+import { useFormik } from 'formik'
+import { useDispatch, useSelector } from 'react-redux'
+import { getLoginConfig } from '../../store/slices/loginConfigSlice'
+import { createIndyViewFormSchema } from '../../validation'
+import { ServiceStoreIndyView } from '../../services/IndyViewService'
+import Toast from 'react-native-toast-message';
+import { convertToFormDataObject } from '../../helpers/common'
+import { setActivityIndicator } from '../../store/slices/appConfigSlice'
 
 const UploadAd = ({ route }) => {
     const { slot } = route.params;
-    console.log({slot});
     const navigation = useNavigation();
-    const [gstin, setGstin] = useState('');
-    const [coupen, setCoupen] = useState('');
-    const [address, setAddress] = useState('');
-    const [state, setState] = useState('');
-    const [storeName, setStoreName] = useState('');
-    const [redirectUrl, setRedirectUrl] = useState('');
+    const dispatch = useDispatch();
+    const loginConfig = useSelector(getLoginConfig);
+
+    const {
+        errors,
+        touched,
+        values,
+        setFieldValue,
+        setFieldTouched,
+        handleBlur,
+        handleSubmit,
+        handleReset,
+    } = useFormik({
+        initialValues: {
+            start_date: slot?.submit_start_date,
+            end_date: slot?.submit_end_date,
+            image: null,
+            name: loginConfig?.user?.name,
+            gstin: '',
+            coupon: '64079d4eb92cf',
+            address: '',
+            state: '',
+            store_name: '',
+            redirect_url: '',
+        },
+        onSubmit: (values) => {
+            console.log({ values });
+
+            if (!values.image) {
+                return Toast.show({
+                    type: 'error',
+                    text1: 'Required',
+                    text2: 'Image required',
+                });
+            }
+
+            const formData = convertToFormDataObject(values);
+            console.log({ formData });
+            dispatch(setActivityIndicator(true));
+            ServiceStoreIndyView(formData).then(async (response) => {
+                console.log({ response });
+                dispatch(setActivityIndicator(false));
+                Toast.show({
+                    type: 'success',
+                    text1: 'Success',
+                    text2: response?.message,
+                });
+                handleReset();
+                navigation.pop(2);
+            }).catch(e => {
+                dispatch(setActivityIndicator(false));
+                console.log(e);
+                const errors = e?.response?.data?.errors;
+                Toast.show({
+                    type: 'error',
+                    text1: e?.response?.data?.message || e?.message,
+                    text2: errors ? errors[Object.keys(errors)[0]][0] : '',
+                });
+            });
+        },
+        validationSchema: createIndyViewFormSchema,
+    });
+
+    const otherProps = { values, errors, touched, setFieldValue, setFieldTouched, handleBlur };
 
     return (
         <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }}>
@@ -26,51 +91,51 @@ const UploadAd = ({ route }) => {
             <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
                 <View style={{ flex: 1, marginHorizontal: 16, paddingBottom: 108 }}>
                     <View style={{ marginVertical: 16, height: 176 }}>
-                        <UploadImages />
+                        <UploadImages getImage={(blobfile) => setFieldValue('image', blobfile)} />
                     </View>
 
                     <InputFieldBase
+                        otherProps={otherProps}
                         title={'GSTIN (Optional)'}
                         placeholder={'GSTIN (Optional)'}
-                        value={gstin}
-                        onTextChange={(t) => setGstin(t)}
+                        name='gstin'
                     />
                     <InputFieldBase
+                        otherProps={otherProps}
                         title={'Coupon'}
                         placeholder={'Coupon'}
-                        value={coupen}
-                        onTextChange={(t) => setCoupen(t)}
+                        name='coupon'
                     />
                     <InputFieldBase
+                        otherProps={otherProps}
                         title={'Address'}
                         placeholder={'Address'}
-                        value={address}
-                        onTextChange={(t) => setAddress(t)}
+                        name='address'
                     />
                     <InputFieldBase
+                        otherProps={otherProps}
                         title={'State'}
                         placeholder={'State'}
-                        value={state}
-                        onTextChange={(t) => setState(t)}
+                        name='state'
                     />
                     <InputFieldBase
+                        otherProps={otherProps}
                         title={'Store Name'}
                         placeholder={'Store Name'}
-                        value={storeName}
-                        onTextChange={(t) => setStoreName(t)}
+                        name='store_name'
                     />
                     <InputFieldBase
+                        otherProps={otherProps}
                         title={'Redirect Url'}
                         placeholder={'Redirect Url'}
-                        value={redirectUrl}
-                        onTextChange={(t) => setRedirectUrl(t)}
+                        name='redirect_url'
                     />
 
                 </View>
             </ScrollView>
 
             <View style={AppStyle.buttonContainerBottom}>
-                <Button text={'Next'} fill={true} handleClick={() => navigation.navigate('CropImage')} />
+                <Button text={'Next'} fill={true} handleClick={handleSubmit} />
             </View>
         </View>
     )

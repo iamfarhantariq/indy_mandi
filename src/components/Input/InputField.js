@@ -78,7 +78,7 @@ function InputField({
                                 onTextChange(it);
                             }
                         }} />
-                    {(otherProps && otherProps?.values[name]?.length) && (value && editable) ?
+                    {(otherProps && otherProps?.values[name]?.length) || (value && editable) ?
                         <TouchableOpacity style={{ padding: 10 }}
                             onPress={() => {
                                 if (otherProps) {

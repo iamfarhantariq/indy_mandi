@@ -1,23 +1,38 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useState } from 'react'
 import AppStyle from '../../assets/styles/AppStyle';
 import UploadIcon from '../../assets/images/add-images.svg';
 import { commonStyle } from '../../helpers/common';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { useNavigation } from '@react-navigation/native';
+import ImagePicker from 'react-native-image-crop-picker';
 
-const UploadImages = () => {
+const UploadImages = ({ getImage = null }) => {
+    const navigation = useNavigation();
+    const [cropedImage, setCropedImage] = useState(null);
 
     const openGallery = async () => {
-        const options = {}
-        const result = await launchImageLibrary(options);
-        console.log({ result });
+        ImagePicker.openPicker({
+            width: 400,
+            height: 400,
+            cropping: true,
+            mediaType: 'photo',
+        }).then(async image => {
+            console.log(image);
+            setCropedImage(image);
+            const blobfile = await (await fetch(image?.sourceURL)).blob()
+            getImage(blobfile);
+        });
     }
 
     return (
-        <TouchableOpacity style={styles.container} onPress={openGallery}>
-            <UploadIcon style={{ color: '#713A74' }} />
-            <Text style={styles.text}>Upload image</Text>
-        </TouchableOpacity>
+        <>
+            {cropedImage ? <Image source={{ uri: cropedImage.sourceURL }} style={styles.container} resizeMode={'cover'} /> :
+                <TouchableOpacity style={styles.container} onPress={openGallery}>
+                    <UploadIcon style={{ color: '#713A74' }} />
+                    <Text style={styles.text}>Upload image</Text>
+                </TouchableOpacity>
+            }
+        </>
     )
 }
 
