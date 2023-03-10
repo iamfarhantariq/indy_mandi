@@ -4,34 +4,18 @@ import ExploreHeading from './ExploreHeading'
 import { commonStyle } from '../../helpers/common'
 import AppStyle from '../../assets/styles/AppStyle'
 
-const StoresExplore = () => {
-    const items = [
-        { name: 'Feine Coffee Company', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-        { name: 'Feine Coffee Company', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-        { name: 'Feine Coffee Company', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-        { name: 'Feine Coffee Company', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-        { name: 'Feine Coffee Company', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-        { name: 'Feine Coffee Company', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-        { name: 'Feine Coffee Company', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-        { name: 'Feine Coffee Company', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-        { name: 'Feine Coffee Company', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-        { name: 'Feine Coffee Company', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-        { name: 'Feine Coffee Company', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-        { name: 'Feine Coffee Company', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-    ]
-
+const StoresExplore = ({ items }) => {
     const _renderItem = ({ item, index }) => (
         <View style={styles.itemContainer}>
-            <Image resizeMode='cover' source={item.imageSource}
+            <Image resizeMode='cover' source={{ uri: item?.image }}
                 style={styles.imageStyle} />
-            <Text style={styles.text}>{item.name}</Text>
+            <Text style={styles.text}>{item?.name}</Text>
         </View>
     )
 
     return (
         <View style={{ flex: 1 }}>
             <ExploreHeading title={'Stores'} isFilter={false} />
-
             <FlatList
                 data={items}
                 key={index => 'category' + index + 'store'}
@@ -39,7 +23,6 @@ const StoresExplore = () => {
                 horizontal={false}
                 showsVerticalScrollIndicator={false}
             />
-
         </View>
     )
 }

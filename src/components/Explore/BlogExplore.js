@@ -5,19 +5,12 @@ import { useNavigation } from '@react-navigation/native'
 import AppStyle from '../../assets/styles/AppStyle'
 import CoverFrame from '../Products/CoverFrame'
 
-const BlogExplore = () => {
+const BlogExplore = ({items}) => {
     const navigation = useNavigation();
-    const items = [
+    const categories = [
         { name: 'All', color: '#C5F1C4' },
         { name: 'Fashion', color: '#CCDFD6' },
         { name: 'Article', color: '#E8CDDE' },
-    ]
-
-    const coverItems = [
-        { name: 'The secrets of not tired of wearing shoe', imageSource: require('../../assets/images/demo-cover-bg.png') },
-        { name: 'The secrets of not tired of wearing shoe', imageSource: require('../../assets/images/demo-cover-bg.png') },
-        { name: 'The secrets of not tired of wearing shoe', imageSource: require('../../assets/images/demo-cover-bg.png') },
-        { name: 'The secrets of not tired of wearing shoe', imageSource: require('../../assets/images/demo-cover-bg.png') },
     ]
 
     const _renderItem = ({ item, index }) => {
@@ -37,14 +30,14 @@ const BlogExplore = () => {
                 <View style={{ marginBottom: 16 }}>
                     <FlatList
                         horizontal
-                        data={items}
+                        data={categories}
                         key={(index) => 'header' + index + 'chip'}
                         renderItem={_renderItem}
                         showsHorizontalScrollIndicator={false}
                     />
                 </View>
                 <ScrollView showsVerticalScrollIndicator={false} style={{ marginHorizontal: 16 }}>
-                    {coverItems?.map((item, index) => {
+                    {items?.map((item, index) => {
                         return (
                             <TouchableOpacity onPress={() => navigation.navigate('BlogContentScreen')} key={index} style={{ marginBottom: 16 }}>
                                 <CoverFrame item={item} key={index} index={index} detailed={false} flex={true} />
