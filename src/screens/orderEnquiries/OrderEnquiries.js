@@ -2,8 +2,7 @@ import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react
 import React from 'react'
 import HeaderWithBack from '../../components/Headers/HeaderWithBack'
 import AppStyle from '../../assets/styles/AppStyle'
-import TabBar from 'react-native-tab-view/src/TabBar';
-import { TabView, SceneMap } from 'react-native-tab-view';
+import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import AppConfig from '../../helpers/config'
 import { commonStyle } from '../../helpers/common';
 

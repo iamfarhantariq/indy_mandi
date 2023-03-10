@@ -2,29 +2,18 @@ import React from 'react';
 import AppStyle from '../assets/styles/AppStyle';
 import { FlatList, ImageBackground, StyleSheet, Text, View } from 'react-native';
 
-const ProductCategories = () => {
-
-    const items = [
-        { name: 'Fashion', imageSource: require('../assets/images/demo-category-image.jpeg') },
-        { name: 'Tea', imageSource: require('../assets/images/demo-category-image.jpeg') },
-        { name: 'Toys', imageSource: require('../assets/images/demo-category-image.jpeg') },
-        { name: 'Clothes', imageSource: require('../assets/images/demo-category-image.jpeg') },
-        { name: 'Accessories', imageSource: require('../assets/images/demo-category-image.jpeg') },
-        { name: 'Fashion', imageSource: require('../assets/images/demo-category-image.jpeg') },
-        { name: 'Fashion', imageSource: require('../assets/images/demo-category-image.jpeg') },
-        { name: 'Fashion', imageSource: require('../assets/images/demo-category-image.jpeg') },
-    ]
+const ProductCategories = ({ data }) => {
 
     const _renderItem = ({ item, index }) => {
         return (
             <ImageBackground
                 resizeMode='cover'
-                source={item.imageSource}
+                source={{uri: item?.image}}
                 style={{ ...styles.imageContainer, marginLeft: index === 0 ? 16 : 0 }}
                 imageStyle={{ borderRadius: 50 }}
             >
                 <View style={styles.chipContainer}>
-                    <Text numberOfLines={2} style={styles.chipText}>{item.name}</Text>
+                    <Text numberOfLines={2} style={styles.chipText}>{item?.name}</Text>
                 </View>
             </ImageBackground>
         )
@@ -34,7 +23,7 @@ const ProductCategories = () => {
         <View>
             <FlatList
                 horizontal
-                data={items}
+                data={data || []}
                 key={(index) => 'category' + index + 'chip'}
                 renderItem={_renderItem}
                 showsHorizontalScrollIndicator={false}

@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { TabView, SceneMap } from 'react-native-tab-view';
-import TabBar from 'react-native-tab-view/src/TabBar';
+import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import AppStyle from '../../assets/styles/AppStyle';
 import { commonStyle } from '../../helpers/common';
 import AppConfig from '../../helpers/config';

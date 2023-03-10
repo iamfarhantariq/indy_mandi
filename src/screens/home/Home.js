@@ -11,9 +11,9 @@ import Facebook from '../../assets/images/facebook-icon.svg';
 import Instagram from '../../assets/images/insta-icon.svg';
 import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
-import { ServiceGetIndyViewBlogsStories, ServiceGetTrendingCuratedEditorsProducts } from '../../services/ProductService';
+import { ServiceGetCategoriesCircle, ServiceGetIndyViewBlogsStories, ServiceGetTrendingCuratedEditorsProducts } from '../../services/ProductService';
 import { showToastHandler } from '../../helpers/common';
-import { setHomeProducts, setHomeSections } from '../../store/slices/productsSlice';
+import { setCircleCategoriesStore, setHomeProducts, setHomeSections } from '../../store/slices/productsSlice';
 
 
 const Home = ({ route }) => {
@@ -21,10 +21,12 @@ const Home = ({ route }) => {
   const navigation = useNavigation();
   const [products, setProducts] = useState(null);
   const [sections, setSections] = useState(null);
+  const [circleCategories, setCircleCategories] = useState([]);
 
   useEffect(() => {
     getHomeSectionProducts();
     getHomeOtherSections();
+    getCircleCategories();
   }, []);
 
   const getHomeSectionProducts = () => {
@@ -47,12 +49,22 @@ const Home = ({ route }) => {
     });
   }
 
+  const getCircleCategories = () => {
+    ServiceGetCategoriesCircle().then(response => {
+      console.log({ response });
+      setCircleCategories(response?.data);
+      dispatch(setCircleCategoriesStore(response?.data));
+    }).catch(e => {
+      showToastHandler(e);
+    });
+  }
+
   return (
     <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }}>
       <HomeHeader route={route} />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ marginTop: 16, marginBottom: 24 }}>
-          <ProductCategories />
+          <ProductCategories data={circleCategories}/>
         </View>
 
         <View style={{ marginBottom: 25.5 }}>

@@ -4,6 +4,7 @@ const initialState = {
   categories: [],
   homeProducts: null,
   homeSections: null,
+  circleCategories: [],
 };
 
 export const productsSlice = createSlice({
@@ -19,6 +20,9 @@ export const productsSlice = createSlice({
     setHomeSections: (state, action) => {
       state.homeSections = action.payload;
     },
+    setCircleCategoriesStore: (state, action) => {
+      state.circleCategories = action.payload;
+    },
   },
 });
 
@@ -29,7 +33,8 @@ export const getProducts = (state) => state.products;
 export const {
   setCategories,
   setHomeProducts,
-  setHomeSections
+  setHomeSections,
+  setCircleCategoriesStore
 } = productsSlice.actions;
 
 export default productsSlice.reducer;
