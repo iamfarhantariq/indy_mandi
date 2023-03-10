@@ -1,6 +1,8 @@
 import moment from 'moment';
 import AppStyle from '../assets/styles/AppStyle';
+import { setActivityIndicator } from '../store/slices/appConfigSlice';
 import AppConfig from './config';
+import Toast from 'react-native-toast-message';
 
 /**
  * Get random package from array.
@@ -78,9 +80,22 @@ export const commonPageStyle = {
 };
 
 export const convertToFormDataObject = (values) => {
-    const formData = new FormData();
-    Object.keys(values).forEach(key => {
-      formData.append(key, values[key])
-    });
-    return formData;
+  const formData = new FormData();
+  Object.keys(values).forEach(key => {
+    formData.append(key, values[key])
+  });
+  return formData;
+}
+
+export const showToastHandler = (e, dispatch = null) => {
+  if (dispatch) {
+    dispatch(setActivityIndicator(false));
+  }
+  console.log(e);
+  const errors = e?.response?.data?.errors;
+  Toast.show({
+    type: 'error',
+    text1: e?.response?.data?.message || e?.message,
+    text2: errors ? errors[Object.keys(errors)[0]][0] : '',
+  });
 }

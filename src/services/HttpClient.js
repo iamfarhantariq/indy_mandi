@@ -15,8 +15,8 @@ export const post = (api, data, source) => {
 export const postMultipartData = async (api, data) => {
     const value = await AsyncStorage.getItem("auth_token");
     return axios.post(api, data, {
-        headers:{
-            "Content-Type": "multipart/form-data",
+        headers: {
+            'Content-Type': 'multipart/form-data',
             'Accept': 'application/json',
             'Authorization': `Bearer ${value}`
         }
@@ -53,7 +53,7 @@ axiosApiInstance.interceptors.request.use(async config => {
         'Content-Type': 'application/json',
         'Accept': 'application/json'
     }
-    if(value){
+    if (value) {
         config.headers['Authorization'] = `Bearer ${value}`
     }
     return config;

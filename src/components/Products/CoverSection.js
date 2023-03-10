@@ -6,14 +6,15 @@ import { useNavigation } from '@react-navigation/native'
 import RedirectImage from '../../assets/images/redirect-with-indyviews.svg';
 import AppConfig from '../../helpers/config'
 
-const CoverSection = ({ title, detailed = true, discoverOption }) => {
+const CoverSection = ({ title, items = [], detailed = true, discoverOption }) => {
     const navigation = useNavigation();
 
-    const items = [
-        { price: '$89.99', name: 'Floran shiffon dress', subtitle: 'All birds Couture, Calcutta', imageSource: require('../../assets/images/demo-cover-bg.png') },
-        { price: '$89.99', name: 'Floran shiffon dress', subtitle: 'All birds Couture, Calcutta', imageSource: require('../../assets/images/demo-cover-bg.png') },
-        { view: true }
+    let itemsToShow = [
+        ...items
     ]
+    if (title !== 'Blogs') {
+        itemsToShow.push({ view: true })
+    }
 
     const _renderItem = ({ item, index }) => {
         return (
@@ -41,7 +42,7 @@ const CoverSection = ({ title, detailed = true, discoverOption }) => {
             </View>
             <FlatList
                 horizontal
-                data={items}
+                data={itemsToShow}
                 key={(index) => 'Indyview' + index + 'cover'}
                 renderItem={_renderItem}
                 showsHorizontalScrollIndicator={false}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import AppStyle from '../../assets/styles/AppStyle';
 import HomeHeader from '../../components/Headers/HomeHeader';
@@ -9,17 +9,43 @@ import SellerStory from '../../components/SellerStory';
 import Email from '../../assets/images/email-icon.svg';
 import Facebook from '../../assets/images/facebook-icon.svg';
 import Instagram from '../../assets/images/insta-icon.svg';
+import { useDispatch } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import { ServiceGetIndyViewBlogsStories, ServiceGetTrendingCuratedEditorsProducts } from '../../services/ProductService';
+import { showToastHandler } from '../../helpers/common';
+import { setHomeProducts, setHomeSections } from '../../store/slices/productsSlice';
 
 
 const Home = ({ route }) => {
-  const items = [
-    { name: 'New Nike girl shoe', price: '$80.77', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-    { name: 'New Nike girl shoe', price: '$80.77', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-    { name: 'New Nike girl shoe', price: '$80.77', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-    { name: 'New Nike girl shoe', price: '$80.77', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-    { name: 'New Nike girl shoe', price: '$80.77', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-    { name: 'New Nike girl shoe', price: '$80.77', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-  ];
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const [products, setProducts] = useState(null);
+  const [sections, setSections] = useState(null);
+
+  useEffect(() => {
+    getHomeSectionProducts();
+    getHomeOtherSections();
+  }, []);
+
+  const getHomeSectionProducts = () => {
+    ServiceGetTrendingCuratedEditorsProducts().then(response => {
+      console.log({ response });
+      setProducts(response?.data);
+      dispatch(setHomeProducts(response?.data));
+    }).catch(e => {
+      showToastHandler(e);
+    });
+  }
+
+  const getHomeOtherSections = () => {
+    ServiceGetIndyViewBlogsStories().then(response => {
+      console.log({ response });
+      setSections(response?.data);
+      dispatch(setHomeSections(response?.data));
+    }).catch(e => {
+      showToastHandler(e);
+    });
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }}>
@@ -30,30 +56,30 @@ const Home = ({ route }) => {
         </View>
 
         <View style={{ marginBottom: 25.5 }}>
-          <ProductSection items={items} title={'Trending Now'} />
+          <ProductSection items={products?.trending_now || []} title={'Trending Now'} />
         </View>
 
         <View style={{ marginBottom: 25.5 }}>
-          <ProductSection items={items} title={'Curated for you'} color={AppStyle.colorSet.primaryColorC}
+          <ProductSection items={products?.curated_for_you || []} title={'Curated for you'} color={AppStyle.colorSet.primaryColorC}
             route={'CuratedForYouScreen'} />
         </View>
 
         <View style={{ marginBottom: 25.5, marginHorizontal: 16 }}>
-          <CoverSection title={'Indyview'} detailed={true} discoverOption={false} />
+          <CoverSection title={'Indyview'} items={sections?.indyviews || []} detailed={true} discoverOption={false} />
         </View>
 
         <View style={{ marginBottom: 25.5 }}>
-          <ProductSection items={items} title={"Best of Editor's Pick"}
+          <ProductSection items={products?.editor_picks || []} title={"Best of Editor's Pick"}
             BG={require('../../assets/images/product-section-bg.png')}
             route={'EditorChoiceScreen'} />
         </View>
 
         <View style={{ marginBottom: 25.5, marginHorizontal: 16 }}>
-          <CoverSection title={'Blogs'} detailed={false} discoverOption={true} />
+          <CoverSection title={'Blogs'} items={sections?.blog_posts || []} detailed={false} discoverOption={true} />
         </View>
 
         <View style={{ marginHorizontal: 16 }}>
-          <SellerStory title={'Seller Story'} />
+          <SellerStory title={'Seller Story'} item={sections?.seller_story}/>
         </View>
 
         <View style={{ marginVertical: 45, flexDirection: 'row', marginHorizontal: '20%', justifyContent: 'space-evenly' }}>

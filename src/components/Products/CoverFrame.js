@@ -12,7 +12,7 @@ const CoverFrame = ({ item, index, detailed = true, flex = false }) => {
         <View>
             <ImageBackground
                 resizeMode='cover'
-                source={require('../../assets/images/demo-cover-bg.png')}
+                source={{uri: item?.image}}
                 style={flexStyle}
                 imageStyle={{ borderRadius: 8 }}
             >
@@ -30,7 +30,7 @@ const CoverFrame = ({ item, index, detailed = true, flex = false }) => {
                             </Text>
                         </> :
                         <Text style={styles.nameText}>
-                            {item?.name}
+                            {item?.title}
                         </Text>
                     }
                 </View>

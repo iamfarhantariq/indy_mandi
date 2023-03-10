@@ -3,7 +3,7 @@ import React from 'react'
 import AppStyle from '../assets/styles/AppStyle'
 import { useNavigation } from '@react-navigation/native'
 
-const SellerStory = ({ title = null }) => {
+const SellerStory = ({ title = null, item }) => {
     const navigation = useNavigation();
     return (
         <View>
@@ -12,17 +12,17 @@ const SellerStory = ({ title = null }) => {
                 <View style={styles.imageContainer}>
                     <Image resizeMode='contain'
                         style={{ height: 200, flex: 1 }}
-                        source={require('../assets/images/demo-seller-actor.png')} />
+                        source={{uri: item?.image}} />
                 </View>
                 <View style={styles.textContainer}>
                     <Text style={styles.whiteText}>
-                        Turning the side hustle into a roaring business.
+                        {item?.title}
                     </Text>
                     <Text style={styles.coloredText}>
-                        While studying engineering, Rohit began designing hoodies for his college photography club
+                       {item?.first_line}
                     </Text>
                     <Text style={styles.whiteText}>
-                        {"Read Rohit's story >"}
+                        {"Read story >"}
                     </Text>
                     <TouchableOpacity onPress={() => navigation.navigate('SellerStoriesScreen')} style={styles.button}>
                         <Text style={styles.whiteText}>Become a Seller</Text>

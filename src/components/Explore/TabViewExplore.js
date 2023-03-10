@@ -59,7 +59,7 @@ const TabViewExplore = () => {
                                 ...styles.tabBarLabel,
                                 opacity: focused ? 1 : 0.5
                             }}>
-                            {route.title}
+                            {route?.title}
                         </Text>
                     )}
                 />

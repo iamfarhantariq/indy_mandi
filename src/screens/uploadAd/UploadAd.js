@@ -66,8 +66,8 @@ const UploadAd = ({ route }) => {
                     text1: 'Success',
                     text2: response?.message,
                 });
-                handleReset();
-                navigation.pop(2);
+                // handleReset();
+                // navigation.pop(2);
             }).catch(e => {
                 dispatch(setActivityIndicator(false));
                 console.log(e);

@@ -3,10 +3,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { persistReducer } from 'redux-persist';
 import appConfigSlice from './slices/appConfigSlice';
 import loginConfigSlice from './slices/loginConfigSlice';
+import productsSlice from './slices/productsSlice';
 
 const reducers = combineReducers({
   appConfig: appConfigSlice,
-  loginConfig: loginConfigSlice
+  loginConfig: loginConfigSlice,
+  products: productsSlice
 });
 
 const persistConfig = {
