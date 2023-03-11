@@ -1,17 +1,45 @@
-import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import { ActivityIndicator, FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import ExploreHeading from './ExploreHeading'
 import { useNavigation } from '@react-navigation/native'
 import AppStyle from '../../assets/styles/AppStyle'
 import CoverFrame from '../Products/CoverFrame'
+import { ServiceExploreData } from '../../services/ExploreService'
+import { showToastHandler } from '../../helpers/common'
 
-const BlogExplore = ({items}) => {
+const BlogExplore = ({ searchType, search }) => {
     const navigation = useNavigation();
     const categories = [
         { name: 'All', color: '#C5F1C4' },
         { name: 'Fashion', color: '#CCDFD6' },
         { name: 'Article', color: '#E8CDDE' },
     ]
+
+    const [page, setPage] = useState(1);
+    const [sortBy, setSortBy] = useState('relevancy'); // relevancy, asc, desc
+    const [items, setItems] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        ExploreSearch();
+    }, [page]);
+
+    const ExploreSearch = () => {
+        setLoading(true);
+        const payload = { type: searchType, sort_by: sortBy, search_keywords: search }
+        ServiceExploreData(payload, page).then((response) => {
+            console.log({ response });
+            if (page === 1) {
+                setItems(response?.data);
+            } else {
+                setItems([...items, ...response?.data])
+            }
+            setLoading(false);
+        }).catch(e => {
+            setLoading(false);
+            showToastHandler(e);
+        });
+    }
 
     const _renderItem = ({ item, index }) => {
         return (
@@ -22,6 +50,12 @@ const BlogExplore = ({items}) => {
             </TouchableOpacity>
         )
     }
+
+    const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
+        const paddingToBottom = 20;
+        return layoutMeasurement.height + contentOffset.y >=
+            contentSize.height - paddingToBottom;
+    };
 
     return (
         <View style={{ flex: 1 }}>
@@ -36,7 +70,13 @@ const BlogExplore = ({items}) => {
                         showsHorizontalScrollIndicator={false}
                     />
                 </View>
-                <ScrollView showsVerticalScrollIndicator={false} style={{ marginHorizontal: 16 }}>
+                <ScrollView
+                    onScroll={({ nativeEvent }) => {
+                        if (isCloseToBottom(nativeEvent)) {
+                            setPage(page + 1);
+                        }
+                    }}
+                    scrollEventThrottle={400} showsVerticalScrollIndicator={false} style={{ marginHorizontal: 16 }}>
                     {items?.map((item, index) => {
                         return (
                             <TouchableOpacity onPress={() => navigation.navigate('BlogContentScreen')} key={index} style={{ marginBottom: 16 }}>
@@ -46,6 +86,11 @@ const BlogExplore = ({items}) => {
                     })}
                 </ScrollView>
             </View>
+            {loading &&
+                <View style={{ marginBottom: 20 }}>
+                    <ActivityIndicator size={'large'} />
+                </View>
+            }
         </View>
     )
 }

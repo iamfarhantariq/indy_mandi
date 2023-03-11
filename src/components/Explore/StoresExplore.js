@@ -1,10 +1,37 @@
-import { FlatList, Image, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { ActivityIndicator, FlatList, Image, StyleSheet, Text, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import ExploreHeading from './ExploreHeading'
-import { commonStyle } from '../../helpers/common'
+import { commonStyle, showToastHandler } from '../../helpers/common'
 import AppStyle from '../../assets/styles/AppStyle'
+import { ServiceExploreData } from '../../services/ExploreService'
 
-const StoresExplore = ({ items }) => {
+const StoresExplore = ({ searchType, search }) => {
+    const [page, setPage] = useState(1);
+    const [sortBy, setSortBy] = useState('relevancy'); // relevancy, asc, desc
+    const [items, setItems] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        ExploreSearch();
+    }, [page]);
+
+    const ExploreSearch = () => {
+        setLoading(true);
+        const payload = { type: searchType, sort_by: sortBy, search_keywords: search }
+        ServiceExploreData(payload, page).then((response) => {
+            console.log({ response });
+            if (page === 1) {
+                setItems(response?.data);
+            } else {
+                setItems([...items, ...response?.data])
+            }
+            setLoading(false);
+        }).catch(e => {
+            setLoading(false);
+            showToastHandler(e);
+        });
+    }
+
     const _renderItem = ({ item, index }) => (
         <View style={styles.itemContainer}>
             <Image resizeMode='cover' source={{ uri: item?.image }}
@@ -22,7 +49,15 @@ const StoresExplore = ({ items }) => {
                 renderItem={_renderItem}
                 horizontal={false}
                 showsVerticalScrollIndicator={false}
+                onEndReached={info => {
+                    setPage(page + 1);
+                }}
             />
+            {loading &&
+                <View style={{ marginBottom: 20 }}>
+                    <ActivityIndicator size={'large'} />
+                </View>
+            }
         </View>
     )
 }
