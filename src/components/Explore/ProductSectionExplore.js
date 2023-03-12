@@ -7,20 +7,21 @@ import { showToastHandler } from '../../helpers/common'
 
 const ProductSectionExplore = ({ searchType, search }) => {
     const [page, setPage] = useState(1);
-    const [sortBy, setSortBy] = useState('relevancy'); // relevancy, asc, desc
+    const [sortBy, setSortBy] = useState('relevancy');
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        ExploreSearch();
+        const payload = { type: searchType, sort_by: sortBy, search_keywords: search }
+        ExploreSearch(payload);
     }, [page]);
 
-    const ExploreSearch = () => {
+    const ExploreSearch = (payload, _page = null) => {
+        const __page = _page ? _page : page;
         setLoading(true);
-        const payload = { type: searchType, sort_by: sortBy, search_keywords: search }
-        ServiceExploreData(payload, page).then((response) => {
+        ServiceExploreData(payload, __page).then((response) => {
             console.log({ response });
-            if (page === 1) {
+            if (__page === 1) {
                 setItems(response?.data);
             } else {
                 setItems([...items, ...response?.data])
@@ -32,6 +33,13 @@ const ProductSectionExplore = ({ searchType, search }) => {
         });
     }
 
+    const filterHandler = (value) => {
+        setSortBy(value);
+        setPage(1);
+        setItems([]);
+        const payload = { type: searchType, sort_by: value, search_keywords: search }
+        ExploreSearch(payload, 1);
+    }
 
     const _renderItem = ({ item, index }) => {
         return (
@@ -43,7 +51,7 @@ const ProductSectionExplore = ({ searchType, search }) => {
 
     return (
         <View style={{ flex: 1 }}>
-            <ExploreHeading title={'Products'} />
+            <ExploreHeading title={'Products'} filterHandler={filterHandler} />
             <View style={{ flex: 1 }}>
                 <FlatList
                     data={items}

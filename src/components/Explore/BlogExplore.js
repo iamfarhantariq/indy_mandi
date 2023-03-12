@@ -59,7 +59,7 @@ const BlogExplore = ({ searchType, search }) => {
 
     return (
         <View style={{ flex: 1 }}>
-            <ExploreHeading title={'Blogs'} />
+            <ExploreHeading title={'Blogs'} isFilter={false} />
             <View style={{ flex: 1, marginHorizontal: -16 }}>
                 <View style={{ marginBottom: 16 }}>
                     <FlatList

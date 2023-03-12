@@ -2,12 +2,27 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import Sort from '../../assets/images/sort-icon.svg';
 import { commonStyle } from '../../helpers/common';
+import { SheetManager } from 'react-native-actions-sheet';
 
 const ExploreHeading = ({ title, isFilter = true, filterHandler = null }) => {
+    const filters = [
+        { title: 'Relevancy', value: 'relevancy' },
+        { title: 'Asc', value: 'asc' },
+        { title: 'Desc', value: 'desc' },
+    ]
+
     return (
         <View style={styles.container}>
             <Text style={styles.heading}>{title}</Text>
-            {isFilter && <TouchableOpacity onPress={filterHandler}>
+            {isFilter && <TouchableOpacity onPress={() => {
+                SheetManager.show('example-two', {
+                    payload: { header: 'Sort by', actions: filters, filterHandler },
+                    // onClose: (value) => {
+                    //     // console.log({ value });
+                    //     filterHandler(value);
+                    // }
+                });
+            }}>
                 <Sort />
             </TouchableOpacity>}
         </View>

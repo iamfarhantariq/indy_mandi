@@ -14,6 +14,10 @@ import AppNavigation from './src/navigations/AppNavigation';
 import { persistStore } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
 import AppStyle from './src/assets/styles/AppStyle';
+import { SheetProvider } from 'react-native-actions-sheet';
+import './src/helpers/sheets';
+// import { LogBox } from 'react-native';
+// LogBox.ignoreLogs(['Sending']);
 
 let persistor = persistStore(store);
 
@@ -22,7 +26,9 @@ const App = () => {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }}>
-          <AppNavigation />
+          <SheetProvider>
+            <AppNavigation />
+          </SheetProvider>
         </View>
       </PersistGate>
     </Provider>
