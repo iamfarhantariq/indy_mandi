@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   loadingScreen: false,
+  countryStates: []
 };
 
 export const appConfigSlice = createSlice({
@@ -11,6 +12,9 @@ export const appConfigSlice = createSlice({
     setActivityIndicator: (state, action) => {
       state.loadingScreen = action.payload;
     },
+    setCountryStates: (state, action) => {
+      state.countryStates = action.payload;
+    }
   },
 });
 
@@ -20,6 +24,7 @@ export const getAppConfig = (state) => state.appConfig;
 // Action creators are generated for each case reducer function
 export const {
   setActivityIndicator,
+  setCountryStates
 } = appConfigSlice.actions;
 
 export default appConfigSlice.reducer;

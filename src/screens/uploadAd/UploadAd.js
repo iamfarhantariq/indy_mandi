@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import AppStyle from '../../assets/styles/AppStyle'
 import HeaderWithBack from '../../components/Headers/HeaderWithBack'
 import UploadImages from '../../components/Input/UploadImages'
@@ -13,14 +13,29 @@ import { getLoginConfig } from '../../store/slices/loginConfigSlice'
 import { createIndyViewFormSchema } from '../../validation'
 import { ServiceStoreIndyView } from '../../services/IndyViewService'
 import Toast from 'react-native-toast-message';
-import { convertToFormDataObject } from '../../helpers/common'
-import { setActivityIndicator } from '../../store/slices/appConfigSlice'
+import { convertToFormDataObject, showToastHandler } from '../../helpers/common'
+import { setActivityIndicator, setCountryStates } from '../../store/slices/appConfigSlice'
+import { GetCountryStates } from '../../services/AppService'
+import GetCountryState from '../../components/GetCountryState'
 
 const UploadAd = ({ route }) => {
     const { slot } = route.params;
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const loginConfig = useSelector(getLoginConfig);
+
+    useEffect(() => {
+        getCountryStates();
+    }, []);
+
+    const getCountryStates = () => {
+        GetCountryStates().then((response) => {
+            console.log({ response });
+            dispatch(setCountryStates(response?.data));
+        }).catch(e => {
+            showToastHandler(e);
+        });
+    }
 
     const {
         errors,
@@ -66,8 +81,8 @@ const UploadAd = ({ route }) => {
                     text1: 'Success',
                     text2: response?.message,
                 });
-                // handleReset();
-                // navigation.pop(2);
+                handleReset();
+                navigation.pop(2);
             }).catch(e => {
                 dispatch(setActivityIndicator(false));
                 console.log(e);
@@ -112,9 +127,8 @@ const UploadAd = ({ route }) => {
                         placeholder={'Address'}
                         name='address'
                     />
-                    <InputFieldBase
+                    <GetCountryState
                         otherProps={otherProps}
-                        title={'State'}
                         placeholder={'State'}
                         name='state'
                     />

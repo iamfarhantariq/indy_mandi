@@ -10,6 +10,9 @@ export const API_AUTH_VERIFY_EMAIL = `${BASE_URL}/auth/verify/email`;
 export const API_AUTH_FORGOT_PASSWORD = `${BASE_URL}/auth/forgot/password`;
 export const API_AUTH_RESET_PASSWORD = `${BASE_URL}/auth/reset/password`;
 
+// App
+export const API_GET_COUNTRY_STATES = `${BASE_URL}/getstates`;
+
 // IndyView 
 export const API_GET_DAYS_SLOTS = `${BASE_URL}/indyviews/getdates`;
 export const API_POST_INDY_MANDI_AD = `${BASE_URL}/indyviews/store`;

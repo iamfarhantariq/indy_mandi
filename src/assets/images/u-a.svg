@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="12.021" height="7.425" viewBox="0 0 12.021 7.425">
+  <defs>
+    <clipPath id="clip-path">
+      <path id="Mask" d="M0,6.01,6.01,0,7.425,1.414l-4.6,4.6,4.6,4.6L6.01,12.021Z" transform="translate(12.021) rotate(90)" fill="#2e3a59"/>
+    </clipPath>
+  </defs>
+  <g id="u-a" transform="translate(0 0)">
+    <path id="Mask-2" data-name="Mask" d="M0,6.01,6.01,0,7.425,1.414l-4.6,4.6,4.6,4.6L6.01,12.021Z" transform="translate(12.021 0) rotate(90)" fill="#2e3a59"/>
+    <g id="Color" transform="translate(0 0)" clip-path="url(#clip-path)">
+      <g id="Color-2" data-name="Color" transform="translate(-5.99 -8.288)">
+        <rect id="color_errors" data-name="color/errors" width="24" height="24" rx="4" fill="#596c7f"/>
+      </g>
+    </g>
+  </g>
+</svg>
