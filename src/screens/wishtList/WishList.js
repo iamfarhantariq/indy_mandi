@@ -1,18 +1,34 @@
 import { FlatList, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import AppStyle from '../../assets/styles/AppStyle';
 import HeaderWithBack from '../../components/Headers/HeaderWithBack';
 import AppConfig from '../../helpers/config';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { setActivityIndicator } from '../../store/slices/appConfigSlice';
+import { ServiceGetUserWishList } from '../../services/AppService';
+import { showToastHandler } from '../../helpers/common';
 
 const WishList = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
+  const isFocus = useIsFocused();
+  const [wishlist, setWishList] = useState([]);
 
-  const items = [
-    { name: 'Shoes', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-    { name: 'Winter stuff', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-    { name: 'Beverages', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-  ];
+  useEffect(() => {
+    isFocus && getUserWishLists();
+  }, [isFocus]);
+
+  const getUserWishLists = () => {
+    dispatch(setActivityIndicator(true));
+    ServiceGetUserWishList().then((response) => {
+      console.log({ response });
+      setWishList(response?.data?.data);
+      dispatch(setActivityIndicator(false));
+    }).catch(e => {
+      showToastHandler(e, dispatch);
+    });
+  }
 
   const _renderItem = ({ item, index }) => {
     return (
@@ -20,7 +36,7 @@ const WishList = () => {
         style={{ marginRight: index % 2 === 0 ? 16 : 0, marginBottom: 16 }}>
         <Image
           resizeMode='cover'
-          source={item.imageSource}
+          source={{ uri: item?.image }}
           style={styles.flexImageContainer}
           imageStyle={{ borderRadius: 8 }}
         />
@@ -37,7 +53,7 @@ const WishList = () => {
       <View style={{ flex: 1, marginHorizontal: 16, marginTop: 16 }}>
         <FlatList
           horizontal={false}
-          data={items}
+          data={wishlist}
           numColumns={2}
           key={(index) => 'wishlist' + index + 'product'}
           renderItem={_renderItem}

@@ -16,11 +16,7 @@ const ExploreHeading = ({ title, isFilter = true, filterHandler = null }) => {
             <Text style={styles.heading}>{title}</Text>
             {isFilter && <TouchableOpacity onPress={() => {
                 SheetManager.show('example-two', {
-                    payload: { header: 'Sort by', actions: filters, filterHandler },
-                    // onClose: (value) => {
-                    //     // console.log({ value });
-                    //     filterHandler(value);
-                    // }
+                    payload: { header: 'Sort by', actions: filters, filterHandler }
                 });
             }}>
                 <Sort />

@@ -12,6 +12,9 @@ export const API_AUTH_RESET_PASSWORD = `${BASE_URL}/auth/reset/password`;
 
 // App
 export const API_GET_COUNTRY_STATES = `${BASE_URL}/getstates`;
+export const API_POST_STORE_ADDRESS = `${BASE_URL}/customer/addresses`;
+export const API_GET_USER_WISHLIST = `${BASE_URL}/customer/wishlists`;
+export const API_POST_USER_WISHLIST_STORE = `${BASE_URL}/customer/wishlist/store`;
 
 // IndyView 
 export const API_GET_DAYS_SLOTS = `${BASE_URL}/indyviews/getdates`;

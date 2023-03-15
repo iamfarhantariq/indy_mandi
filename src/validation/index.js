@@ -42,3 +42,12 @@ export const createIndyViewFormSchema = Yup.object().shape({
             'Enter correct url.co.'
         ).required('Redirect URL is required'),
 });
+
+export const storeAddressSchema = Yup.object().shape({
+    type: Yup.string().trim().required('Type is required'),
+    address: Yup.string().trim().required('Address is required'),
+});
+
+export const storeWishListSchema = Yup.object().shape({
+    name: Yup.string().trim().required('Name is required'),
+});
