@@ -1,17 +1,57 @@
 import { ImageBackground, Platform, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import WishIcon from '../../assets/images/wish-icon.svg';
+import WishIconLiked from '../../assets/images/wish-icon-liked.svg';
 import AppStyle from '../../assets/styles/AppStyle';
 import AppConfig from '../../helpers/config';
 import { useNavigation } from '@react-navigation/native';
+import { ServiceGetWishListListingForUser, ServicePostProductToWishList } from '../../services/AppService';
+import { showToastHandler } from '../../helpers/common';
+import { SheetManager } from 'react-native-actions-sheet';
+import Toast from 'react-native-toast-message';
 
-const GeneralProduct = ({ item, index, flex = false, options = false, discountPrice = true, enable = false, enableHandler = null }) => {
+const GeneralProduct = ({ item, index, flex = false, enable = false }) => {
   const navigation = useNavigation();
   const [isEnabled, setIsEnabled] = useState(true);
+  const [liked, setLiked] = useState(false);
+  const [wishlists, setWishlists] = useState([]);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   const flexStyle = flex ? { ...styles.flexImageContainer } :
     { ...styles.imageContainer, marginLeft: index === 0 ? 16 : 0 }
+
+
+  const addToWishList = (wishListId) => {
+    setLiked(true);
+    ServicePostProductToWishList(wishListId, item?.id).then(response => {
+      console.log({ response });
+      Toast.show({
+        type: 'success',
+        text1: 'Success',
+        text2: response?.data?.message
+      });
+    }).catch(e => {
+      setLiked(false);
+      showToastHandler(e);
+    });
+  }
+
+  const getWishListListing = () => {
+    ServiceGetWishListListingForUser().then(response => {
+      console.log({ response });
+      const data = response?.data?.data;
+      setWishlists(data);
+      SheetManager.show('example-two', {
+        payload: {
+          header: 'Add to:',
+          actions: data?.map(w => ({ title: w?.name, value: w?.id })),
+          filterHandler: (wishListId) => addToWishList(wishListId)
+        }
+      });
+    }).catch(e => {
+      showToastHandler(e);
+    });
+  }
 
   return (
     <View>
@@ -22,8 +62,8 @@ const GeneralProduct = ({ item, index, flex = false, options = false, discountPr
           style={flexStyle}
           imageStyle={{ borderRadius: 8 }}
         >
-          <TouchableOpacity style={{ position: 'absolute', right: 0, top: 0 }}>
-            <WishIcon />
+          <TouchableOpacity onPress={getWishListListing} style={{ position: 'absolute', right: 0, top: 0 }}>
+            {liked ? <WishIconLiked /> : <WishIcon />}
           </TouchableOpacity>
         </ImageBackground>
         <Text style={{ ...styles.name, width: flexStyle.width, marginLeft: index === 0 && !flex ? 16 : 0 }}>{item?.name}</Text>

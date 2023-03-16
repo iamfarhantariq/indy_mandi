@@ -1,13 +1,31 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import AppStyle from '../../assets/styles/AppStyle'
 import GeneralProduct from '../../components/Products/GeneralProduct';
 import HeaderWithBack from '../../components/Headers/HeaderWithBack';
 import InputField from '../../components/Input/InputField';
 import { useState } from 'react';
+import { ServiceGetWishListProducts } from '../../services/AppService';
+import { showToastHandler } from '../../helpers/common';
 
-const WishListDetail = () => {
+const WishListDetail = ({ route }) => {
+    const { wishListId } = route?.params;
+    console.log({ wishListId });
     const [search, setSearch] = useState('');
+    const [products, setProducts] = useState([]);
+
+    useEffect(() => {
+        getProductsForThisWishList();
+    }, [search]);
+
+    const getProductsForThisWishList = () => {
+        ServiceGetWishListProducts(wishListId, search).then(response => {
+            console.log({ response });
+            setProducts(response?.data);
+        }).catch(e => {
+            showToastHandler(e);
+        });
+    }
 
     const items = [
         { name: 'New Nike girl shoe', price: '$80.77', imageSource: require('../../assets/images/demo-category-image.jpeg') },

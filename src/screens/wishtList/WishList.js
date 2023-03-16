@@ -32,7 +32,7 @@ const WishList = () => {
 
   const _renderItem = ({ item, index }) => {
     return (
-      <TouchableOpacity onPress={() => navigation.navigate('WishListDetail')}
+      <TouchableOpacity onPress={() => navigation.navigate('WishListDetail', { wishListId: item?.id })}
         style={{ marginRight: index % 2 === 0 ? 16 : 0, marginBottom: 16 }}>
         <Image
           resizeMode='cover'
