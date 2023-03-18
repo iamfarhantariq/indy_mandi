@@ -18,10 +18,17 @@ const UploadImages = ({ getImage = null }) => {
             mediaType: 'photo',
         }).then(async image => {
             console.log(image);
+            const imageUri = Platform.OS === 'ios' ? image?.sourceURL : image?.path
+            const mimeImage = {
+                uri: imageUri,
+                type: image?.mime,
+                name: imageUri.split("/").pop(),              
+            }
             setCropedImage(image);
-            const blobfile = await (await fetch(Platform.OS === 'ios' ? image?.sourceURL : image?.path)).blob();
-            console.log({ blobfile });
-            getImage(blobfile);
+            getImage(mimeImage);
+            // const blobfile = await (await fetch(imageUri)).blob();
+            // console.log({ blobfile });
+            // getImage(blobfile);
         }).catch(e => {
             console.log({ e });
         });
