@@ -9,12 +9,12 @@ import { commonStyle } from '../../helpers/common';
 import Add from '../../assets/images/add-icon.svg';
 import Option from '../../assets/images/options-icon.svg';
 
-const HeaderWithBack = ({ title, cross = false, iconType = '', route = '', shouldBack = true }) => {
+const HeaderWithBack = ({ title, cross = false, iconType = '', route = '', shouldBack = true, handleOptions = null }) => {
     const navigation = useNavigation();
 
     const icons = [
         { name: 'add', icon: <Add />, func: () => navigation.navigate(route) },
-        { name: 'options', icon: <Option />, func: () => null },
+        { name: 'options', icon: <Option />, func: () => handleOptions() },
         {
             name: 'manageProducts',
             icon: <View style={{ flexDirection: 'row', width: 70, justifyContent: 'space-between' }}>

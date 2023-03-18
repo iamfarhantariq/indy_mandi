@@ -16,6 +16,7 @@ const BlogExplore = ({ searchType, search }) => {
     ]
 
     const [page, setPage] = useState(1);
+    const [lastPage, setLastPage] = useState(2);
     const [sortBy, setSortBy] = useState('relevancy'); // relevancy, asc, desc
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -35,6 +36,7 @@ const BlogExplore = ({ searchType, search }) => {
                 setItems([...items, ...response?.data])
             }
             setLoading(false);
+            setLastPage(response?.meta?.last_page);
         }).catch(e => {
             setLoading(false);
             showToastHandler(e);
@@ -73,6 +75,7 @@ const BlogExplore = ({ searchType, search }) => {
                 <ScrollView
                     onScroll={({ nativeEvent }) => {
                         if (isCloseToBottom(nativeEvent)) {
+                            if (page > lastPage) return;
                             setPage(page + 1);
                         }
                     }}

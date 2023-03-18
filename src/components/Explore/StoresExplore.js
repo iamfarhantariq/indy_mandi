@@ -7,6 +7,7 @@ import { ServiceExploreData } from '../../services/ExploreService'
 
 const StoresExplore = ({ searchType, search }) => {
     const [page, setPage] = useState(1);
+    const [lastPage, setLastPage] = useState(2);
     const [sortBy, setSortBy] = useState('relevancy'); // relevancy, asc, desc
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -26,6 +27,7 @@ const StoresExplore = ({ searchType, search }) => {
                 setItems([...items, ...response?.data])
             }
             setLoading(false);
+            setLastPage(response?.meta?.last_page);
         }).catch(e => {
             setLoading(false);
             showToastHandler(e);
@@ -50,6 +52,7 @@ const StoresExplore = ({ searchType, search }) => {
                 horizontal={false}
                 showsVerticalScrollIndicator={false}
                 onEndReached={info => {
+                    if (page > lastPage) return;
                     setPage(page + 1);
                 }}
             />

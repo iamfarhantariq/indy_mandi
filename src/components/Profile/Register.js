@@ -30,7 +30,6 @@ const Register = ({ setView }) => {
     initialValues: { name: "", email: "", mobile: "", password: "", password_confirmation: "", device_name: DeviceInfo.getBrand() },
     onSubmit: (values) => {
       console.log({ values });
-
       dispatch(setActivityIndicator(true));
       ServiceRegisterUser(values).then(async (response) => {
         console.log({ response });

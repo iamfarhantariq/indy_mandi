@@ -41,6 +41,8 @@ const VerifyEmail = ({ route }) => {
                     index: 0,
                     routes: [{ name: 'UserScreen' }]
                 });
+                navigation.navigate('HomeScreen');
+                handleReset();
             }).catch(e => {
                 dispatch(setActivityIndicator(false));
                 console.log(e);

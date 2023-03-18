@@ -2,6 +2,7 @@ import { ImageBackground, Platform, StyleSheet, Switch, Text, TouchableOpacity, 
 import React, { useState } from 'react'
 import WishIcon from '../../assets/images/wish-icon.svg';
 import WishIconLiked from '../../assets/images/wish-icon-liked.svg';
+import Option from '../../assets/images/options-icon.svg';
 import AppStyle from '../../assets/styles/AppStyle';
 import AppConfig from '../../helpers/config';
 import { useNavigation } from '@react-navigation/native';
@@ -10,11 +11,10 @@ import { showToastHandler } from '../../helpers/common';
 import { SheetManager } from 'react-native-actions-sheet';
 import Toast from 'react-native-toast-message';
 
-const GeneralProduct = ({ item, index, flex = false, enable = false }) => {
+const GeneralProduct = ({ item, index, flex = false, enable = false, optionIcon = false, handleOptions = null }) => {
   const navigation = useNavigation();
   const [isEnabled, setIsEnabled] = useState(true);
-  const [liked, setLiked] = useState(false);
-  const [wishlists, setWishlists] = useState([]);
+  const [liked, setLiked] = useState(item?.is_liked || false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   const flexStyle = flex ? { ...styles.flexImageContainer } :
@@ -37,20 +37,21 @@ const GeneralProduct = ({ item, index, flex = false, enable = false }) => {
   }
 
   const getWishListListing = () => {
-    ServiceGetWishListListingForUser().then(response => {
-      console.log({ response });
-      const data = response?.data?.data;
-      setWishlists(data);
-      SheetManager.show('example-two', {
-        payload: {
-          header: 'Add to:',
-          actions: data?.map(w => ({ title: w?.name, value: w?.id })),
-          filterHandler: (wishListId) => addToWishList(wishListId)
-        }
+    if (!liked) {
+      ServiceGetWishListListingForUser().then(response => {
+        console.log({ response });
+        const data = response?.data?.data;
+        SheetManager.show('example-two', {
+          payload: {
+            header: 'Add to:',
+            actions: data?.map(w => ({ title: w?.name, value: w?.id })),
+            filterHandler: (wishListId) => addToWishList(wishListId)
+          }
+        });
+      }).catch(e => {
+        showToastHandler(e);
       });
-    }).catch(e => {
-      showToastHandler(e);
-    });
+    }
   }
 
   return (
@@ -62,9 +63,13 @@ const GeneralProduct = ({ item, index, flex = false, enable = false }) => {
           style={flexStyle}
           imageStyle={{ borderRadius: 8 }}
         >
-          <TouchableOpacity onPress={getWishListListing} style={{ position: 'absolute', right: 0, top: 0 }}>
-            {liked ? <WishIconLiked /> : <WishIcon />}
-          </TouchableOpacity>
+          {optionIcon ?
+            <TouchableOpacity onPress={handleOptions} style={{ position: 'absolute', right: 0, top: 0 }}>
+              <WishIconLiked />
+            </TouchableOpacity> :
+            <TouchableOpacity onPress={getWishListListing} style={{ position: 'absolute', right: 0, top: 0 }}>
+              {liked ? <WishIconLiked /> : <WishIcon />}
+            </TouchableOpacity>}
         </ImageBackground>
         <Text style={{ ...styles.name, width: flexStyle.width, marginLeft: index === 0 && !flex ? 16 : 0 }}>{item?.name}</Text>
         <View style={{ flexDirection: 'row' }}>

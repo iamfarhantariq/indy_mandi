@@ -11,10 +11,14 @@ import { commonStyle } from '../helpers/common';
 const GetCountryState = ({ otherProps = null, value = '', name = '' }) => {
     const appConfig = useSelector(getAppConfig);
     const [open, setOpen] = useState(false);
-    const [items, setItems] = useState(appConfig?.countryStates?.map(p => ({
-        label: p, value: p
-    })));
+    const [items, setItems] = useState([]);
     const [pickerValue, setPickerValue] = useState('');
+
+    useEffect(() => {
+        setItems(appConfig?.countryStates?.map(p => ({
+            label: p, value: p
+        })))
+    }, [appConfig?.countryStates]);
 
     return (
         <View style={{ marginBottom: 16, zIndex: 1 }}>

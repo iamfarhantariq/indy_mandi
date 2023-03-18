@@ -7,6 +7,7 @@ import { showToastHandler } from '../../helpers/common'
 
 const ProductSectionExplore = ({ searchType, search }) => {
     const [page, setPage] = useState(1);
+    const [lastPage, setLastPage] = useState(2);
     const [sortBy, setSortBy] = useState('relevancy');
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -27,6 +28,7 @@ const ProductSectionExplore = ({ searchType, search }) => {
                 setItems([...items, ...response?.data])
             }
             setLoading(false);
+            setLastPage(response?.meta?.last_page);
         }).catch(e => {
             setLoading(false);
             showToastHandler(e);
@@ -62,6 +64,7 @@ const ProductSectionExplore = ({ searchType, search }) => {
                     scrollEnabled
                     showsVerticalScrollIndicator={false}
                     onEndReached={info => {
+                        if (page > lastPage) return;
                         setPage(page + 1);
                     }}
                 />

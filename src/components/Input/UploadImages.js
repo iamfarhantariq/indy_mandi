@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, ImageBackground, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import AppStyle from '../../assets/styles/AppStyle';
 import UploadIcon from '../../assets/images/add-images.svg';
@@ -19,14 +19,24 @@ const UploadImages = ({ getImage = null }) => {
         }).then(async image => {
             console.log(image);
             setCropedImage(image);
-            const blobfile = await (await fetch(image?.sourceURL)).blob()
+            const blobfile = await (await fetch(Platform.OS === 'ios' ? image?.sourceURL : image?.path)).blob();
+            console.log({ blobfile });
             getImage(blobfile);
+        }).catch(e => {
+            console.log({ e });
         });
     }
 
     return (
         <>
-            {cropedImage ? <Image source={{ uri: cropedImage.sourceURL }} style={styles.container} resizeMode={'cover'} /> :
+            {cropedImage ? <ImageBackground source={{ uri: Platform.OS === 'ios' ? cropedImage.sourceURL : cropedImage?.path }}
+                style={styles.container}
+                imageStyle={{ borderRadius: 22, opacity: 0.7 }}
+                resizeMode={'cover'}>
+                <TouchableOpacity onPress={() => setCropedImage(null)} style={{ alignItems: 'center' }}>
+                    <Text style={{...styles.text, color: AppStyle.colorSet.primaryColorA}}>X Remove image</Text>
+                </TouchableOpacity>
+            </ImageBackground> :
                 <TouchableOpacity style={styles.container} onPress={openGallery}>
                     <UploadIcon style={{ color: '#713A74' }} />
                     <Text style={styles.text}>Upload image</Text>

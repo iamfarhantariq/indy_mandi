@@ -15,9 +15,11 @@ export const API_GET_COUNTRY_STATES = `${BASE_URL}/getstates`;
 export const API_POST_STORE_ADDRESS = `${BASE_URL}/customer/addresses`;
 export const API_GET_USER_WISHLIST = `${BASE_URL}/customer/wishlists`;
 export const API_POST_USER_WISHLIST_STORE = `${BASE_URL}/customer/wishlist/store`;
+export const API_PUT_USER_WISHLIST_UPDATE = `${BASE_URL}/customer/wishlist/update`;
 export const API_POST_WISHLIST_PRODUCTS = `${BASE_URL}/customer/wishlist/products`;
 export const API_GET_WISHLIST_LISTS = `${BASE_URL}/customer/wishlists/list`;
 export const API_POST_PRODUCT_TO_WISHLISTS = `${BASE_URL}/customer/wishlist/add`;
+export const API_DELETE_PRODUCT_FROM_WISHLISTS = `${BASE_URL}/customer/wishlist/delete`;
 
 // IndyView 
 export const API_GET_DAYS_SLOTS = `${BASE_URL}/indyviews/getdates`;

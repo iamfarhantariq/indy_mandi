@@ -81,11 +81,13 @@ function InputField({
                     {(otherProps && otherProps?.values[name]?.length) || (value && editable) ?
                         <TouchableOpacity style={{ padding: 10 }}
                             onPress={() => {
-                                if (otherProps) {
-                                    otherProps.setFieldValue(name, '', true);
-                                    otherProps.setFieldTouched(name, true, true);
-                                } else {
-                                    onTextChange('');
+                                if (editable) {
+                                    if (otherProps) {
+                                        otherProps.setFieldValue(name, '', true);
+                                        otherProps.setFieldTouched(name, true, true);
+                                    } else {
+                                        onTextChange('');
+                                    }
                                 }
                             }}>
                             <ClearAll />

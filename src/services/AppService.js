@@ -1,12 +1,14 @@
 import { get, post, put, remove } from "./HttpClient"
 import {
+    API_DELETE_PRODUCT_FROM_WISHLISTS,
     API_GET_COUNTRY_STATES,
     API_GET_USER_WISHLIST,
     API_GET_WISHLIST_LISTS,
     API_POST_PRODUCT_TO_WISHLISTS,
     API_POST_STORE_ADDRESS,
     API_POST_USER_WISHLIST_STORE,
-    API_POST_WISHLIST_PRODUCTS
+    API_POST_WISHLIST_PRODUCTS,
+    API_PUT_USER_WISHLIST_UPDATE
 } from "./ApisRoutes"
 
 export const GetCountryStates = () => {
@@ -41,7 +43,13 @@ export const PostPutStoreAddress = (params, id) => {
 
 export const ServicePostPutWishList = (params, id) => {
     if (id) {
-
+        return new Promise((resolve, reject) => {
+            put(`${API_PUT_USER_WISHLIST_UPDATE}/${id}`, params).then(response => {
+                resolve(response);
+            }).catch(error => {
+                reject(error);
+            });
+        });
     }
     return new Promise((resolve, reject) => {
         post(API_POST_USER_WISHLIST_STORE, params).then(response => {
@@ -106,11 +114,32 @@ export const ServicePostProductToWishList = (wishListId, productId, action = 'ad
     let URL = ''
     if (action === 'add') {
         URL = `${API_POST_PRODUCT_TO_WISHLISTS}/${wishListId}/product/${productId}/${action}`;
-    }else{
+    } else {
         URL = `${API_POST_PRODUCT_TO_WISHLISTS}/${wishListId}/product/${productId}/${action}/${otherWishListId}`;
     }
+
     return new Promise((resolve, reject) => {
         post(URL).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const ServiceDeleteProductFromWishList = (wishListId, productId) => {
+    return new Promise((resolve, reject) => {
+        remove(`${API_DELETE_PRODUCT_FROM_WISHLISTS}/${wishListId}/product/${productId}`).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const DeleteWishlist = (id) => {
+    return new Promise((resolve, reject) => {
+        remove(`${API_DELETE_PRODUCT_FROM_WISHLISTS}/${id}`).then(response => {
             resolve(response);
         }).catch(error => {
             reject(error);

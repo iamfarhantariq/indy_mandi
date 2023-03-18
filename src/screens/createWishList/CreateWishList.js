@@ -18,7 +18,6 @@ const CreateWishList = ({ route }) => {
     const params = route?.params;
     const navigation = useNavigation();
     const dispatch = useDispatch();
-
     const {
         errors,
         touched,
@@ -30,7 +29,7 @@ const CreateWishList = ({ route }) => {
         handleReset,
     } = useFormik({
         initialValues: {
-            type: params?.wishListData?.name || ''
+            name: params?.wishListData?.name || ''
         },
         onSubmit: (values) => {
             dispatch(setActivityIndicator(true));
@@ -43,7 +42,7 @@ const CreateWishList = ({ route }) => {
                     text2: response?.message,
                 });
                 handleReset();
-                navigation.pop();
+                navigation.pop(params?.wishListData?.id ? 2 : 1);
             }).catch(e => {
                 showToastHandler(e, dispatch);
             });
@@ -55,7 +54,7 @@ const CreateWishList = ({ route }) => {
 
     return (
         <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }}>
-            <HeaderWithBack title={'Create wish list'} cross={true} />
+            <HeaderWithBack title={params?.wishListData?.id ? 'Edit wish list' : 'Create wish list'} cross={true} />
             <View style={{ marginHorizontal: 16, marginVertical: 16 }}>
                 <InputFieldBase
                     otherProps={otherProps}

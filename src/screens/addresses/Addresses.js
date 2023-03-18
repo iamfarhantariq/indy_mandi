@@ -65,7 +65,7 @@ const Addresses = () => {
                 <TouchableOpacity onPress={() => {
                     SheetManager.show('example-two', {
                         payload: {
-                            header: 'Choose you action',
+                            header: 'Choose your action',
                             actions: [
                                 { title: 'Edit', value: 'edit' },
                                 { title: 'Delete', value: 'delete' }
