@@ -103,7 +103,7 @@ const UploadAd = ({ route }) => {
         <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }}>
             <HeaderWithBack title={'Upload your ad'} cross={true} />
 
-            <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+            <ScrollView style={{ flex: 1 }} nestedScrollEnabled showsVerticalScrollIndicator={false}>
                 <View style={{ flex: 1, marginHorizontal: 16, paddingBottom: 108 }}>
                     <View style={{ marginVertical: 16, height: 176 }}>
                         <UploadImages getImage={(blobfile) => setFieldValue('image', blobfile)} />

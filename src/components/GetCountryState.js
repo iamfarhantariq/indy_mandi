@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import DropDownPicker from 'react-native-dropdown-picker';
 import DownArrow from '../assets/images/d-a.svg';
@@ -7,6 +7,8 @@ import { useSelector } from 'react-redux';
 import { getAppConfig } from '../store/slices/appConfigSlice';
 import AppStyle from '../assets/styles/AppStyle';
 import { commonStyle } from '../helpers/common';
+
+DropDownPicker.setListMode("MODAL")
 
 const GetCountryState = ({ otherProps = null, value = '', name = '' }) => {
     const appConfig = useSelector(getAppConfig);
@@ -31,14 +33,10 @@ const GetCountryState = ({ otherProps = null, value = '', name = '' }) => {
                 setValue={setPickerValue}
                 setItems={setItems}
                 closeAfterSelecting={true}
-                zIndex={100}
-                listMode={'SCROLLVIEW'}
-                maxHeight={170}
                 placeholder={'States'}
                 itemSeparator={true}
                 showTickIcon={true}
-                dropDownDirection='BOTTOM'
-                dropDownStyle={{ backgroundColor: AppStyle.colorSet.BGColor, }}
+                dropDownStyle={{ backgroundColor: AppStyle.colorSet.BGColor }}
                 closeOnBackPressed={true}
                 itemSeparatorStyle={{ opacity: 0.1 }}
                 ArrowDownIconComponent={() => <DownArrow />}
@@ -61,11 +59,9 @@ const GetCountryState = ({ otherProps = null, value = '', name = '' }) => {
                     borderWidth: 1,
                     borderRadius: 20,
                     minHeight: 44,
-                    flex: 1,
                     backgroundColor: AppStyle.colorSet.BGColor,
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    flexDirection: 'row',
                 }}
             />
         </View>

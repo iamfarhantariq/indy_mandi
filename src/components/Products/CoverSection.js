@@ -23,8 +23,15 @@ const CoverSection = ({ title, items = [], detailed = true, discoverOption }) =>
                     <TouchableOpacity onPress={() => navigation.navigate('IndyViews')}>
                         <RedirectImage height={303} width={303} />
                     </TouchableOpacity> :
-                    <TouchableOpacity onPress={() => navigation.navigate('BlogContentScreen')}>
-                        <CoverFrame item={item} index={index} detailed={detailed} />
+                    <TouchableOpacity onPress={() => {
+                        if (item?.view) {
+
+                        }
+                        else {
+                            navigation.navigate('BlogContentScreen');
+                        }
+                    }}>
+                        <CoverFrame item={item} index={index} detailed={detailed} indyview={title !== 'Blogs'}/>
                     </TouchableOpacity>}
             </>
         )

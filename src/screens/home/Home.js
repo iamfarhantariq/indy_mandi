@@ -10,7 +10,7 @@ import Email from '../../assets/images/email-icon.svg';
 import Facebook from '../../assets/images/facebook-icon.svg';
 import Instagram from '../../assets/images/insta-icon.svg';
 import { useDispatch } from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { ServiceGetCategoriesCircle, ServiceGetIndyViewBlogsStories, ServiceGetTrendingCuratedEditorsProducts } from '../../services/ProductService';
 import { showToastHandler } from '../../helpers/common';
 import { setCircleCategoriesStore, setHomeProducts, setHomeSections } from '../../store/slices/productsSlice';
@@ -19,15 +19,20 @@ import { setCircleCategoriesStore, setHomeProducts, setHomeSections } from '../.
 const Home = ({ route }) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const isFocus = useIsFocused();
   const [products, setProducts] = useState(null);
   const [sections, setSections] = useState(null);
   const [circleCategories, setCircleCategories] = useState([]);
 
   useEffect(() => {
-    getHomeSectionProducts();
     getHomeOtherSections();
+  }, [isFocus]);
+
+  useEffect(() => {
+    getHomeSectionProducts();
     getCircleCategories();
   }, []);
+
 
   const getHomeSectionProducts = () => {
     ServiceGetTrendingCuratedEditorsProducts().then(response => {
@@ -64,7 +69,7 @@ const Home = ({ route }) => {
       <HomeHeader route={route} />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ marginTop: 16, marginBottom: 24 }}>
-          <ProductCategories data={circleCategories}/>
+          <ProductCategories data={circleCategories} />
         </View>
 
         <View style={{ marginBottom: 25.5 }}>
@@ -91,7 +96,7 @@ const Home = ({ route }) => {
         </View>
 
         <View style={{ marginHorizontal: 16 }}>
-          <SellerStory title={'Seller Story'} item={sections?.seller_story}/>
+          <SellerStory title={'Seller Story'} item={sections?.seller_story} />
         </View>
 
         <View style={{ marginVertical: 45, flexDirection: 'row', marginHorizontal: '20%', justifyContent: 'space-evenly' }}>

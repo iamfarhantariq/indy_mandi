@@ -3,7 +3,7 @@ import React from 'react'
 import AppStyle from '../../assets/styles/AppStyle'
 import AppConfig from '../../helpers/config'
 
-const CoverFrame = ({ item, index, detailed = true, flex = false }) => {
+const CoverFrame = ({ item, index, detailed = true, flex = false, indyview = false }) => {
 
     const flexStyle = flex ? { ...styles.flexImageContainer } :
         { ...styles.imageContainer }
@@ -17,16 +17,13 @@ const CoverFrame = ({ item, index, detailed = true, flex = false }) => {
                 imageStyle={{ borderRadius: 8 }}
             >
                 <View style={styles.insideContainer}>
-                    {detailed ?
+                    {indyview ?
                         <>
-                            <Text style={styles.priceText}>
-                                {item?.price}
-                            </Text>
                             <Text style={styles.nameText}>
-                                {item?.name}
+                                {item?.store_name}
                             </Text>
                             <Text style={styles.subtitleText}>
-                                {item?.subtitle}
+                                {item?.website_url}
                             </Text>
                         </> :
                         <Text style={styles.nameText}>
@@ -34,7 +31,7 @@ const CoverFrame = ({ item, index, detailed = true, flex = false }) => {
                         </Text>
                     }
                 </View>
-                <View style={{ ...styles.darkBackground, height: detailed ? 70 : 35 }} />
+                <View style={{ ...styles.darkBackground, height: indyview ? 45 : 35 }} />
             </ImageBackground>
         </View>
     )
