@@ -20,6 +20,7 @@ export const API_POST_WISHLIST_PRODUCTS = `${BASE_URL}/customer/wishlist/product
 export const API_GET_WISHLIST_LISTS = `${BASE_URL}/customer/wishlists/list`;
 export const API_POST_PRODUCT_TO_WISHLISTS = `${BASE_URL}/customer/wishlist/add`;
 export const API_DELETE_PRODUCT_FROM_WISHLISTS = `${BASE_URL}/customer/wishlist/delete`;
+export const API_POST_RAISE_DISPUTE = `${BASE_URL}/raise-an-dispute/store`;
 
 // IndyView 
 export const API_GET_DAYS_SLOTS = `${BASE_URL}/indyviews/getdates`;

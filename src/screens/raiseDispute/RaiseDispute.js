@@ -7,10 +7,66 @@ import HeadingAndDescription from '../../components/Store/HeadingAndDescription'
 import InputFieldBase from '../../components/Input/InputFieldBase';
 import Button from '../../components/Button';
 import UploadImages from '../../components/Input/UploadImages';
+import { useDispatch } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import { useFormik } from 'formik';
+import Toast from 'react-native-toast-message';
+import { convertToFormDataObject, showToastHandler } from '../../helpers/common';
+import { setActivityIndicator } from '../../store/slices/appConfigSlice';
+import { ServicePostRaiseDispute } from '../../services/IndyViewService';
+import { storeRaiseDispute } from '../../validation';
 
 const RaiseDispute = () => {
-  const [phone, setPhone] = useState('');
-  const [description, setDescription] = useState('');
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+
+  const {
+    errors,
+    touched,
+    values,
+    setFieldValue,
+    setFieldTouched,
+    handleBlur,
+    handleSubmit,
+    handleReset,
+  } = useFormik({
+    initialValues: {
+      phone: '',
+      description: '',
+      disputefile: null,
+    },
+    onSubmit: (values) => {
+      console.log({ values });
+
+      if (!values.disputefile) {
+        return Toast.show({
+          type: 'error',
+          text1: 'Required',
+          text2: 'Image required',
+        });
+      }
+
+      const formData = convertToFormDataObject(values);
+      console.log({ formData });
+      dispatch(setActivityIndicator(true));
+      ServicePostRaiseDispute(formData).then(async (response) => {
+        console.log({ response });
+        dispatch(setActivityIndicator(false));
+        Toast.show({
+          type: 'success',
+          text1: 'Success',
+          text2: response?.message,
+        });
+        handleReset();
+        navigation.pop();
+      }).catch(e => {
+        showToastHandler(e, dispatch);
+      });
+    },
+    validationSchema: storeRaiseDispute,
+  });
+
+  const otherProps = { values, errors, touched, setFieldValue, setFieldTouched, handleBlur };
 
   return (
     <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }}>
@@ -21,25 +77,25 @@ const RaiseDispute = () => {
 
       <ScrollView style={{ marginHorizontal: 16 }} showsVerticalScrollIndicator={false}>
         <InputFieldBase
+          otherProps={otherProps}
           title={'Phone'}
           placeholder={'Phone'}
-          value={phone}
-          onTextChange={(t) => setPhone(t)}
+          name='phone'
         />
 
         <View style={{ marginVertical: 16 }}>
-          <UploadImages />
+          <UploadImages getImage={(blobfile) => setFieldValue('disputefile', blobfile)} ˇ />
         </View>
 
         <InputFieldBase
+          otherProps={otherProps}
           title={'Write description'}
           placeholder={'Write description'}
-          value={description}
           numberOfLines={4}
-          onTextChange={(t) => setDescription(t)}
+          name='description'
         />
         <View style={{ marginVertical: 16 }}>
-          <Button text={'Submit'} handleClick={() => null} fill={true} />
+          <Button text={'Submit'} handleClick={handleSubmit} fill={true} />
         </View>
       </ScrollView>
     </View>

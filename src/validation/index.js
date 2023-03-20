@@ -51,3 +51,8 @@ export const storeAddressSchema = Yup.object().shape({
 export const storeWishListSchema = Yup.object().shape({
     name: Yup.string().trim().required('Name is required'),
 });
+
+export const storeRaiseDispute = Yup.object().shape({
+    phone: Yup.string().trim().required('Phone is required'),
+    description: Yup.string().trim().required('Description is required'),
+});

@@ -7,7 +7,6 @@ import { useNavigation } from '@react-navigation/native';
 import ImagePicker from 'react-native-image-crop-picker';
 
 const UploadImages = ({ getImage = null }) => {
-    const navigation = useNavigation();
     const [cropedImage, setCropedImage] = useState(null);
 
     const openGallery = async () => {
