@@ -11,6 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { setActivityIndicator } from '../../store/slices/appConfigSlice'
 import { ServiceLogout } from '../../services/AuthServices'
 import Toast from 'react-native-toast-message';
+import { SheetManager } from 'react-native-actions-sheet';
 
 const UserScreen = () => {
     const navigation = useNavigation();
@@ -62,11 +63,26 @@ const UserScreen = () => {
         </TouchableOpacity>
     )
 
+    const onImageClick = () => {
+        SheetManager.show('example-two', {
+            payload: {
+                header: 'Choose your action',
+                actions: [
+                    { title: 'View photo', value: 'view' },
+                    { title: 'Upload photo', value: 'edit' }
+                ],
+                filterHandler: (_action) => navigation.navigate('UserImage', { action: _action })
+            }
+        });
+    }
+
     return (
         <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }}>
             <View style={styles.headingContainer}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <UserAvatar />
+                    <TouchableOpacity onPress={onImageClick}>
+                        <UserAvatar />
+                    </TouchableOpacity>
                     <Text style={styles.headerText}>Customer</Text>
                 </View>
             </View>

@@ -56,3 +56,9 @@ export const storeRaiseDispute = Yup.object().shape({
     phone: Yup.string().trim().required('Phone is required'),
     description: Yup.string().trim().required('Description is required'),
 });
+
+export const updatePasswordFormSchema = Yup.object().shape({
+    current_password: Yup.string().trim().required('Pin code is required'),
+    new_password: Yup.string().trim().required('Password is required'),
+    new_confirm_password: Yup.string().trim().required('Confrim Password is required').oneOf([Yup.ref('new_password'), null], 'Passwords must match'),
+});

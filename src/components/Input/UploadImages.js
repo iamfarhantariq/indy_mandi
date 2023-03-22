@@ -25,9 +25,6 @@ const UploadImages = ({ getImage = null }) => {
             }
             setCropedImage(image);
             getImage(mimeImage);
-            // const blobfile = await (await fetch(imageUri)).blob();
-            // console.log({ blobfile });
-            // getImage(blobfile);
         }).catch(e => {
             console.log({ e });
         });
@@ -57,7 +54,7 @@ export default UploadImages
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        height: 176,
+        // height: 176,
         borderRadius: 22,
         borderColor: AppStyle.colorSet.borderLightGrayColor,
         backgroundColor: AppStyle.colorSet.borderLightGrayColor + '70',

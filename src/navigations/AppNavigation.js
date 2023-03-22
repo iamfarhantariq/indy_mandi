@@ -74,6 +74,7 @@ import { getLoginConfig } from '../store/slices/loginConfigSlice';
 import { useState } from 'react';
 import ForgotPassword from '../screens/forgotPassword/ForgotPassword';
 import ResetPasswordWithCode from '../screens/resetPasswordWithCode/ResetPasswordWithCode';
+import UserImage from '../screens/userImage/UserImage';
 
 const Tab = createBottomTabNavigator();
 
@@ -389,6 +390,7 @@ const AppNavigation = () => {
                     <AppStack.Screen name="VerifyEmail" component={VerifyEmail} />
                     <AppStack.Screen name="ForgotPassword" component={ForgotPassword} />
                     <AppStack.Screen name="ResetPasswordWithCode" component={ResetPasswordWithCode} />
+                    <AppStack.Screen name="UserImage" component={UserImage} />
                 </AppStack.Navigator>
             </NavigationContainer>
 

@@ -9,6 +9,8 @@ export const API_AUTH_RESEND_CODE = `${BASE_URL}/auth/verify/email/resend`;
 export const API_AUTH_VERIFY_EMAIL = `${BASE_URL}/auth/verify/email`;
 export const API_AUTH_FORGOT_PASSWORD = `${BASE_URL}/auth/forgot/password`;
 export const API_AUTH_RESET_PASSWORD = `${BASE_URL}/auth/reset/password`;
+export const API_POST_RESET_PASSWORD = `${BASE_URL}/update/current/password`;
+export const API_POST_UPLOAD_THUMBNAIL = `${BASE_URL}/upload/thumbnail`;
 
 // App
 export const API_GET_COUNTRY_STATES = `${BASE_URL}/getstates`;
