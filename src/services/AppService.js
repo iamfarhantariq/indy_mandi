@@ -2,6 +2,8 @@ import { get, post, put, remove } from "./HttpClient"
 import {
     API_DELETE_PRODUCT_FROM_WISHLISTS,
     API_GET_COUNTRY_STATES,
+    API_GET_PAYMENTS,
+    API_GET_PAYMENTS_INVOICE,
     API_GET_USER_WISHLIST,
     API_GET_WISHLIST_LISTS,
     API_POST_PRODUCT_TO_WISHLISTS,
@@ -146,3 +148,24 @@ export const DeleteWishlist = (id) => {
         });
     });
 }
+
+export const ServiceGetUserPayments = (page) => {
+    return new Promise((resolve, reject) => {
+        get(`${API_GET_PAYMENTS}?page=${page}`).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const ServiceGetUserPaymentsInvoice = (id) => {
+    return new Promise((resolve, reject) => {
+        get(`${API_GET_PAYMENTS_INVOICE}/${id}`).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+

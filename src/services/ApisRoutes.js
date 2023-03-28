@@ -23,6 +23,8 @@ export const API_GET_WISHLIST_LISTS = `${BASE_URL}/customer/wishlists/list`;
 export const API_POST_PRODUCT_TO_WISHLISTS = `${BASE_URL}/customer/wishlist/add`;
 export const API_DELETE_PRODUCT_FROM_WISHLISTS = `${BASE_URL}/customer/wishlist/delete`;
 export const API_POST_RAISE_DISPUTE = `${BASE_URL}/raise-an-dispute/store`;
+export const API_GET_PAYMENTS = `${BASE_URL}/payments`;
+export const API_GET_PAYMENTS_INVOICE = `${BASE_URL}/view-invoice`;
 
 // IndyView 
 export const API_GET_DAYS_SLOTS = `${BASE_URL}/indyviews/getdates`;

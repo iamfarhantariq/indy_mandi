@@ -1,34 +1,93 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { Image, StyleSheet, Text, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import AppStyle from '../../assets/styles/AppStyle'
 import HeaderWithBack from '../../components/Headers/HeaderWithBack'
-import { commonStyle } from '../../helpers/common'
+import { commonStyle, showToastHandler } from '../../helpers/common'
 import AppLogo from '../../assets/images/app-logo.svg';
+import { useDispatch } from 'react-redux'
+import { useNavigation } from '@react-navigation/native'
+import { ServiceGetUserPaymentsInvoice } from '../../services/AppService'
+import { setActivityIndicator } from '../../store/slices/appConfigSlice'
 
-const Invoice = () => {
+const Invoice = ({ route }) => {
+    const params = route?.params;
+    const dispatch = useDispatch();
+    const navigation = useNavigation();
+    const [invoice, setInvoice] = useState(null);
+
+    // let data = {
+    //     "company_logo": "http://indymandi-laravel-new-installation.test/images/defaults/indymandi.svg",
+    //     "company_name": "Vruksha Marketplace Services Private Limited",
+    //     "company_address": "N-705, North Block, 7th floor, Manipal Centre, 47, Dickenson Road, Bangalore 560042",
+    //     "company_gstin": "29AAICV8975A1ZT",
+    //     "company_cin": "US2100KA2022PTC164355",
+    //     "company_sac": "998316",
+    //     "invoice_id": "INDY021",
+    //     "invoice_date": "18-Mar-2023",
+    //     "customer_name": "Rashid Ali",
+    //     "customer_address": "aljannat street village kamaha post",
+    //     "customer_state": "Manipur",
+    //     "customer_gstin": "11111",
+    //     "product_description": "Standard Membership",
+    //     "product_unit_price": "₹ 300",
+    //     "product_quantity": "1",
+    //     "product_rate": "54(18% igst)",
+    //     "product_amount": "₹354",
+    //     "product_total_amount": "₹354"
+    // }
+
+    useEffect(() => {
+        if (params?.id) {
+            getPaymentHistoryInvoice();
+            // setInvoice(data);
+        } else {
+            navigation.pop();
+        }
+    }, []);
+
+    const getPaymentHistoryInvoice = () => {
+        dispatch(setActivityIndicator(true));
+        ServiceGetUserPaymentsInvoice(params?.id).then(response => {
+            console.log({ response });
+            setInvoice(response?.data?.data);
+            dispatch(setActivityIndicator(false));
+        }).catch(e => {
+            showToastHandler(e, dispatch);
+        })
+    }
+
+    const getHeaders = (from, to) => {
+        return valuesVSHeaders.slice(from, to)?.map(h => h.headerName);
+    }
+
+    const getValues = (from, to) => {
+        return valuesVSHeaders.slice(from, to)?.map(h => invoice[h.dbName])
+    }
+
     return (
         <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }}>
-            <HeaderWithBack title={'Payment history'} />
+            <HeaderWithBack title={'Invoice'} />
 
             <View style={{ flex: 1, marginHorizontal: 16, marginTop: 16 }}>
                 <View style={{ marginBottom: 16 }}>
-                    <AppLogo />
+                    <Image source={{ uri: invoice?.company_logo }} resizeMode='cover'
+                        style={{ height: 40, width: 40 }} />
                 </View>
 
-                <Text style={styles.iTitle}>Vruksha Marketplace Services Private Limited</Text>
-                <Text style={styles.aTitle}>N-705, North Block, 7th floor, Manipal Centre, 47, Dickenson Road, Bangalore 560042</Text>
+                <Text style={styles.iTitle}>{invoice?.company_name}</Text>
+                <Text style={styles.aTitle}>{invoice?.company_address}</Text>
 
                 <View style={{ flexDirection: 'row' }}>
                     <View style={{ width: '40%' }}>
-                        {['Invoice Id', 'Date', 'GSTIN', 'CIN', 'SAC'].map((_item, _index) => (
+                        {getHeaders(0, 5).map((_item, _index) => (
                             <Text key={_index + _item} style={styles.itemDetailText}>
                                 {_item}
                             </Text>
                         ))}
                     </View>
                     <View style={{ width: '60%' }}>
-                        {['INDY06', '03 Jan, 2023', '29AAICV8975A1ZT', 'US2100KA2022PTC164355', '998315'].map((_item, _index) => (
-                            <Text key={_index} style={styles.itemDetailTextR}>
+                        {getValues(0, 5).map((_item, _index) => (
+                            <Text numberOfLines={1} lineBreakMode='tail' key={_index} style={styles.itemDetailTextR}>
                                 {_item}
                             </Text>
                         ))}
@@ -39,15 +98,15 @@ const Invoice = () => {
 
                 <View style={{ flexDirection: 'row' }}>
                     <View style={{ width: '40%' }}>
-                        {['Name', 'Address', 'State'].map((_item, _index) => (
+                        {getHeaders(5, 8).map((_item, _index) => (
                             <Text key={_index + _item} style={styles.itemDetailText}>
                                 {_item}
                             </Text>
                         ))}
                     </View>
                     <View style={{ width: '60%' }}>
-                        {['Ahtisham', 'Lahore', 'Himachal Pradesh'].map((_item, _index) => (
-                            <Text key={_index} style={styles.itemDetailTextR}>
+                        {getValues(5, 8).map((_item, _index) => (
+                            <Text numberOfLines={1} lineBreakMode='tail' key={_index} style={styles.itemDetailTextR}>
                                 {_item}
                             </Text>
                         ))}
@@ -58,6 +117,18 @@ const Invoice = () => {
         </View>
     )
 }
+
+const valuesVSHeaders = [
+    { dbName: 'invoice_id', headerName: 'Invoice Id' },
+    { dbName: 'invoice_date', headerName: 'Date' },
+    { dbName: 'company_gstin', headerName: 'GSTIN' },
+    { dbName: 'company_cin', headerName: 'CIN' },
+    { dbName: 'company_sac', headerName: 'SAC' },
+
+    { dbName: 'customer_name', headerName: 'Name' },
+    { dbName: 'customer_address', headerName: 'Address' },
+    { dbName: 'customer_state', headerName: 'State' },
+]
 
 export default Invoice
 

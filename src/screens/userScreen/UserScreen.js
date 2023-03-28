@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import AppStyle from '../../assets/styles/AppStyle'
 import { commonPageStyle, commonStyle } from '../../helpers/common'
@@ -81,7 +81,10 @@ const UserScreen = () => {
             <View style={styles.headingContainer}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <TouchableOpacity onPress={onImageClick}>
-                        <UserAvatar />
+                        {loginConfig?.user?.profile_image ?
+                            <Image source={{ uri: loginConfig?.user?.profile_image }}
+                                resizeMode='cover' style={{ height: 40, width: 40, borderRadius: 50 }} />
+                            : <UserAvatar />}
                     </TouchableOpacity>
                     <Text style={styles.headerText}>Customer</Text>
                 </View>

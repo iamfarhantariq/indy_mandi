@@ -1,37 +1,61 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import AppStyle from '../../assets/styles/AppStyle'
 import HeaderWithBack from '../../components/Headers/HeaderWithBack'
 import { useNavigation } from '@react-navigation/native'
-import { commonStyle } from '../../helpers/common'
+import { commonStyle, showToastHandler } from '../../helpers/common'
 import SmallButton from '../../components/SmallButton'
 import Button from '../../components/Button'
+import { ServiceGetUserPayments } from '../../services/AppService'
+import { useDispatch } from 'react-redux'
+import { setActivityIndicator } from '../../store/slices/appConfigSlice'
 
 const PaymentHistory = () => {
+    const dispatch = useDispatch();
     const navigation = useNavigation();
+    const [page, setPage] = useState(1);
+    const [lastPage, setLastPage] = useState(2);
+    const [loading, setLoading] = useState(false);
+    const [payments, setPayments] = useState([]);
 
-    const items = [
-        {
-            issueDate: '03 Jan, 2023',
-            method: 'Card',
-            currency: 'INR',
-            ammount: '1,820,999',
-            status: 'Captured'
-        },
-        {
-            issueDate: '03 Jan, 2023',
-            method: 'Card',
-            currency: 'INR',
-            ammount: '1,820,999',
-            status: 'Captured'
-        },
-    ]
+    useEffect(() => {
+        getPaymentHistory();
+    }, []);
+
+    console.log({ payments });
+
+    const getPaymentHistory = () => {
+        setLoading(true);
+        ServiceGetUserPayments(page).then(response => {
+            console.log({ response });
+            if (page === 1) {
+                setPayments(response?.data?.data);
+            } else {
+                setPayments([...payments, ...response?.data?.data])
+            }
+            setLoading(false);
+            setLastPage(response?.meta?.last_page);
+        }).catch(e => {
+            setLoading(false);
+            showToastHandler(e);
+        })
+    }
+
+    const capitalize = (key) => key.charAt(0).toUpperCase() + key.slice(1);
+
+    const getHeaders = () => {
+        let _payments = [...payments].map(p => {
+            delete p.id;
+            return p;
+        });
+        return Object.keys(Object.assign({}, ..._payments)).map(k => capitalize(k));
+    }
 
     const _renderItem = ({ item, index }) => (
         <View style={styles.itemContainer}>
             <View style={{ flexDirection: 'row' }}>
                 <View style={{ width: '40%' }}>
-                    {['Issue date', 'Method', 'Currency', 'Ammount', 'Status'].map((_item, _index) => (
+                    {payments?.length && getHeaders().map((_item, _index) => (
                         <Text key={_index + _item} style={styles.itemDetailText}>
                             {_item}
                         </Text>
@@ -46,7 +70,9 @@ const PaymentHistory = () => {
                 </View>
             </View>
             <View style={{ width: 108, marginTop: 8 }}>
-                <Button text={'Invoice'} height={36} fill={true} handleClick={() => navigation.navigate('Invoice')} />
+                <Button text={'Invoice'} height={36} fill={true} handleClick={() => {
+                    navigation.navigate('Invoice', { id: payments[index]?.id })
+                }} />
             </View>
         </View>
     )
@@ -54,15 +80,26 @@ const PaymentHistory = () => {
     return (
         <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }}>
             <HeaderWithBack title={'Payment history'} />
-
+            <Button text={'Invoice'} height={36} fill={true} handleClick={() => {
+                    navigation.navigate('Invoice', { id: 7 })
+                }} />
             <View style={{ flex: 1, marginHorizontal: 16, marginTop: 16 }}>
                 <FlatList
                     horizontal={false}
-                    data={items}
+                    data={payments}
                     key={(index) => 'address' + index + 'item'}
                     renderItem={_renderItem}
                     showsVerticalScrollIndicator={false}
+                    onEndReached={info => {
+                        if (page > lastPage) return;
+                        setPage(page + 1);
+                    }}
                 />
+                {loading &&
+                    <View style={{ marginBottom: 20 }}>
+                        <ActivityIndicator size={'large'} />
+                    </View>
+                }
             </View>
         </View>
     )
