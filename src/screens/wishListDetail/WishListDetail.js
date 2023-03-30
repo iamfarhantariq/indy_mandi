@@ -15,6 +15,7 @@ import AppConfig from '../../helpers/config';
 import Toast from 'react-native-toast-message';
 import { setActivityIndicator } from '../../store/slices/appConfigSlice';
 import { useDispatch } from 'react-redux';
+import { setAddToCart } from '../../store/slices/loginConfigSlice';
 
 const WishListDetail = ({ route }) => {
     const { wishListId, wishListName, wishlists } = route?.params;
@@ -104,8 +105,8 @@ const WishListDetail = ({ route }) => {
                 }).catch(e => {
                     showToastHandler(e);
                 });
-        } else {
-
+        } else if (action === 'Cart') {
+            dispatch(setAddToCart(products.find(p => p.id === productId)));
         }
     }
 

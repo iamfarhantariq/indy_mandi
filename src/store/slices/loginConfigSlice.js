@@ -1,9 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
+import Toast from 'react-native-toast-message';
 
 const initialState = {
     isLogin: false,
     isAutherized: false,
-    user: null
+    user: null,
+    cart: [],
 };
 
 export const loginConfigSlice = createSlice({
@@ -25,7 +27,36 @@ export const loginConfigSlice = createSlice({
             state.isLogin = false;
             state.isAutherized = false;
             state.user = null;
+            state.cart = [];
         },
+        setAddToCart: (state, action) => {
+            const prevCart = [...state.cart];
+            if (!prevCart.find(f => f?.id === action.payload?.id)) {
+                prevCart.push({ ...action.payload, count: 1 });
+                state.cart = prevCart;
+                Toast.show({
+                    type: 'success',
+                    text1: 'Success',
+                    text2: 'Added'
+                });
+            } else {
+                Toast.show({
+                    type: 'error',
+                    text1: 'Sorry',
+                    text2: 'This product already existed in cart.'
+                });
+            }
+        },
+        updateCounter: (state, action) => {
+            const prevCart = [...state.cart];
+            const product = prevCart.find(f => f?.id === action.payload?.id);
+            product.count = action.payload?.action === 'increment' ? product.count + 1 : product.count - 1;
+            state.cart = prevCart;
+        },
+        removeFromCart: (state, action) => {
+            const prevCart = [...state.cart];
+            state.cart = prevCart.filter(f => f?.id !== action.payload);
+        }
     },
 });
 
@@ -37,7 +68,10 @@ export const {
     setIsLogin,
     setIsAuthorized,
     setUser,
-    setLogout
+    setLogout,
+    setAddToCart,
+    updateCounter,
+    removeFromCart
 } = loginConfigSlice.actions;
 
 export default loginConfigSlice.reducer;

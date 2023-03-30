@@ -5,69 +5,83 @@ import AppStyle from '../../assets/styles/AppStyle'
 import Minus from '../../assets/images/minus-btn-icon.svg'
 import Plus from '../../assets/images/plus-btn-icon.svg'
 import More from '../../assets/images/more-icon.svg'
-import InputFieldBase from '../../components/Input/InputFieldBase'
+import InputFieldBase from '../../components/Input/InputFieldBase';
+import { useDispatch, useSelector } from 'react-redux'
+import { getLoginConfig, updateCounter } from '../../store/slices/loginConfigSlice'
 
 const Cart = () => {
+  const { cart } = useSelector(getLoginConfig);
+  const dispatch = useDispatch();
 
-  const items = [
-    {
-      products: [
-        {
-          imageSource: require('../../assets/images/demo-category-image.jpeg'),
-          name: 'New Nike girl shoe', price: '$80.77', totalPrice: '$400'
-        },
-        {
-          imageSource: require('../../assets/images/demo-category-image.jpeg'),
-          name: 'New Nike girl shoe', price: '$80.77', totalPrice: '$400'
-        },
-      ],
-      seller: { name: 'Vedaka' }
-    },
-    {
-      products: [
-        {
-          imageSource: require('../../assets/images/demo-category-image.jpeg'),
-          name: 'New Nike girl shoe', price: '$80.77', totalPrice: '$400'
-        }
-      ],
-      seller: { name: 'Vedaka' }
-    },
-    {
-      products: [
-        {
-          imageSource: require('../../assets/images/demo-category-image.jpeg'),
-          name: 'New Nike girl shoe', price: '$80.77', totalPrice: '$400'
-        }
-      ],
-      seller: { name: 'Vedaka' }
-    }
-  ];
+  // const items = [
+  //   {
+  //     products: [
+  //       {
+  //         imageSource: require('../../assets/images/demo-category-image.jpeg'),
+  //         name: 'New Nike girl shoe', price: '$80.77', totalPrice: '$400'
+  //       },
+  //       {
+  //         imageSource: require('../../assets/images/demo-category-image.jpeg'),
+  //         name: 'New Nike girl shoe', price: '$80.77', totalPrice: '$400'
+  //       },
+  //     ],
+  //     seller: { name: 'Vedaka' }
+  //   },
+  //   {
+  //     products: [
+  //       {
+  //         imageSource: require('../../assets/images/demo-category-image.jpeg'),
+  //         name: 'New Nike girl shoe', price: '$80.77', totalPrice: '$400'
+  //       }
+  //     ],
+  //     seller: { name: 'Vedaka' }
+  //   },
+  //   {
+  //     products: [
+  //       {
+  //         imageSource: require('../../assets/images/demo-category-image.jpeg'),
+  //         name: 'New Nike girl shoe', price: '$80.77', totalPrice: '$400'
+  //       }
+  //     ],
+  //     seller: { name: 'Vedaka' }
+  //   }
+  // ];
 
-  const ProductItem = ({ item, index }) => (
-    <View style={{ flexDirection: 'row', marginTop: 16 }}>
-      <View style={{ width: '70%', flexDirection: 'row' }}>
-        <Image source={item.imageSource} resizeMode='cover'
-          style={styles.imageStyle} />
-        <View>
-          <Text style={styles.pIHeading}>{item.name}</Text>
-          <Text style={styles.pIPrice}>{item.price}</Text>
-          <Text style={styles.pIPrice}>Total: {item.totalPrice}</Text>
+  const getTotalSumPrice = () => {
+    return cart.map(f => (
+      (f?.offer_price ? f?.offer_price : f?.price) * f.count
+    )).reduce((p, c) => p + c, 0)
+  }
+
+  const ProductItem = ({ item, index }) => {
+    const priceToShow = item?.offer_price ? item?.offer_price : item?.price;
+
+    return (
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 16 }}>
+        <View style={{ width: '70%', flexDirection: 'row' }}>
+          <Image source={{ uri: item?.image }} resizeMode='cover'
+            style={styles.imageStyle} />
+          <View>
+            <Text style={{ ...styles.pIHeading, width: '99.8%' }}>{item.name?.trim()}</Text>
+            <Text style={styles.pIPrice}>₹{priceToShow}</Text>
+            <Text style={styles.pIPrice}>Total: ₹{priceToShow * item?.count}</Text>
+          </View>
+        </View>
+        <View style={{ width: '30%', flexDirection: 'row', justifyContent: 'space-between' }}>
+          <TouchableOpacity onPress={() => item?.count > 1 && dispatch(updateCounter({ id: item?.id, action: 'decrement' }))}>
+            <Minus />
+          </TouchableOpacity>
+          <Text style={styles.counter}>{item?.count}</Text>
+          <TouchableOpacity onPress={() => dispatch(updateCounter({ id: item?.id, action: 'increment' }))}>
+            <Plus />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => null}>
+            <More />
+          </TouchableOpacity>
         </View>
       </View>
-      <View style={{ width: '30%', flexDirection: 'row', justifyContent: 'space-between' }}>
-        <TouchableOpacity onPress={() => null}>
-          <Minus />
-        </TouchableOpacity>
-        <Text style={styles.counter}>5</Text>
-        <TouchableOpacity onPress={() => null}>
-          <Plus />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => null}>
-          <More />
-        </TouchableOpacity>
-      </View>
-    </View>
-  )
+    )
+  }
 
   const ProductContainer = ({ item, index }) => {
 
@@ -75,14 +89,15 @@ const Cart = () => {
       <View style={styles.productContainer}>
 
         <View>
-          <FlatList
+          {/* <FlatList
             data={item?.products}
             horizontal={false}
             renderItem={ProductItem}
             key={index => 'item' + index + 'category'}
             showsVerticalScrollIndicator={false}
             nestedScrollEnabled
-          />
+          /> */}
+          <ProductItem item={item} index={index} />
         </View>
 
         <View style={{ marginVertical: 16 }}>
@@ -107,13 +122,13 @@ const Cart = () => {
       </View>
 
       <View style={styles.priceContainer}>
-        <Text style={styles.pHeading}>Total price of 4 products</Text>
-        <Text style={styles.pPrice}>$3000.22</Text>
+        <Text style={styles.pHeading}>Total price of {cart?.length} products</Text>
+        <Text style={styles.pPrice}>₹{getTotalSumPrice()}</Text>
       </View>
 
       <View style={{ marginHorizontal: 16, flex: 1 }}>
         <FlatList
-          data={items}
+          data={cart}
           horizontal={false}
           renderItem={ProductContainer}
           key={index => 'item' + index + 'product'}

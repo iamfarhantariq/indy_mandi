@@ -4,11 +4,9 @@ import AppStyle from '../../assets/styles/AppStyle'
 import HeaderWithBack from '../../components/Headers/HeaderWithBack'
 import { useNavigation } from '@react-navigation/native'
 import { commonStyle, showToastHandler } from '../../helpers/common'
-import SmallButton from '../../components/SmallButton'
 import Button from '../../components/Button'
 import { ServiceGetUserPayments } from '../../services/AppService'
 import { useDispatch } from 'react-redux'
-import { setActivityIndicator } from '../../store/slices/appConfigSlice'
 
 const PaymentHistory = () => {
     const dispatch = useDispatch();
@@ -80,9 +78,7 @@ const PaymentHistory = () => {
     return (
         <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }}>
             <HeaderWithBack title={'Payment history'} />
-            <Button text={'Invoice'} height={36} fill={true} handleClick={() => {
-                    navigation.navigate('Invoice', { id: 7 })
-                }} />
+
             <View style={{ flex: 1, marginHorizontal: 16, marginTop: 16 }}>
                 <FlatList
                     horizontal={false}
