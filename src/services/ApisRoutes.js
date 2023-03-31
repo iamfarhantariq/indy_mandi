@@ -11,6 +11,7 @@ export const API_AUTH_FORGOT_PASSWORD = `${BASE_URL}/auth/forgot/password`;
 export const API_AUTH_RESET_PASSWORD = `${BASE_URL}/auth/reset/password`;
 export const API_POST_RESET_PASSWORD = `${BASE_URL}/update/current/password`;
 export const API_POST_UPLOAD_THUMBNAIL = `${BASE_URL}/upload/thumbnail`;
+export const API_UPDATE_USER_NAME = `${BASE_URL}/customer/profile/setting`;
 
 // App
 export const API_GET_COUNTRY_STATES = `${BASE_URL}/getstates`;

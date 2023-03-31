@@ -10,7 +10,8 @@ import HeaderWithBack from '../../components/Headers/HeaderWithBack'
 const AccountSettings = () => {
     const navigation = useNavigation();
     const items = [
-        { title: 'Profile settings', func: () => navigation.navigate('ProfileSettings') },
+        { title: 'Change name', func: () => navigation.navigate('ChangeName') },
+        { title: 'Change email', func: () => navigation.navigate('ChangeEmail') },
         { title: 'Reset password', func: () => navigation.navigate('ResetPassword') },
     ]
 

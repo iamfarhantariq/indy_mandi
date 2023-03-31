@@ -62,3 +62,9 @@ export const updatePasswordFormSchema = Yup.object().shape({
     new_password: Yup.string().trim().required('Password is required'),
     new_confirm_password: Yup.string().trim().required('Confrim Password is required').oneOf([Yup.ref('new_password'), null], 'Passwords must match'),
 });
+
+
+export const updateUserNameFormSchema = Yup.object().shape({
+    name: Yup.string().trim().required('Name is required'),
+    mobile: Yup.string().trim().required('Phone is required'),
+});

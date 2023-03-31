@@ -75,6 +75,8 @@ import { useState } from 'react';
 import ForgotPassword from '../screens/forgotPassword/ForgotPassword';
 import ResetPasswordWithCode from '../screens/resetPasswordWithCode/ResetPasswordWithCode';
 import UserImage from '../screens/userImage/UserImage';
+import ChangeName from '../screens/changeName/ChangeName';
+import ChangeEmail from '../screens/changeEmail/ChangeEmail';
 
 const Tab = createBottomTabNavigator();
 
@@ -375,7 +377,8 @@ const AppNavigation = () => {
                     <AppStack.Screen name="PaymentHistory" component={PaymentHistory} />
                     <AppStack.Screen name="Invoice" component={Invoice} />
                     <AppStack.Screen name="ResetPassword" component={ResetPassword} />
-                    <AppStack.Screen name="ProfileSettings" component={ProfileSettings} />
+                    <AppStack.Screen name="ChangeName" component={ChangeName} />
+                    <AppStack.Screen name="ChangeEmail" component={ChangeEmail} />
                     <AppStack.Screen name="IndyViews" component={IndyViews} />
                     <AppStack.Screen name="UploadAd" component={UploadAd} />
                     <AppStack.Screen name="CropImage" component={CropImage} />

@@ -99,3 +99,7 @@ export const showToastHandler = (e, dispatch = null) => {
     text2: errors ? errors[Object.keys(errors)[0]][0] : '',
   });
 }
+
+export const GetUpdatedUser = ({props}) => {
+
+}

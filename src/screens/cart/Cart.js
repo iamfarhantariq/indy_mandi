@@ -7,7 +7,9 @@ import Plus from '../../assets/images/plus-btn-icon.svg'
 import More from '../../assets/images/more-icon.svg'
 import InputFieldBase from '../../components/Input/InputFieldBase';
 import { useDispatch, useSelector } from 'react-redux'
-import { getLoginConfig, updateCounter } from '../../store/slices/loginConfigSlice'
+import { getLoginConfig, removeFromCart, updateCounter } from '../../store/slices/loginConfigSlice'
+import AppConfig from '../../helpers/config';
+import { SheetManager } from 'react-native-actions-sheet';
 
 const Cart = () => {
   const { cart } = useSelector(getLoginConfig);
@@ -50,7 +52,7 @@ const Cart = () => {
   const getTotalSumPrice = () => {
     return cart.map(f => (
       (f?.offer_price ? f?.offer_price : f?.price) * f.count
-    )).reduce((p, c) => p + c, 0)
+    )).reduce((p, c) => p + c, 0);
   }
 
   const ProductItem = ({ item, index }) => {
@@ -61,8 +63,8 @@ const Cart = () => {
         <View style={{ width: '70%', flexDirection: 'row' }}>
           <Image source={{ uri: item?.image }} resizeMode='cover'
             style={styles.imageStyle} />
-          <View>
-            <Text style={{ ...styles.pIHeading, width: '99.8%' }}>{item.name?.trim()}</Text>
+          <View style={{ width: AppConfig.windowWidth / 2 }}>
+            <Text style={styles.pIHeading}>{item.name?.trim()}</Text>
             <Text style={styles.pIPrice}>₹{priceToShow}</Text>
             <Text style={styles.pIPrice}>Total: ₹{priceToShow * item?.count}</Text>
           </View>
@@ -75,7 +77,17 @@ const Cart = () => {
           <TouchableOpacity onPress={() => dispatch(updateCounter({ id: item?.id, action: 'increment' }))}>
             <Plus />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => null}>
+          <TouchableOpacity onPress={() => {
+            SheetManager.show('example-two', {
+              payload: {
+                header: 'Choose your action',
+                actions: [
+                  { title: 'Remove from cart', value: 'remove' }
+                ],
+                filterHandler: (_action) => dispatch(removeFromCart(item?.id))
+              }
+            });
+          }}>
             <More />
           </TouchableOpacity>
         </View>
