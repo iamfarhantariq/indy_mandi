@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StatusBar, View } from 'react-native';
 import store from './src/store';
 import { Provider } from 'react-redux';
@@ -16,12 +16,17 @@ import { PersistGate } from 'redux-persist/integration/react';
 import AppStyle from './src/assets/styles/AppStyle';
 import { SheetProvider } from 'react-native-actions-sheet';
 import './src/helpers/sheets';
-// import { LogBox } from 'react-native';
-// LogBox.ignoreLogs(['Sending']);
+import { LogBox } from 'react-native';
 
 let persistor = persistStore(store);
 
 const App = () => {
+
+  useEffect(() => {
+    LogBox.ignoreAllLogs();
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  }, []);
+
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>

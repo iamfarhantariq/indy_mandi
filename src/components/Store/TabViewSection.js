@@ -9,8 +9,7 @@ import AboutSectionStore from './AboutSectionStore';
 import PolicySectionStore from './PolicySectionStore';
 import AppConfig from '../../helpers/config';
 
-const TabViewSection = () => {
-
+const TabViewSection = ({ storeData, storeId }) => {
     const [index, setIndex] = React.useState(0);
     const [routes] = React.useState([
         { key: 'first', title: 'Products' },
@@ -21,7 +20,7 @@ const TabViewSection = () => {
 
     const FirstRoute = () => (
         <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }} >
-            <ProductSectionStore />
+            <ProductSectionStore storeData={storeData} storeId={storeId} />
         </View>
     );
 
@@ -33,7 +32,7 @@ const TabViewSection = () => {
 
     const ThirdRoute = () => (
         <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }} >
-            <AboutSectionStore />
+            <AboutSectionStore storeData={storeData} />
         </View>
     );
 
@@ -82,7 +81,7 @@ const TabViewSection = () => {
     )
 }
 
-export default TabViewSection
+export default TabViewSection;
 
 const styles = StyleSheet.create({
     tabBarStyle: {

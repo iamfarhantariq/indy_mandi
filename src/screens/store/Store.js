@@ -1,18 +1,131 @@
-import { Image, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import { Image, ImageBackground, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import AppStyle from '../../assets/styles/AppStyle'
 import BackLarge from '../../assets/images/back-large.svg';
 import AppConfig from '../../helpers/config';
-import { commonStyle } from '../../helpers/common';
+import { commonStyle, showToastHandler } from '../../helpers/common';
 import StarRating from '../../components/Store/StarRating';
 import { useNavigation } from '@react-navigation/native';
 import Van from '../../assets/images/store-van.svg';
 import Response from '../../assets/images/store-response.svg';
 import TabViewSection from '../../components/Store/TabViewSection';
 import Button from '../../components/Button';
+import { useDispatch } from 'react-redux';
+import { setActivityIndicator } from '../../store/slices/appConfigSlice';
+import { ServiceGetStoreDetail, ServiceGetStoreFirstCollection, ServiceGetStoreOtherCollection, ServiceGetStoreProducts } from '../../services/ProductService';
+import ProductSectionStore from '../../components/Store/ProductSectionStore';
+import ReviewSectionStore from '../../components/Store/ReviewSectionStore';
+import AboutSectionStore from '../../components/Store/AboutSectionStore';
+import PolicySectionStore from '../../components/Store/PolicySectionStore';
+import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
+import InputField from '../../components/Input/InputField';
 
-const Store = () => {
+const Store = ({ route }) => {
+    const { storeId } = route?.params;
+    console.log({ storeId });
+    const dispatch = useDispatch();
     const navigation = useNavigation();
+    const [index, setIndex] = React.useState(0);
+    const [routes] = React.useState([
+        { key: 'first', title: 'Products' },
+        { key: 'second', title: 'Reviews' },
+        { key: 'third', title: 'About' },
+        { key: 'fourth', title: 'Policies' },
+    ]);
+    const [storeData, setStoreData] = useState(null);
+    const [search, setSearch] = useState('');
+    const [collections, setCollections] = useState([]);
+    const [selectedCollection, setSelectedCollection] = useState(null);
+    const [products, setProducts] = useState([]);
+
+    const FirstRoute = () => (
+        <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor, paddingTop: 18 }} >
+            <InputField value={search} onTextChange={(t) => setSearch(t)} placeholder={'Search'} />
+            <ProductSectionStore collections={collections} selectedCollection={selectedCollection} products={products}/>
+        </View>
+    );
+
+    const SecondRoute = () => (
+        <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }} >
+            <ReviewSectionStore />
+        </View>
+    );
+
+    const ThirdRoute = () => (
+        <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }} >
+            <AboutSectionStore storeData={storeData} />
+        </View>
+    );
+
+    const FourthRoute = () => (
+        <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }} >
+            <PolicySectionStore />
+        </View>
+    );
+
+    const renderScene = SceneMap({
+        first: FirstRoute,
+        second: SecondRoute,
+        third: ThirdRoute,
+        fourth: FourthRoute,
+    });
+
+    useEffect(() => {
+        if (storeId) {
+            getStoreDetail();
+            getStoreCollection();
+        } else {
+            navigation.pop();
+        }
+    }, []);
+
+    useEffect(() => {
+        if (selectedCollection) {
+            getCollectionProducts();
+        }
+    }, [selectedCollection, search]);
+
+    const getStoreCollection = () => {
+        ServiceGetStoreFirstCollection(storeId).then(response => {
+            ServiceGetStoreOtherCollection(storeId).then(_response => {
+                const combinedCollection = [response?.data, ..._response?.data];
+                // console.log(combinedCollection, "********");
+                setCollections(combinedCollection);
+                if (!selectedCollection) {
+                    setSelectedCollection(combinedCollection[0]);
+                }
+            }).catch(e => {
+                showToastHandler(e, dispatch);
+            });
+        }).catch(e => {
+            showToastHandler(e, dispatch);
+        });
+    }
+
+    const getStoreDetail = () => {
+        dispatch(setActivityIndicator(true));
+        ServiceGetStoreDetail(storeId).then(response => {
+            console.log({ response });
+            dispatch(setActivityIndicator(false));
+            setStoreData(response?.data);
+        }).catch(e => {
+            showToastHandler(e, dispatch);
+        });
+    }
+
+    const getCollectionProducts = () => {
+        const payload = { store_id: storeId, search_keywords: search };
+        if (selectedCollection && selectedCollection?.id) {
+            payload.collection_id = selectedCollection?.id;
+        }
+        console.log({ payload });
+        ServiceGetStoreProducts(payload).then(response => {
+            console.log({ response });
+            setProducts(response?.data);
+        }).catch(e => {
+            showToastHandler(e);
+        })
+    }
 
     return (
         <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }}>
@@ -20,7 +133,7 @@ const Store = () => {
                 showsVerticalScrollIndicator={false}>
                 <ImageBackground
                     resizeMode='cover'
-                    source={require('../../assets/images/demo-cover-bg.png')}
+                    source={{ uri: storeData?.store_banner_image }}
                     style={styles.imageContainer}
                 >
                     <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.pop()}>
@@ -29,26 +142,26 @@ const Store = () => {
 
                     <View style={styles.profileContainer}>
                         <Image
-                            source={require('../../assets/images/demo-category-image.jpeg')}
+                            source={{ uri: storeData?.store_image }}
                             resizeMode='cover'
                             style={styles.imageStyle}
                         />
                     </View>
                 </ImageBackground>
                 <View style={{ marginHorizontal: 16, marginBottom: 16 }}>
-                    <Text style={styles.name}>Nike - Original store</Text>
-                    <Text style={styles.description}>From men to ladies, wide range of variety</Text>
-                    <Text style={styles.description}>Ahmedabad, Gujarat</Text>
+                    <Text style={styles.name}>{storeData?.store_name}</Text>
+                    <Text style={styles.description}>{storeData?.seller_name}</Text>
+                    {/* <Text style={styles.description}>Ahmedabad, Gujarat</Text> */}
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <View style={{ height: 20, width: 90 }}>
                             <StarRating rating={4} />
                         </View>
-                        <Text style={styles.ratingText}>(4/5) 500 sales</Text>
+                        {/* <Text style={styles.ratingText}>(4/5) 500 sales</Text> */}
                     </View>
                 </View>
                 <View style={{ flexDirection: 'row', marginHorizontal: 16, justifyContent: 'space-between', marginBottom: 16 }}>
                     <View style={{ width: '49%' }}>
-                        <Button text={'Manage products'} handleClick={()=> navigation.navigate('ManageProducts')}/>
+                        <Button text={'Manage products'} handleClick={() => navigation.navigate('ManageProducts')} />
                     </View>
                     <View style={{ width: '49%' }}>
                         <Button text={'Edit profile'} />
@@ -58,7 +171,35 @@ const Store = () => {
                     <StoreDetail Icon={<Van />} text={'Smooth Dispatcher'} description='Has a history of dispatching orders on time' />
                     <StoreDetail Icon={<Response />} text={'Speedy Replies'} description='Has a history of dispatching orders on time' />
                 </View>
-                <TabViewSection />
+                {/* <TabViewSection storeData={storeData} storeId={storeId} /> */}
+                <View style={{
+                    height: AppConfig.screenHeight - (Platform.OS === 'ios' ? 20 : 50)
+                }}>
+                    <TabView
+                        navigationState={{ index, routes }}
+                        renderScene={renderScene}
+                        onIndexChange={setIndex}
+                        initialLayout={{ width: AppConfig.screenWidth, flex: 1 }}
+                        renderTabBar={props => (
+                            <TabBar
+                                {...props} style={styles.tabBarStyle}
+                                indicatorStyle={{
+                                    backgroundColor: AppStyle.colorSet.blackColor,
+                                }}
+                                renderLabel={({ focused, route }) => (
+                                    <Text
+                                        style={{
+                                            ...styles.tabBarLabel,
+                                            opacity: focused ? 1 : 0.5
+                                        }}>
+                                        {route.title}
+                                    </Text>
+                                )}
+                            />
+                        )}
+                        style={{ marginTop: 20, marginHorizontal: 16 }}
+                    />
+                </View>
             </ScrollView>
         </View>
     )
@@ -127,5 +268,11 @@ const styles = StyleSheet.create({
     },
     storeDText: {
         ...commonStyle('400', 14, 'textSecondary'),
+    },
+    tabBarStyle: {
+        backgroundColor: AppStyle.colorSet.BGColor,
+    },
+    tabBarLabel: {
+        ...commonStyle('500', 12, 'blackColor')
     }
 })

@@ -3,19 +3,19 @@ import React from 'react'
 import { commonStyle } from '../../helpers/common'
 import Box from '../../assets/images/box-icon.svg';
 import Coment from '../../assets/images/coment-icon.svg';
-import Van from '../../assets/images/van-icon.svg';
+// import Van from '../../assets/images/van-icon.svg';
 import AppStyle from '../../assets/styles/AppStyle';
 import StarRating from './StarRating';
 import SmallButton from '../SmallButton';
 import { useNavigation } from '@react-navigation/native';
 
-const SellerDetails = () => {
+const SellerDetails = ({ productDetail }) => {
   const navigation = useNavigation();
 
   const data = [
-    { Icon: <Box />, text: 'This seller usually responds within an hour.' },
-    { Icon: <Coment />, text: 'All orders will be delivered by Vedaka' },
-    { Icon: <Van />, text: 'Easy return & exchange within 15 days' },
+    { Icon: <Box />, text: productDetail?.seller_detail_first_line },
+    { Icon: <Coment />, text: productDetail?.seller_detail_second_line },
+    // { Icon: <Van />, text: 'Easy return & exchange within 15 days' },
   ]
 
   return (
@@ -32,15 +32,15 @@ const SellerDetails = () => {
       })}
       <View style={styles.profileConatiner}>
         <View style={{ flex: 1 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={styles.name}>Nike</Text>
-            <View style={{ height: 16, width: 90, marginLeft: 8 }}>
+          <View style={{ width: '100%', flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={{ ...styles.name, maxWidth: '58%' }}>{productDetail?.seller_name}</Text>
+            <View style={{ width: '42%', height: 16, width: 90, marginLeft: 8 }}>
               <StarRating rating={3} />
             </View>
           </View>
-          <Text style={styles.address}>Darjeeling, Assam</Text>
+          <Text style={styles.address}>{productDetail?.store_name}</Text>
         </View>
-        <SmallButton text={'View profile'} large={false} handleClick={() => navigation.navigate('StoreScreen')} />
+        <SmallButton text={'View profile'} large={false} handleClick={() => navigation.navigate('StoreScreen', { storeId: productDetail?.store_id })} />
       </View>
     </View>
   )
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
-    height: 67,
+    // height: 67,
     backgroundColor: AppStyle.colorSet.borderLightGrayColor,
     borderRadius: 8,
     alignItems: 'center',

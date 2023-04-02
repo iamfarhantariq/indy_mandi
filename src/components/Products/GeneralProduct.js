@@ -10,9 +10,12 @@ import { ServiceGetWishListListingForUser, ServicePostProductToWishList } from '
 import { showToastHandler } from '../../helpers/common';
 import { SheetManager } from 'react-native-actions-sheet';
 import Toast from 'react-native-toast-message';
+import { useSelector } from 'react-redux';
+import { getLoginConfig } from '../../store/slices/loginConfigSlice';
 
 const GeneralProduct = ({ item, index, flex = false, enable = false, optionIcon = false, handleOptions = null }) => {
   const navigation = useNavigation();
+  const loginConfig = useSelector(getLoginConfig);
   const [isEnabled, setIsEnabled] = useState(true);
   const [liked, setLiked] = useState(item?.is_liked || false);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
@@ -56,20 +59,22 @@ const GeneralProduct = ({ item, index, flex = false, enable = false, optionIcon 
 
   return (
     <View>
-      <TouchableOpacity onPress={() => navigation.navigate('ProductDetailScreen')}>
+      <TouchableOpacity onPress={() => {
+        navigation.navigate('ProductDetailScreen', { productId: item?.id })
+      }}>
         <ImageBackground
           resizeMode='cover'
           source={{ uri: item?.image }}
           style={flexStyle}
           imageStyle={{ borderRadius: 8 }}
         >
-          {optionIcon ?
+          {loginConfig?.isLogin && (optionIcon ?
             <TouchableOpacity onPress={handleOptions} style={{ position: 'absolute', right: 0, top: 0 }}>
               <WishIconLiked />
             </TouchableOpacity> :
             <TouchableOpacity onPress={getWishListListing} style={{ position: 'absolute', right: 0, top: 0 }}>
               {liked ? <WishIconLiked /> : <WishIcon />}
-            </TouchableOpacity>}
+            </TouchableOpacity>)}
         </ImageBackground>
         <Text style={{ ...styles.name, width: flexStyle.width, marginLeft: index === 0 && !flex ? 16 : 0 }}>{item?.name}</Text>
         <View style={{ flexDirection: 'row' }}>

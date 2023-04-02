@@ -37,7 +37,6 @@ const ChatDetail = () => {
     useEffect(() => {
         const keyboardDidShowListener = Keyboard.addListener(
             'keyboardDidShow', () => {
-                console.log('Hello');
                 flatListRef.current.scrollToEnd();
             },
         );

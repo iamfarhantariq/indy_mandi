@@ -40,6 +40,11 @@ export const API_GET_PRODUCT_CATEGORIES = `${BASE_URL}/home/categories`;
 export const API_GET_PRODUCT_HOME_PAGE_TYPES = `${BASE_URL}/home/trending-curated-editors`;
 export const API_GET_HOME_INDY_BLOGS_STORY = `${BASE_URL}/home/indyview-blog-story`;
 export const API_GET_CIRCLE_CATEGORY = `${BASE_URL}/home/categories/circles`;
+export const API_GET_PRODUCT_DETAIL = `${BASE_URL}/explore/view/product`;
+export const API_GET_STORE_DETAIL = `${BASE_URL}/explore/visit/store`;
+export const API_GET_STORE_FIRST_COLLECTION = `${BASE_URL}/store/collections-all`;
+export const API_GET_STORE_OTHER_COLLECTION = `${BASE_URL}/store/collections`;
+export const API_GET_STORE_PRODUCTS = `${BASE_URL}/store/products`;
 
 // Explore
 export const API_POST_EXPLORE = `${BASE_URL}/explore`;

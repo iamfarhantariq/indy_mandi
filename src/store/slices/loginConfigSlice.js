@@ -32,7 +32,7 @@ export const loginConfigSlice = createSlice({
         setAddToCart: (state, action) => {
             const prevCart = [...state.cart];
             if (!prevCart.find(f => f?.id === action.payload?.id)) {
-                prevCart.push({ ...action.payload, count: 1 });
+                prevCart.push({ ...action.payload, count: action.payload?.count || 1 });
                 state.cart = prevCart;
                 Toast.show({
                     type: 'success',

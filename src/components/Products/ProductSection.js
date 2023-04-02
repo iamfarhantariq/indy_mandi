@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import React from 'react'
-import { ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ImageBackground, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import AppStyle from '../../assets/styles/AppStyle'
 import GeneralProduct from './GeneralProduct'
@@ -24,7 +24,7 @@ const ProductSection = ({ title, items = [], BG = '', color = null, route = '' }
             }}
         >
             <View>
-                <TouchableOpacity onPress={()=> navigation.navigate(route)}>
+                <TouchableOpacity onPress={() => navigation.navigate(route)}>
                     <Text style={styles.heading}>{title}</Text>
                 </TouchableOpacity>
                 <FlatList

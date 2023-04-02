@@ -12,19 +12,21 @@ const SellerStory = ({ title = null, item }) => {
                 <View style={styles.imageContainer}>
                     <Image resizeMode='contain'
                         style={{ height: 200, flex: 1 }}
-                        source={{uri: item?.image}} />
+                        source={{ uri: item?.image }} />
                 </View>
                 <View style={styles.textContainer}>
                     <Text style={styles.whiteText}>
                         {item?.title}
                     </Text>
                     <Text style={styles.coloredText}>
-                       {item?.first_line}
+                        {item?.first_line}
                     </Text>
-                    <Text style={styles.whiteText}>
-                        {"Read story >"}
-                    </Text>
-                    <TouchableOpacity onPress={() => navigation.navigate('SellerStoriesScreen')} style={styles.button}>
+                    <TouchableOpacity onPress={() => navigation.navigate('SellerStoriesScreen')}>
+                        <Text style={styles.whiteText}>
+                            {"Read story >"}
+                        </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('BecomeSeller')} style={styles.button}>
                         <Text style={styles.whiteText}>Become a Seller</Text>
                     </TouchableOpacity>
                 </View>

@@ -1,27 +1,11 @@
 import { FlatList, Image, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import InputField from '../Input/InputField';
-import { useState } from 'react';
 import { commonStyle } from '../../helpers/common';
 import GeneralProduct from '../Products/GeneralProduct';
+import AppStyle from '../../assets/styles/AppStyle';
 
-const ProductSectionStore = () => {
-    const [search, setSearch] = useState('');
-
-    const items = [
-        { name: 'New Nike girl shoe', price: '$80.77', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-        { name: 'New Nike girl shoe', price: '$80.77', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-        { name: 'New Nike girl shoe', price: '$80.77', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-        { name: 'New Nike girl shoe', price: '$80.77', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-        { name: 'New Nike girl shoe', price: '$80.77', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-        { name: 'New Nike girl shoe', price: '$80.77', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-        { name: 'New Nike girl shoe', price: '$80.77', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-        { name: 'New Nike girl shoe', price: '$80.77', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-        { name: 'New Nike girl shoe', price: '$80.77', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-        { name: 'New Nike girl shoe', price: '$80.77', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-        { name: 'New Nike girl shoe', price: '$80.77', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-    ]
-
+const ProductSectionStore = ({ collections, selectedCollection, products }) => {
+    console.log({ collections });
     const _renderItem = ({ item, index }) => {
         return (
             <View style={{ marginBottom: 16, paddingRight: index % 2 == 0 ? 8 : 0, paddingLeft: index % 2 == 0 ? 0 : 8 }}>
@@ -30,20 +14,22 @@ const ProductSectionStore = () => {
         )
     }
 
-    const ProductType = ({ item, index }) => (
-        <View style={{ marginRight: 16 }}>
-            <Image resizeMode='cover' style={styles.imageStyle}
-                source={require('../../assets/images/demo-cover-bg.png')} />
-            <Text style={styles.typeText}>{item}</Text>
-        </View>
-    )
+    const ProductType = ({ item, index }) => {
+        const selectedStyle = { borderColor: AppStyle.colorSet.primaryColorB, borderWidth: 1 };
+        return (
+            <View style={{ marginRight: 16 }}>
+                <Image resizeMode='cover' style={item === selectedCollection ? { ...selectedStyle, ...styles.imageStyle } : styles.imageStyle}
+                    source={{ uri: item?.image }} />
+                <Text style={styles.typeText}>{item?.name}</Text>
+            </View>
+        )
+    }
 
     return (
         <View style={{ flex: 1, paddingTop: 16 }}>
-            <InputField value={search} onTextChange={(t) => setSearch(t)} placeholder={'Search'} />
             <View style={{ marginVertical: 16 }}>
                 <FlatList
-                    data={['All', 'On-sale', 'New year']}
+                    data={collections}
                     horizontal
                     renderItem={ProductType}
                     key={index => 'type' + index + 'product'}
@@ -53,7 +39,7 @@ const ProductSectionStore = () => {
             </View>
             <View style={{ flex: 1, marginBottom: 16 }}>
                 <FlatList
-                    data={items}
+                    data={products}
                     nestedScrollEnabled
                     key={index => 'category' + index + 'main-product'}
                     renderItem={_renderItem}
@@ -75,6 +61,8 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         height: 80,
         width: 80,
+        // borderColor: AppStyle.colorSet.primaryColorB,
+        // borderWidth: 2,
     },
     typeText: {
         ...commonStyle('400', 12, 'primaryColorA'),

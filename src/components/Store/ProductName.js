@@ -1,32 +1,84 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import StarRating from './StarRating';
 import FavBlank from '../../assets/images/fav-blank.svg';
+import FavLiked from '../../assets/images/fav-liked.svg';
 import { commonStyle } from '../../helpers/common';
+import { ServiceGetWishListListingForUser, ServicePostProductToWishList } from '../../services/AppService';
+import { showToastHandler } from '../../helpers/common';
+import { SheetManager } from 'react-native-actions-sheet';
+import Toast from 'react-native-toast-message';
+import { useSelector } from 'react-redux';
+import { getLoginConfig } from '../../store/slices/loginConfigSlice';
 
-const ProductName = () => {
+const ProductName = ({ productDetail }) => {
+    const loginConfig = useSelector(getLoginConfig);
+    const [liked, setLiked] = useState(productDetail?.is_liked || false);
+    const getSortedArray = () => productDetail?.categories_path.sort((a, b) => Number(a.level) - Number(b.level));
+
+    const addToWishList = (wishListId) => {
+        setLiked(true);
+        ServicePostProductToWishList(wishListId, productDetail?.id).then(response => {
+            console.log({ response });
+            Toast.show({
+                type: 'success',
+                text1: 'Success',
+                text2: response?.data?.message
+            });
+        }).catch(e => {
+            setLiked(false);
+            showToastHandler(e);
+        });
+    }
+
+    const getWishListListing = () => {
+        if (!liked) {
+            ServiceGetWishListListingForUser().then(response => {
+                console.log({ response });
+                const data = response?.data?.data;
+                SheetManager.show('example-two', {
+                    payload: {
+                        header: 'Add to:',
+                        actions: data?.map(w => ({ title: w?.name, value: w?.id })),
+                        filterHandler: (wishListId) => addToWishList(wishListId)
+                    }
+                });
+            }).catch(e => {
+                showToastHandler(e);
+            });
+        }
+    }
+
     return (
         <View style={styles.container}>
             <View style={{ flexDirection: 'row' }}>
                 <View style={{ flex: 1 }}>
-                    <Text style={styles.nestedCategories}>{'Shoes > New arrival > Men > Nike '}</Text>
-                    <Text style={styles.title}>New Nike girl shoe</Text>
+                    <View style={styles.levelsContainer}>
+                        {getSortedArray()?.map((lvl, index) => {
+                            return (
+                                <TouchableOpacity key={index}>
+                                    <Text style={styles.nestedCategories}>
+                                        {lvl?.name}{getSortedArray()?.length - 1 === index ? '' : ' > '}
+                                    </Text>
+                                </TouchableOpacity>
+                            )
+                        })}
+                    </View>
+                    <Text style={styles.title}>{productDetail?.name}</Text>
                     <View style={{ height: 20, width: 110, marginBottom: 4 }}>
                         <StarRating rating={4} />
                     </View>
                 </View>
-                <TouchableOpacity style={{ marginLeft: 16 }}>
-                    <FavBlank />
-                </TouchableOpacity>
+                {loginConfig?.isLogin && <TouchableOpacity onPress={getWishListListing} style={{ marginLeft: 16 }}>
+                    {liked ? <FavLiked /> : <FavBlank />}
+                </TouchableOpacity>}
             </View>
             <Text style={styles.price} numberOfLines={1} lineBreakMode='tail'>
-                $80.77
-                <Text style={styles.description}>
-                    {"  "}
+                ₹{productDetail?.offer_price ? productDetail?.offer_price : productDetail?.price}
+                {/* <Text style={styles.description}>
                     <Text style={{ textDecorationLine: 'line-through' }}>$390</Text>
-                    {" "}
                     (20% OFF) inclusive all taxes)
-                </Text>
+                </Text> */}
             </Text>
         </View>
     )
@@ -51,5 +103,10 @@ const styles = StyleSheet.create({
     },
     description: {
         ...commonStyle('500', 12, 'textSecondary'),
+    },
+    levelsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'center'
     }
 })

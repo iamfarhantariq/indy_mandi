@@ -75,7 +75,7 @@ const BecomeSeller = () => {
             address: '',
             state: '',
             gstn: '',
-            coupon: '',
+            coupon: 'INDYEARLYBIRD',
             seller_name: '',
             email: '',
             password: '',
@@ -116,7 +116,7 @@ const BecomeSeller = () => {
                 showToastHandler(e, dispatch);
             });
         },
-        validationSchema: loginConfig?.isLogin ? becomeASellerAuthorizedFormSchema : { ...becomeASellerAuthorizedFormSchema, ...becomeASellerGuestFormSchema },
+        validationSchema: loginConfig?.isLogin ? becomeASellerAuthorizedFormSchema : becomeASellerGuestFormSchema,
     });
 
     const otherProps = { values, errors, touched, setFieldValue, setFieldTouched, handleBlur };
@@ -237,7 +237,7 @@ const BecomeSeller = () => {
                         <View>
                             <Text style={styles.proofText}>
                                 {cropedImage ? Platform.OS === 'ios' ? cropedImage?.filename :
-                                cropedImage?.path?.split('/')[cropedImage?.path?.split('/')?.length - 1] :
+                                    cropedImage?.path?.split('/')[cropedImage?.path?.split('/')?.length - 1] :
                                     'Upload ID Proof (Driver\'s License, PAN card, Aadhar, Voter\'s ID)'}
                             </Text>
                         </View>

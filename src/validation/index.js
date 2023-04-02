@@ -82,4 +82,12 @@ export const becomeASellerAuthorizedFormSchema = Yup.object().shape({
 export const becomeASellerGuestFormSchema = Yup.object().shape({
     email: Yup.string().trim().email("Email is invalid").required('Email is required'),
     password: Yup.string().trim().required('Password is required'),
+    name: Yup.string().trim().required('Name is required'),
+    description: Yup.string().trim().required('Description is required'),
+    address: Yup.string().trim().required('Address is required'),
+    state: Yup.string().trim().required('State is required'),
+    gstn: Yup.string().trim(),
+    coupon: Yup.string().trim(),
+    seller_name: Yup.string().trim().required('Seller name is required'),
+    mobile: Yup.string().trim().required('Mobile is required'),
 });
