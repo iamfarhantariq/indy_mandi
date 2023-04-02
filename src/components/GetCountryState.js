@@ -8,7 +8,7 @@ import { getAppConfig } from '../store/slices/appConfigSlice';
 import AppStyle from '../assets/styles/AppStyle';
 import { commonStyle } from '../helpers/common';
 
-DropDownPicker.setListMode("MODAL")
+DropDownPicker.setListMode("MODAL");
 
 const GetCountryState = ({ otherProps = null, value = '', name = '' }) => {
     const appConfig = useSelector(getAppConfig);

@@ -33,6 +33,7 @@ export const API_GET_PAYMENTS_INVOICE = `${BASE_URL}/view-invoice`;
 // IndyView 
 export const API_GET_DAYS_SLOTS = `${BASE_URL}/indyviews/getdates`;
 export const API_POST_INDY_MANDI_AD = `${BASE_URL}/indyviews/store`;
+export const API_POST_BECOME_A_SELLER = `${BASE_URL}/become-a-seller/store`;
 
 // Products
 export const API_GET_PRODUCT_CATEGORIES = `${BASE_URL}/home/categories`;

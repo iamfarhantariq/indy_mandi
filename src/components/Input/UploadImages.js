@@ -1,9 +1,8 @@
-import { Image, ImageBackground, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ImageBackground, Platform, StyleSheet, Text, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import AppStyle from '../../assets/styles/AppStyle';
 import UploadIcon from '../../assets/images/add-images.svg';
 import { commonStyle } from '../../helpers/common';
-import { useNavigation } from '@react-navigation/native';
 import ImagePicker from 'react-native-image-crop-picker';
 
 const UploadImages = ({ getImage = null }) => {
