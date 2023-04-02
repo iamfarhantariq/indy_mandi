@@ -69,7 +69,7 @@ import ManageCollection from '../screens/manageCollection/ManageCollection';
 import CreateCollection from '../screens/createCollection/CreateCollection';
 import LoadingScreen from '../screens/LoadingScreen';
 import VerifyEmail from '../screens/verifyEmail/VerifyEmail';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getLoginConfig } from '../store/slices/loginConfigSlice';
 import { useState } from 'react';
 import ForgotPassword from '../screens/forgotPassword/ForgotPassword';
@@ -77,6 +77,8 @@ import ResetPasswordWithCode from '../screens/resetPasswordWithCode/ResetPasswor
 import UserImage from '../screens/userImage/UserImage';
 import ChangeName from '../screens/changeName/ChangeName';
 import ChangeEmail from '../screens/changeEmail/ChangeEmail';
+import VerifyEmailLoggedUser from '../screens/verifyEmail/VerifyEmailLoggedUser';
+import { UpdatedUserInTheApp } from '../helpers/common';
 
 const Tab = createBottomTabNavigator();
 
@@ -318,6 +320,8 @@ const AppStack = createNativeStackNavigator();
 
 const AppNavigation = () => {
     // const isDarkMode = useColorScheme() === 'dark';
+    const dispatch = useDispatch();
+    const loginConfig = useSelector(getLoginConfig);
 
     const CustomToast = (props) => {
         return <BaseToast
@@ -340,6 +344,10 @@ const AppNavigation = () => {
 
     useEffect(() => {
         SplashScreen.hide();
+        async function fetchUserDetails() {
+            loginConfig?.isLogin && await UpdatedUserInTheApp(dispatch);
+        }
+        fetchUserDetails();
     }, []);
 
     return (
@@ -394,6 +402,7 @@ const AppNavigation = () => {
                     <AppStack.Screen name="ForgotPassword" component={ForgotPassword} />
                     <AppStack.Screen name="ResetPasswordWithCode" component={ResetPasswordWithCode} />
                     <AppStack.Screen name="UserImage" component={UserImage} />
+                    <AppStack.Screen name="VerifyEmailLoggedUser" component={VerifyEmailLoggedUser} />
                 </AppStack.Navigator>
             </NavigationContainer>
 

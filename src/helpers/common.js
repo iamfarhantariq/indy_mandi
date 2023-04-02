@@ -3,6 +3,8 @@ import AppStyle from '../assets/styles/AppStyle';
 import { setActivityIndicator } from '../store/slices/appConfigSlice';
 import AppConfig from './config';
 import Toast from 'react-native-toast-message';
+import { ServiceGetUser } from '../services/AuthServices';
+import { setUser } from '../store/slices/loginConfigSlice';
 
 /**
  * Get random package from array.
@@ -100,6 +102,15 @@ export const showToastHandler = (e, dispatch = null) => {
   });
 }
 
-export const GetUpdatedUser = ({props}) => {
-
+export const UpdatedUserInTheApp = (dispatch) => {
+  return new Promise((resolve, reject) => {
+    ServiceGetUser().then(response => {
+      console.log({response});
+      dispatch(setUser(response?.data));
+      resolve();
+    }).catch(e => {
+      console.log(e);
+      reject();
+    })
+  });
 }

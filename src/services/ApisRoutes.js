@@ -12,6 +12,9 @@ export const API_AUTH_RESET_PASSWORD = `${BASE_URL}/auth/reset/password`;
 export const API_POST_RESET_PASSWORD = `${BASE_URL}/update/current/password`;
 export const API_POST_UPLOAD_THUMBNAIL = `${BASE_URL}/upload/thumbnail`;
 export const API_UPDATE_USER_NAME = `${BASE_URL}/customer/profile/setting`;
+export const API_GET_UPDATED_USER = `${BASE_URL}/get-updated-user`;
+export const API_UPDATE_CURRENT_EMAIL = `${BASE_URL}/update/current/email/authenticate`;
+export const API_POST_VERIFY_NEW_EMAIL = `${BASE_URL}/update/current/email`;
 
 // App
 export const API_GET_COUNTRY_STATES = `${BASE_URL}/getstates`;

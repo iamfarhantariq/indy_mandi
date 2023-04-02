@@ -1,10 +1,10 @@
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import AppStyle from '../../assets/styles/AppStyle'
-import { commonPageStyle, commonStyle } from '../../helpers/common'
+import { commonStyle, UpdatedUserInTheApp } from '../../helpers/common'
 import AppConfig from '../../helpers/config'
 import UserAvatar from '../../assets/images/user-avatar.svg';
-import { useNavigation } from '@react-navigation/native'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 import { getLoginConfig, setLogout } from '../../store/slices/loginConfigSlice'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -12,11 +12,21 @@ import { setActivityIndicator } from '../../store/slices/appConfigSlice'
 import { ServiceLogout } from '../../services/AuthServices'
 import Toast from 'react-native-toast-message';
 import { SheetManager } from 'react-native-actions-sheet';
+import { useEffect } from 'react'
 
 const UserScreen = () => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
+    const isFocused = useIsFocused();
     const loginConfig = useSelector(getLoginConfig);
+
+    useEffect(() => {
+        async function fetchUserDetails() {
+            loginConfig?.isLogin && await UpdatedUserInTheApp(dispatch);
+        }
+        fetchUserDetails();
+    }, [isFocused]);
+    
 
     const items = [
         { title: 'Order enquiries', func: () => navigation.navigate('OrderEnquiries') },
@@ -68,7 +78,7 @@ const UserScreen = () => {
             payload: {
                 header: 'Choose your action',
                 actions: [
-                    { title: 'View photo', value: 'view' },
+                    // { title: 'View photo', value: 'view' },
                     { title: 'Upload photo', value: 'edit' }
                 ],
                 filterHandler: (_action) => navigation.navigate('UserImage', { action: _action })

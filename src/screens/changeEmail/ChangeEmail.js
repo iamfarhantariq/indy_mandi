@@ -6,11 +6,52 @@ import AppStyle from '../../assets/styles/AppStyle';
 import HeaderWithBack from '../../components/Headers/HeaderWithBack';
 import InputFieldBase from '../../components/Input/InputFieldBase';
 import Button from '../../components/Button';
-import { commonStyle } from '../../helpers/common';
+import { commonStyle, showToastHandler } from '../../helpers/common';
+import { useDispatch, useSelector } from 'react-redux';
+import { getLoginConfig } from '../../store/slices/loginConfigSlice';
+import { useFormik } from 'formik';
+import { setActivityIndicator } from '../../store/slices/appConfigSlice';
+import { ServiceUserEmailChange } from '../../services/AuthServices';
+import { forgotFormSchema } from '../../validation';
+import Toast from 'react-native-toast-message';
 
 const ChangeEmail = () => {
     const navigation = useNavigation();
-    const [email, setEmail] = useState('');
+    const dispatch = useDispatch();
+    const { user } = useSelector(getLoginConfig);
+
+    const {
+        errors,
+        touched,
+        values,
+        setFieldValue,
+        setFieldTouched,
+        handleBlur,
+        handleSubmit,
+        handleReset,
+    } = useFormik({
+        initialValues: { email: "" },
+        onSubmit: (values) => {
+            console.log({ values });
+            dispatch(setActivityIndicator(true));
+            ServiceUserEmailChange(values).then(async (response) => {
+                console.log({ response });
+                dispatch(setActivityIndicator(false));
+                Toast.show({
+                    type: 'success',
+                    text1: 'Success',
+                    text2: response?.message,
+                  });
+                navigation.navigate('VerifyEmailLoggedUser', { email: values?.email });
+                handleReset();
+            }).catch(e => {
+                showToastHandler(e, dispatch);
+            });
+        },
+        validationSchema: forgotFormSchema,
+    });
+
+    const otherProps = { values, errors, touched, setFieldValue, setFieldTouched, handleBlur };
 
     return (
         <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }}>
@@ -25,21 +66,21 @@ const ChangeEmail = () => {
                     </View>
                     <View style={{ width: '60%' }}>
                         <Text style={styles.itemDetailTextR}>
-                            Info@example.com
+                            {user?.email}
                         </Text>
                     </View>
                 </View>
 
                 <InputFieldBase
+                    otherProps={otherProps}
                     title={'New email'}
                     placeholder={'Info@example.com'}
-                    value={email}
-                    onTextChange={(t) => setEmail(t)}
+                    name='email'
                 />
             </View>
 
             <View style={AppStyle.buttonContainerBottom}>
-                <Button text={'Save'} fill={true} handleClick={() => navigation.pop()} />
+                <Button text={'Update'} fill={true} handleClick={handleSubmit} />
             </View>
         </View>
     )

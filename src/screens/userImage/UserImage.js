@@ -7,7 +7,7 @@ import { useFormik } from 'formik'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
 import { ServiceUserChangeImage } from '../../services/AuthServices'
-import { convertToFormDataObject, showToastHandler } from '../../helpers/common';
+import { convertToFormDataObject, showToastHandler, UpdatedUserInTheApp } from '../../helpers/common';
 import Toast from 'react-native-toast-message';
 import { setActivityIndicator } from '../../store/slices/appConfigSlice'
 import AppConfig from '../../helpers/config'
@@ -45,6 +45,7 @@ const UserImage = ({ route }) => {
             dispatch(setActivityIndicator(true));
             ServiceUserChangeImage(formData).then(async (response) => {
                 console.log({ response });
+                await UpdatedUserInTheApp(dispatch);
                 dispatch(setActivityIndicator(false));
                 Toast.show({
                     type: 'success',

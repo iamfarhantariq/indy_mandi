@@ -1,24 +1,23 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import React from 'react'
 import HeaderWithBack from '../../components/Headers/HeaderWithBack';
 import AppStyle from '../../assets/styles/AppStyle';
 import InputFieldBase from '../../components/Input/InputFieldBase';
 import Button from '../../components/Button';
 import { useNavigation } from '@react-navigation/native';
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getLoginConfig } from '../../store/slices/loginConfigSlice';
 import { useFormik } from 'formik';
 import { setActivityIndicator } from '../../store/slices/appConfigSlice';
 import { ServiceUserChangeName } from '../../services/AuthServices';
-import { showToastHandler } from '../../helpers/common';
+import { showToastHandler, UpdatedUserInTheApp } from '../../helpers/common';
 import { updateUserNameFormSchema } from '../../validation';
+import Toast from 'react-native-toast-message';
 
 const ChangeName = () => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const { user } = useSelector(getLoginConfig);
-    const [name, setName] = useState('');
 
     const {
         errors,
@@ -37,10 +36,14 @@ const ChangeName = () => {
             ServiceUserChangeName(values).then(async (response) => {
                 console.log({ response });
                 dispatch(setActivityIndicator(false));
-                // await AsyncStorage.setItem("auth_token", response?.data?.token);
-                // dispatch(setUser(response?.data));
-                // navigation.navigate('VerifyEmail', { user: response?.data });
+                await UpdatedUserInTheApp(dispatch);
                 handleReset();
+                Toast.show({
+                    type: 'success',
+                    text1: 'Success',
+                    text2: 'Updated',
+                });
+                navigation.pop();
             }).catch(e => {
                 showToastHandler(e, dispatch);
             });
@@ -52,7 +55,7 @@ const ChangeName = () => {
 
     return (
         <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }}>
-            <HeaderWithBack title={'Update Name'} />
+            <HeaderWithBack title={'Update Profile'} />
 
             <View style={{ marginHorizontal: 16, marginVertical: 16 }}>
                 <InputFieldBase
