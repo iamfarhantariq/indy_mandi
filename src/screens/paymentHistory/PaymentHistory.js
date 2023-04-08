@@ -85,6 +85,7 @@ const PaymentHistory = () => {
                     data={payments}
                     key={(index) => 'address' + index + 'item'}
                     renderItem={_renderItem}
+                    removeClippedSubviews={true}
                     showsVerticalScrollIndicator={false}
                     onEndReached={info => {
                         if (page > lastPage) return;

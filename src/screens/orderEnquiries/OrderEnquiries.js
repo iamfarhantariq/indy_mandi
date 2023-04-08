@@ -90,6 +90,7 @@ const OrderEnquiries = () => {
                 <View style={{ marginVertical: 8, flex: 1 }}>
                     <FlatList
                         data={items}
+                        removeClippedSubviews={true}
                         horizontal={false}
                         renderItem={SingleOrder}
                         key={index => 'item' + index + 'order'}
@@ -138,6 +139,7 @@ const OrderEnquiries = () => {
             <View style={{ flex: 1 }}>
                 <FlatList
                     data={item?.products}
+                    removeClippedSubviews={true}
                     horizontal={false}
                     renderItem={ProductItem}
                     key={index => 'item' + index + 'category'}

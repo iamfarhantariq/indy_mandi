@@ -26,6 +26,7 @@ const ProductCategories = ({ data }) => {
                 data={data || []}
                 key={(index) => 'category' + index + 'chip'}
                 renderItem={_renderItem}
+                removeClippedSubviews={true}
                 showsHorizontalScrollIndicator={false}
             />
         </View>

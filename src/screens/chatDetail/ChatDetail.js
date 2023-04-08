@@ -74,6 +74,7 @@ const ChatDetail = () => {
                     ref={flatListRef}
                     data={messages}
                     nestedScrollEnabled
+                    removeClippedSubviews={true}
                     key={index => 'chat' + index + 'detail'}
                     renderItem={MessageTypeBlock}
                     showsVerticalScrollIndicator={false}

@@ -43,6 +43,7 @@ const Blogs = () => {
                 <FlatList
                     horizontal
                     data={items}
+                    removeClippedSubviews={true}
                     key={(index) => 'header' + index + 'chip'}
                     renderItem={_renderItem}
                     showsHorizontalScrollIndicator={false}

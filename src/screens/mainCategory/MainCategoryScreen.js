@@ -37,6 +37,7 @@ const MainCategoryScreen = ({ route }) => {
                 data={items}
                 key={index => 'category' + index + 'main-product'}
                 renderItem={_renderItem}
+                removeClippedSubviews={true}
                 horizontal={false}
                 numColumns={2}
                 showsVerticalScrollIndicator={false}

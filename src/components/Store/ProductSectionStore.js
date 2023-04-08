@@ -31,6 +31,7 @@ const ProductSectionStore = ({ collections, selectedCollection, products }) => {
                 <FlatList
                     data={collections}
                     horizontal
+                    removeClippedSubviews={true}
                     renderItem={ProductType}
                     key={index => 'type' + index + 'product'}
                     showsHorizontalScrollIndicator={false}
@@ -41,6 +42,7 @@ const ProductSectionStore = ({ collections, selectedCollection, products }) => {
                 <FlatList
                     data={products}
                     nestedScrollEnabled
+                    removeClippedSubviews={true}
                     key={index => 'category' + index + 'main-product'}
                     renderItem={_renderItem}
                     horizontal={false}

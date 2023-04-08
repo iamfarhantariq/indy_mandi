@@ -23,15 +23,17 @@ const ProductSection = ({ title, items = [], BG = '', color = null, route = '' }
                 backgroundColor: color ? color : 'transparent'
             }}
         >
+            <TouchableOpacity onPress={() => navigation.navigate(route)}>
+                <Text style={styles.heading}>{title}</Text>
+            </TouchableOpacity>
             <View>
-                <TouchableOpacity onPress={() => navigation.navigate(route)}>
-                    <Text style={styles.heading}>{title}</Text>
-                </TouchableOpacity>
                 <FlatList
                     horizontal
                     data={items}
+                    removeClippedSubviews={true}
                     key={(index) => title + index + 'product'}
                     renderItem={_renderItem}
+                    removeClippedSubviews={true}
                     showsHorizontalScrollIndicator={false}
                 />
             </View>

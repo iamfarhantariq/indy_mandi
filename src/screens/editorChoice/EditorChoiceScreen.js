@@ -66,6 +66,7 @@ const EditorChoiceScreen = () => {
           renderItem={_renderItem}
           horizontal={false}
           numColumns={2}
+          removeClippedSubviews={true}
           showsVerticalScrollIndicator={false}
           style={{ marginHorizontal: 16 }}
         />

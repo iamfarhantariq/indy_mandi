@@ -67,6 +67,7 @@ const BlogExplore = ({ searchType, search }) => {
                     <FlatList
                         horizontal
                         data={categories}
+                        removeClippedSubviews={true}
                         key={(index) => 'header' + index + 'chip'}
                         renderItem={_renderItem}
                         showsHorizontalScrollIndicator={false}

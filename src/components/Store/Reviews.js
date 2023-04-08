@@ -41,14 +41,17 @@ const Reviews = () => {
     return (
         <View style={{ marginHorizontal: 16 }}>
             <Text style={styles.title}>Reviews (487)</Text>
-            <FlatList
-                data={data}
-                nestedScrollEnabled
-                key={index => 'review' + index + 'item'}
-                renderItem={_renderItem}
-                horizontal={false}
-                showsHorizontalScrollIndicator={false}
-            />
+            <View>
+                <FlatList
+                    data={data}
+                    nestedScrollEnabled
+                    key={index => 'review' + index + 'item'}
+                    renderItem={_renderItem}
+                    horizontal={false}
+                    removeClippedSubviews={true}
+                    showsHorizontalScrollIndicator={false}
+                />
+            </View>
             <View style={{ marginVertical: 8 }}>
                 <SmallButton text={'See all reviews'} />
             </View>

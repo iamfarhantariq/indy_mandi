@@ -57,6 +57,7 @@ const ManageProducts = () => {
                         key={index => 'type' + index + 'product'}
                         showsHorizontalScrollIndicator={false}
                         nestedScrollEnabled
+                        removeClippedSubviews={true}
                     />
                 </View>
 
@@ -74,6 +75,7 @@ const ManageProducts = () => {
                         key={index => 'category' + index + 'main-product'}
                         renderItem={_renderItem}
                         horizontal={false}
+                        removeClippedSubviews={true}
                         numColumns={2}
                         scrollEnabled
                         showsVerticalScrollIndicator={false}

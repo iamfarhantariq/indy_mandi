@@ -21,7 +21,6 @@ import { LogBox } from 'react-native';
 let persistor = persistStore(store);
 
 const App = () => {
-
   useEffect(() => {
     LogBox.ignoreAllLogs();
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);

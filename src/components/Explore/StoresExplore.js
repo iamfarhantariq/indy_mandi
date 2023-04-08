@@ -50,6 +50,7 @@ const StoresExplore = ({ searchType, search }) => {
                 key={index => 'category' + index + 'store'}
                 renderItem={_renderItem}
                 horizontal={false}
+                removeClippedSubviews={true}
                 showsVerticalScrollIndicator={false}
                 onEndReached={info => {
                     if (page > lastPage) return;

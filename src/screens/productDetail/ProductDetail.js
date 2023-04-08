@@ -35,7 +35,7 @@ const ProductDetail = ({ route }) => {
     const getProductDetails = () => {
         dispatch(setActivityIndicator(true));
         ServiceGetProductDetail(productId).then(response => {
-            // console.log({ response });
+            console.log({ response });
             dispatch(setActivityIndicator(false));
             setProductDetail(response?.data?.product);
             setMoreProducts(response?.data?.more_products);
@@ -47,21 +47,20 @@ const ProductDetail = ({ route }) => {
 
     return (
         <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }}>
-            <ScrollView nestedScrollEnabled showsVerticalScrollIndicator={false}>
-                <ImagesSlider />
+            <ScrollView style={{ flex: 1 }} horizontal={false} nestedScrollEnabled showsVerticalScrollIndicator={false}>
+                <ImagesSlider images={productDetail?.side_images}/>
                 <ProductName productDetail={productDetail} />
                 <View style={{ marginHorizontal: 16 }}>
                     <Button text={'Buy it now'} handleClick={() => null} />
                 </View>
                 <SellerDetails productDetail={productDetail} />
-                {/* <DeliveryDetails /> */}
                 <HeadingAndDescription heading={'Product details'} description={productDetail?.product_detail} />
                 <HeadingAndDescription heading={'About the brand '} description={productDetail?.about_brand} />
                 <Reviews />
-                <View style={{ marginVertical: 25.5 }}>
+                <View style={{ marginVertical: 25.5, minHeight: 190 }}>
                     <ProductSection items={moreProducts} title={'More products from this shop'} />
                 </View>
-                <View style={{ marginBottom: 25.5 }}>
+                <View style={{ marginBottom: 25.5, minHeight: 190 }}>
                     <ProductSection items={similarProducts} title={'Similar Brands in this category'} />
                 </View>
             </ScrollView>
