@@ -45,6 +45,8 @@ export const API_GET_STORE_DETAIL = `${BASE_URL}/explore/visit/store`;
 export const API_GET_STORE_FIRST_COLLECTION = `${BASE_URL}/store/collections-all`;
 export const API_GET_STORE_OTHER_COLLECTION = `${BASE_URL}/store/collections`;
 export const API_GET_STORE_PRODUCTS = `${BASE_URL}/store/products`;
+export const API_GET_STORE_COLLECTION_SORTED_PRODUCTS = `${BASE_URL}/vendor/update-products-order`;
+export const API_GET_UPDATE_PRODUCT_STATUS = `${BASE_URL}/vendor/updateproductstatus`;
 
 // Explore
 export const API_POST_EXPLORE = `${BASE_URL}/explore`;

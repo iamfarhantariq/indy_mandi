@@ -198,7 +198,6 @@ const WishListDetail = ({ route }) => {
                                 <View style={{ marginTop: 16 }}>
                                     <FlatList
                                         horizontal={false}
-                                        
                                         data={wishlists}
                                         numColumns={2}
                                         key={(index) => 'wishlist' + index + 'product'}

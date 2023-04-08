@@ -13,12 +13,16 @@ import Toast from 'react-native-toast-message';
 import { useSelector } from 'react-redux';
 import { getLoginConfig } from '../../store/slices/loginConfigSlice';
 
-const GeneralProduct = ({ item, index, flex = false, enable = false, optionIcon = false, handleOptions = null }) => {
+const GeneralProduct = ({ item, index, flex = false, enable = false, optionIcon = false, handleOptions = null, handleToggle = null }) => {
   const navigation = useNavigation();
   const loginConfig = useSelector(getLoginConfig);
-  const [isEnabled, setIsEnabled] = useState(true);
+  const [isEnabled, setIsEnabled] = useState(item?.status);
   const [liked, setLiked] = useState(item?.is_liked || false);
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+  
+  const toggleSwitch = () => {
+    setIsEnabled(isEnabled === 1 ? 0 : 1);
+    handleToggle(isEnabled === 1 ? 0 : 1);
+  };
 
   const flexStyle = flex ? { ...styles.flexImageContainer } :
     { ...styles.imageContainer, marginLeft: index === 0 ? 16 : 0 }

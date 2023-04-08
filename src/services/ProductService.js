@@ -1,5 +1,5 @@
 import { get, post } from "./HttpClient"
-import { API_GET_CIRCLE_CATEGORY, API_GET_HOME_INDY_BLOGS_STORY, API_GET_PRODUCT_CATEGORIES, API_GET_PRODUCT_DETAIL, API_GET_PRODUCT_HOME_PAGE_TYPES, API_GET_STORE_DETAIL, API_GET_STORE_FIRST_COLLECTION, API_GET_STORE_OTHER_COLLECTION, API_GET_STORE_PRODUCTS } from "./ApisRoutes";
+import { API_GET_CIRCLE_CATEGORY, API_GET_HOME_INDY_BLOGS_STORY, API_GET_PRODUCT_CATEGORIES, API_GET_PRODUCT_DETAIL, API_GET_PRODUCT_HOME_PAGE_TYPES, API_GET_STORE_COLLECTION_SORTED_PRODUCTS, API_GET_STORE_DETAIL, API_GET_STORE_FIRST_COLLECTION, API_GET_STORE_OTHER_COLLECTION, API_GET_STORE_PRODUCTS, API_GET_UPDATE_PRODUCT_STATUS } from "./ApisRoutes";
 
 export const ServiceGetCategories = () => {
     return new Promise((resolve, reject) => {
@@ -81,10 +81,29 @@ export const ServiceGetStoreOtherCollection = (storeId) => {
     });
 }
 
-
 export const ServiceGetStoreProducts = (requestPayload, page = 1) => {
     return new Promise((resolve, reject) => {
         post(`${API_GET_STORE_PRODUCTS}?page=${page}`, requestPayload).then(response => {
+            resolve(response?.data);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const ServiceGetCollectionProductsSorted = (requestPayload) => {
+    return new Promise((resolve, reject) => {
+        post(`${API_GET_STORE_COLLECTION_SORTED_PRODUCTS}`, requestPayload).then(response => {
+            resolve(response?.data);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const ServiceUpdateProductStatus = (requestPayload) => {
+    return new Promise((resolve, reject) => {
+        post(`${API_GET_UPDATE_PRODUCT_STATUS}`, requestPayload).then(response => {
             resolve(response?.data);
         }).catch(error => {
             reject(error);

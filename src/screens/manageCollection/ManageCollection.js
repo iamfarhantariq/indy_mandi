@@ -4,15 +4,41 @@ import HeaderWithBack from '../../components/Headers/HeaderWithBack'
 import AppStyle from '../../assets/styles/AppStyle'
 import { useNavigation } from '@react-navigation/native'
 import AppConfig from '../../helpers/config'
+import { useDispatch } from 'react-redux'
+import { useEffect } from 'react'
+import { ServiceGetStoreFirstCollection, ServiceGetStoreOtherCollection } from '../../services/ProductService'
+import { showToastHandler } from '../../helpers/common'
+import { useState } from 'react'
+import { setActivityIndicator } from '../../store/slices/appConfigSlice'
 
-const ManageCollection = () => {
+const ManageCollection = ({ route }) => {
+    const { storeId } = route?.params;
+    const dispatch = useDispatch();
     const navigation = useNavigation();
+    const [collections, setCollections] = useState([]);
 
-    const items = [
-        { name: 'On-sale', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-        { name: 'New year collection', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-        { name: 'Mango collection', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-    ];
+    useEffect(() => {
+        if (storeId) {
+            getStoreCollection();
+        } else {
+            navigation.pop();
+        }
+    }, []);
+
+    const getStoreCollection = () => {
+        dispatch(setActivityIndicator(true));
+        ServiceGetStoreFirstCollection(storeId).then(response => {
+            ServiceGetStoreOtherCollection(storeId).then(_response => {
+                const combinedCollection = [response?.data, ..._response?.data];
+                setCollections(combinedCollection);
+                dispatch(setActivityIndicator(false));
+            }).catch(e => {
+                showToastHandler(e, dispatch);
+            });
+        }).catch(e => {
+            showToastHandler(e, dispatch);
+        });
+    }
 
     const _renderItem = ({ item, index }) => {
         return (
@@ -20,7 +46,7 @@ const ManageCollection = () => {
                 style={{ marginRight: index % 2 === 0 ? 16 : 0, marginBottom: 16 }}>
                 <Image
                     resizeMode='cover'
-                    source={item.imageSource}
+                    source={{ uri: item?.image }}
                     style={styles.flexImageContainer}
                     imageStyle={{ borderRadius: 8 }}
                 />
@@ -37,9 +63,8 @@ const ManageCollection = () => {
             <View style={{ flex: 1, marginHorizontal: 16, marginTop: 16 }}>
                 <FlatList
                     horizontal={false}
-                    data={items}
+                    data={collections}
                     numColumns={2}
-                    
                     key={(index) => 'collection' + index + 'product'}
                     renderItem={_renderItem}
                     showsVerticalScrollIndicator={false}

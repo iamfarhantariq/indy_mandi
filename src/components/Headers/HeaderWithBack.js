@@ -8,8 +8,9 @@ import { useNavigation } from '@react-navigation/native';
 import { commonStyle } from '../../helpers/common';
 import Add from '../../assets/images/add-icon.svg';
 import Option from '../../assets/images/options-icon.svg';
+import { SheetManager } from 'react-native-actions-sheet';
 
-const HeaderWithBack = ({ title, cross = false, iconType = '', route = '', shouldBack = true, handleOptions = null }) => {
+const HeaderWithBack = ({ title, cross = false, iconType = '', route = '', shouldBack = true, handleOptions = null, handleManageCollection = null }) => {
     const navigation = useNavigation();
 
     const icons = [
@@ -21,7 +22,15 @@ const HeaderWithBack = ({ title, cross = false, iconType = '', route = '', shoul
                 <TouchableOpacity onPress={() => navigation.navigate('AddProduct')}>
                     <Add />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.navigate('ManageCollection')}>
+                <TouchableOpacity onPress={() => {
+                    SheetManager.show('example-two', {
+                        payload: {
+                            header: 'Choose an action', actions: [
+                                { title: 'Manage Collection', value: '' }
+                            ], filterHandler: handleManageCollection
+                        }
+                    });
+                }}>
                     <Option />
                 </TouchableOpacity>
             </View>,
