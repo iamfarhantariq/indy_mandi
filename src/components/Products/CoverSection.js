@@ -50,7 +50,7 @@ const CoverSection = ({ title, items = [], detailed = true, discoverOption }) =>
             <FlatList
                 horizontal
                 data={itemsToShow}
-                removeClippedSubviews={true}
+                
                 key={(index) => 'Indyview' + index + 'cover'}
                 renderItem={_renderItem}
                 showsHorizontalScrollIndicator={false}

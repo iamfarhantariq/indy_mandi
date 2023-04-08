@@ -102,7 +102,7 @@ const UserScreen = () => {
             <View style={{ flex: 1, marginHorizontal: 16 }}>
                 <FlatList
                     horizontal={false}
-                    removeClippedSubviews={true}
+                    
                     data={items}
                     key={(index) => 'option' + index + 'action'}
                     renderItem={Option}

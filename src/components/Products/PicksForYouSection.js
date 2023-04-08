@@ -27,7 +27,7 @@ const PicksForYouSection = () => {
       <FlatList
         nestedScrollEnabled
         data={items}
-        removeClippedSubviews={true}
+        
         key={index => 'picks' + index + 'for-you'}
         renderItem={_renderItem}
         horizontal

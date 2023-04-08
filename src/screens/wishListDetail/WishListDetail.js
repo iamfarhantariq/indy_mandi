@@ -165,7 +165,7 @@ const WishListDetail = ({ route }) => {
                 <FlatList
                     horizontal={false}
                     data={products}
-                    removeClippedSubviews={true}
+                    
                     numColumns={2}
                     key={(index) => 'wishlist' + index + 'item'}
                     renderItem={_renderItem}
@@ -198,7 +198,7 @@ const WishListDetail = ({ route }) => {
                                 <View style={{ marginTop: 16 }}>
                                     <FlatList
                                         horizontal={false}
-                                        removeClippedSubviews={true}
+                                        
                                         data={wishlists}
                                         numColumns={2}
                                         key={(index) => 'wishlist' + index + 'product'}

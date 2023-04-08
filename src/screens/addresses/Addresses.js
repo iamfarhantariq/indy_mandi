@@ -86,7 +86,7 @@ const Addresses = () => {
             <View style={{ flex: 1, marginHorizontal: 16, marginTop: 16 }}>
                 <FlatList
                     horizontal={false}
-                    removeClippedSubviews={true}
+                    
                     data={addresses}
                     key={(index) => 'address' + index + 'item'}
                     renderItem={_renderItem}

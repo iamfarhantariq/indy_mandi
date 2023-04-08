@@ -3,8 +3,8 @@ import { Dimensions, Platform, StatusBar } from 'react-native';
 // const insets = useSafeAreaInsets();
 // const statusBarHeight = insets.top;
 
-const BASE_API_URL = 'https://indymandi.com/api'; // Dev maybe
-// const BASE_API_URL = 'https://staging.indymandi.com/api '; // staging maybe
+// const BASE_API_URL = 'https://indymandi.com/api'; // Dev maybe
+const BASE_API_URL = 'https://staging.indymandi.com/api'; // staging maybe
 
 const SCREEN_WIDTH = Dimensions.get('screen').width;
 const SCREEN_HEIGHT = Dimensions.get('screen').height;

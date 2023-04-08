@@ -38,38 +38,6 @@ const Store = ({ route }) => {
     const [selectedCollection, setSelectedCollection] = useState(null);
     const [products, setProducts] = useState([]);
 
-    const FirstRoute = () => (
-        <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor, paddingTop: 18 }} >
-            <InputField value={search} onTextChange={(t) => setSearch(t)} placeholder={'Search'} />
-            <ProductSectionStore collections={collections} selectedCollection={selectedCollection} products={products}/>
-        </View>
-    );
-
-    const SecondRoute = () => (
-        <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }} >
-            <ReviewSectionStore />
-        </View>
-    );
-
-    const ThirdRoute = () => (
-        <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }} >
-            <AboutSectionStore storeData={storeData} />
-        </View>
-    );
-
-    const FourthRoute = () => (
-        <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }} >
-            <PolicySectionStore />
-        </View>
-    );
-
-    const renderScene = SceneMap({
-        first: FirstRoute,
-        second: SecondRoute,
-        third: ThirdRoute,
-        fourth: FourthRoute,
-    });
-
     useEffect(() => {
         if (storeId) {
             getStoreDetail();
@@ -94,6 +62,7 @@ const Store = ({ route }) => {
                 if (!selectedCollection) {
                     setSelectedCollection(combinedCollection[0]);
                 }
+                console.log(combinedCollection[0]);
             }).catch(e => {
                 showToastHandler(e, dispatch);
             });
@@ -126,6 +95,45 @@ const Store = ({ route }) => {
             showToastHandler(e);
         })
     }
+
+    const FirstRoute = () => (
+        <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor, paddingTop: 18 }} >
+            <InputField value={search} onTextChange={(t) => setSearch(t)} placeholder={'Search'} />
+            <ProductSectionStore
+                collections={collections}
+                selectedCollection={selectedCollection}
+                products={products}
+                setSelectedCollection={setSelectedCollection}
+                storeId={storeId}
+                search={search}
+            />
+        </View>
+    );
+
+    const SecondRoute = () => (
+        <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }} >
+            <ReviewSectionStore />
+        </View>
+    );
+
+    const ThirdRoute = () => (
+        <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }} >
+            <AboutSectionStore storeData={storeData} />
+        </View>
+    );
+
+    const FourthRoute = () => (
+        <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }} >
+            <PolicySectionStore />
+        </View>
+    );
+
+    const renderScene = SceneMap({
+        first: FirstRoute,
+        second: SecondRoute,
+        third: ThirdRoute,
+        fourth: FourthRoute,
+    });
 
     return (
         <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }}>
@@ -161,7 +169,7 @@ const Store = ({ route }) => {
                 </View>
                 <View style={{ flexDirection: 'row', marginHorizontal: 16, justifyContent: 'space-between', marginBottom: 16 }}>
                     <View style={{ width: '49%' }}>
-                        <Button text={'Manage products'} handleClick={() => navigation.navigate('ManageProducts')} />
+                        <Button text={'Manage products'} handleClick={() => navigation.navigate('ManageProducts', { storeId })} />
                     </View>
                     <View style={{ width: '49%' }}>
                         <Button text={'Edit profile'} />

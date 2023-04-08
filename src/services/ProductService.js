@@ -82,9 +82,9 @@ export const ServiceGetStoreOtherCollection = (storeId) => {
 }
 
 
-export const ServiceGetStoreProducts = (requestPayload) => {
+export const ServiceGetStoreProducts = (requestPayload, page = 1) => {
     return new Promise((resolve, reject) => {
-        post(`${API_GET_STORE_PRODUCTS}`, requestPayload).then(response => {
+        post(`${API_GET_STORE_PRODUCTS}?page=${page}`, requestPayload).then(response => {
             resolve(response?.data);
         }).catch(error => {
             reject(error);

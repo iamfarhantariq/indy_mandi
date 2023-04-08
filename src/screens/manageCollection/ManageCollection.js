@@ -39,7 +39,7 @@ const ManageCollection = () => {
                     horizontal={false}
                     data={items}
                     numColumns={2}
-                    removeClippedSubviews={true}
+                    
                     key={(index) => 'collection' + index + 'product'}
                     renderItem={_renderItem}
                     showsVerticalScrollIndicator={false}

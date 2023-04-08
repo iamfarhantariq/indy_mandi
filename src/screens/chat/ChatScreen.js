@@ -48,7 +48,7 @@ const ChatScreen = () => {
                 <FlatList
                     data={items}
                     nestedScrollEnabled
-                    removeClippedSubviews={true}
+                    
                     key={index => 'chat' + index + 'item'}
                     renderItem={_renderItem}
                     showsVerticalScrollIndicator={false}

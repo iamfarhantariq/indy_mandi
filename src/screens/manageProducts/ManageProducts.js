@@ -3,13 +3,43 @@ import React, { useState } from 'react'
 import HeaderWithBack from '../../components/Headers/HeaderWithBack'
 import AppStyle from '../../assets/styles/AppStyle'
 import InputField from '../../components/Input/InputField'
-import { commonStyle } from '../../helpers/common'
+import { commonStyle, showToastHandler } from '../../helpers/common'
 import GeneralProduct from '../../components/Products/GeneralProduct'
 import InputFieldBase from '../../components/Input/InputFieldBase'
+import { ServiceGetStoreFirstCollection, ServiceGetStoreOtherCollection } from '../../services/ProductService'
+import { useEffect } from 'react'
 
-const ManageProducts = () => {
+const ManageProducts = ({route}) => {
+    const { storeId } = route?.params;
     const [search, setSearch] = useState('');
-    const [sort, setSort] = useState('')
+    const [sort, setSort] = useState('');
+    const [collections, setCollections] = useState([]);
+    const [selectedCollection, setSelectedCollection] = useState(null);
+    const [products, setProducts] = useState([]);
+
+    useEffect(() => {
+        if (storeId) {
+            getStoreCollection();
+        } else {
+            navigation.pop();
+        }
+    }, []);
+
+    const getStoreCollection = () => {
+        ServiceGetStoreFirstCollection(storeId).then(response => {
+            ServiceGetStoreOtherCollection(storeId).then(_response => {
+                const combinedCollection = [response?.data, ..._response?.data];
+                setCollections(combinedCollection);
+                if (!selectedCollection) {
+                    setSelectedCollection(combinedCollection[0]);
+                }
+            }).catch(e => {
+                showToastHandler(e, dispatch);
+            });
+        }).catch(e => {
+            showToastHandler(e, dispatch);
+        });
+    }
 
     const items = [
         { name: 'New Nike girl shoe', price: '$80.77', imageSource: require('../../assets/images/demo-category-image.jpeg') },
@@ -51,13 +81,12 @@ const ManageProducts = () => {
 
                 <View style={{ marginVertical: 16 }}>
                     <FlatList
-                        data={['All', 'On-sale', 'New year']}
+                        data={collections}
                         horizontal
                         renderItem={ProductType}
                         key={index => 'type' + index + 'product'}
                         showsHorizontalScrollIndicator={false}
                         nestedScrollEnabled
-                        removeClippedSubviews={true}
                     />
                 </View>
 
@@ -75,7 +104,6 @@ const ManageProducts = () => {
                         key={index => 'category' + index + 'main-product'}
                         renderItem={_renderItem}
                         horizontal={false}
-                        removeClippedSubviews={true}
                         numColumns={2}
                         scrollEnabled
                         showsVerticalScrollIndicator={false}

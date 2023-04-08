@@ -48,7 +48,7 @@ const CuratedForYou = () => {
                     renderItem={_renderItem}
                     horizontal={false}
                     numColumns={2}
-                    removeClippedSubviews={true}
+                    
                     showsVerticalScrollIndicator={false}
                     style={{ marginBottom: 8, marginHorizontal: 16 }}
                 />

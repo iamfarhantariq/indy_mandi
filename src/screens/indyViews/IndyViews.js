@@ -107,7 +107,7 @@ const IndyViews = () => {
                         nestedScrollEnabled
                         key={index => 'indyview' + index + 'item'}
                         renderItem={_renderItem}
-                        removeClippedSubviews={true}
+                        
                         horizontal={false}
                         showsHorizontalScrollIndicator={false}
                     />

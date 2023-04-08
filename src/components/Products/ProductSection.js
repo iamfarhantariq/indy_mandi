@@ -30,10 +30,10 @@ const ProductSection = ({ title, items = [], BG = '', color = null, route = '' }
                 <FlatList
                     horizontal
                     data={items}
-                    removeClippedSubviews={true}
+                    
                     key={(index) => title + index + 'product'}
                     renderItem={_renderItem}
-                    removeClippedSubviews={true}
+                    
                     showsHorizontalScrollIndicator={false}
                 />
             </View>

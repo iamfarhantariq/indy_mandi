@@ -62,7 +62,6 @@ const ProductSectionExplore = ({ searchType, search }) => {
                     horizontal={false}
                     numColumns={2}
                     scrollEnabled
-                    removeClippedSubviews={true}
                     showsVerticalScrollIndicator={false}
                     onEndReached={info => {
                         if (page > lastPage) return;

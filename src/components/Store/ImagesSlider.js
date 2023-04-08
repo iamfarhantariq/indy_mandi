@@ -2,10 +2,8 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import AppConfig from '../../helpers/config';
 import Back from '../../assets/images/back-icon.svg';
-import Carousel, { Pagination } from 'react-native-snap-carousel';
-import ImageHeader from '../Headers/ImageHeader';
+import Carousel from 'react-native-snap-carousel';
 import { useNavigation } from '@react-navigation/native';
-import AppStyle from '../../assets/styles/AppStyle';
 
 const ImagesSlider = ({ images }) => {
   const navigation = useNavigation();

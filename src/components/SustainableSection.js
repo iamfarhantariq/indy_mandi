@@ -29,7 +29,6 @@ const SustainableSection = () => {
                 key={index => 'sustainable' + index + 'for-you'}
                 renderItem={_renderItem}
                 horizontal
-                removeClippedSubviews={true}
                 showsHorizontalScrollIndicator={false}
             />
 

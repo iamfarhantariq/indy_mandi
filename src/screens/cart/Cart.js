@@ -142,7 +142,7 @@ const Cart = () => {
         <FlatList
           data={cart}
           horizontal={false}
-          removeClippedSubviews={true}
+          
           renderItem={ProductContainer}
           key={index => 'item' + index + 'product'}
           showsVerticalScrollIndicator={false}

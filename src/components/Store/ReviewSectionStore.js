@@ -50,7 +50,7 @@ const ReviewSectionStore = () => {
                     key={index => 'review' + index + 'item'}
                     renderItem={_renderItem}
                     horizontal={false}
-                    removeClippedSubviews={true}
+                    
                     showsHorizontalScrollIndicator={false}
                 />
             </View>

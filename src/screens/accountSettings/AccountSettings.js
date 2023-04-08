@@ -28,7 +28,7 @@ const AccountSettings = () => {
                 <FlatList
                     horizontal={false}
                     data={items}
-                    removeClippedSubviews={true}
+                    
                     key={(index) => 'option' + index + 'action'}
                     renderItem={Option}
                     showsVerticalScrollIndicator={false}

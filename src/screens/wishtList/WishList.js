@@ -54,7 +54,7 @@ const WishList = () => {
         <FlatList
           horizontal={false}
           data={wishlist}
-          removeClippedSubviews={true}
+          
           numColumns={2}
           key={(index) => 'wishlist' + index + 'product'}
           renderItem={_renderItem}
