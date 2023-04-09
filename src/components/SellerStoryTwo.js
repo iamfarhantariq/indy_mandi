@@ -4,24 +4,24 @@ import { useNavigation } from '@react-navigation/native'
 import AppStyle from '../assets/styles/AppStyle';
 import AppConfig from '../helpers/config';
 
-const SellerStoryTwo = () => {
+const SellerStoryTwo = ({ item }) => {
     const navigation = useNavigation();
     return (
         <View style={styles.topConatiner}>
             <Image resizeMode='cover'
                 style={styles.imageStyle}
-                source={require('../assets/images/demo-seller-story-user.png')} />
+                source={{ uri: item?.image }} />
             <Text style={styles.name}>
-                Sandhya
+                {item?.title}
             </Text>
             <View style={{ margin: 8 }}>
                 <Text numberOfLines={3}
                     style={{ ...styles.description, color: AppStyle.colorSet.whiteColor, marginBottom: 8 }}>
-                    A crafts hobby led to Sandhya starting a women-run business enterprise.
+                    {item?.first_line}
                 </Text>
-                <TouchableOpacity onPress={() => navigation.navigate('SellerStoryContentScreen')}>
+                <TouchableOpacity onPress={() => navigation.navigate('SellerStoryContentScreen', { slug: item?.slug })}>
                     <Text style={styles.description}>
-                        {'Read Sandhya story >'}
+                        {"Read story >"}
                     </Text>
                 </TouchableOpacity>
             </View>

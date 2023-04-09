@@ -1,15 +1,74 @@
 import { ScrollView, StyleSheet, Image, View, Text, TouchableOpacity, FlatList } from 'react-native'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import AppStyle from '../../assets/styles/AppStyle';
 import HeaderWithBack from '../../components/Headers/HeaderWithBack'
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux'
 import SellerStory from '../../components/SellerStory';
 import SellerStoryTwo from '../../components/SellerStoryTwo';
+import { ServiceGetAllSellerStories } from '../../services/AppService';
+import { setActivityIndicator } from '../../store/slices/appConfigSlice';
+import { showToastHandler } from '../../helpers/common';
 
 const SellerStories = () => {
+    const dispatch = useDispatch();
     const navigation = useNavigation();
+    const [page, setPage] = useState(1);
+    const [lastPage, setLastPage] = useState(2);
+    const [loading, setLoading] = useState(false);
+    const [isEndReached, setIsEndReached] = useState(false);
+    const [sellerStoryData, setsellerStoryData] = useState(null);
+    const [stories, setStories] = useState([]);
 
-    const items = [1, 2, 3, 4, 5, 6];
+    useEffect(() => {
+        getSellerStories();
+    }, [page]);
+
+    useEffect(() => {
+        if (isEndReached) {
+            if (page > lastPage) return;
+            setPage(page + 1);
+        }
+    }, [isEndReached]);
+
+    const getSellerStories = () => {
+        setLoading(true);
+        ServiceGetAllSellerStories(page).then(response => {
+            console.log({ response });
+            setsellerStoryData(response?.data?.data?.feature_seller_story);
+            if (page === 1) {
+                setStories(response?.data?.data?.seller_stories?.data);
+            } else {
+                setStories([...stories, ...response?.data?.data?.seller_stories?.data]);
+            }
+            setLoading(false);
+            setLastPage(response?.meta?.last_page);
+        }).catch(e => {
+            setLoading(false);
+            showToastHandler(e);
+        });
+    }
+
+    const TopConatiner = () => {
+        return (
+            <View style={styles.topConatiner}>
+                <Image resizeMode='cover'
+                    style={{ height: 128, width: 128 }}
+                    source={require('../../assets/images/seller-story-top-image.png')} />
+                <View style={styles.topTextContainer}>
+                    <Text style={styles.topHeading}>
+                        Meet the Sellers of IndyMandi
+                    </Text>
+                    <Text style={styles.topDescription}>
+                        Meet the Sellers of IndyMandi
+                    </Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('BecomeSeller')} style={styles.button}>
+                        <Text style={styles.whiteText}>Become a Seller</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        )
+    }
 
     return (
         <View style={{ backgroundColor: AppStyle.colorSet.BGColor, flex: 1 }}>
@@ -19,46 +78,34 @@ const SellerStories = () => {
                 <TopConatiner />
 
                 <Text style={styles.heading}>Featured</Text>
-                <SellerStory />
+                <SellerStory item={sellerStoryData} />
 
-                <View style={{ marginTop: 16, marginBottom: 16, flexDirection: 'row', flexWrap: 'wrap' }}>
-                    {items?.map((item, index) => {
-                        return (
-                            <View key={'seller' + index + 'story2'} style={{
-                                paddingRight: index % 2 == 0 ? 8 : 0,
-                                paddingLeft: index % 2 == 0 ? 0 : 8,
-                                marginBottom: 16
-                            }}>
-                                <SellerStoryTwo />
-                            </View>
-                        )
-                    })}
-                </View>
+                <ScrollView
+                    onScroll={({ nativeEvent }) => {
+                        setIsEndReached(isCloseToBottom(nativeEvent));
+                    }}
+                    scrollEventThrottle={400}
+                    showsVerticalScrollIndicator={false}>
+                    <View style={{ marginTop: 16, marginBottom: 16, flexDirection: 'row', flexWrap: 'wrap' }}>
+                        {stories?.map((item, index) => {
+                            return (
+                                <View key={'seller' + index + 'story2'} style={{
+                                    paddingRight: index % 2 == 0 ? 8 : 0,
+                                    paddingLeft: index % 2 == 0 ? 0 : 8,
+                                    marginBottom: 16
+                                }}>
+                                    <SellerStoryTwo item={item} />
+                                </View>
+                            )
+                        })}
+                    </View>
+                </ScrollView>
             </ScrollView>
         </View>
     )
 }
 
-const TopConatiner = () => {
-    return (
-        <View style={styles.topConatiner}>
-            <Image resizeMode='cover'
-                style={{ height: 128, width: 128 }}
-                source={require('../../assets/images/seller-story-top-image.png')} />
-            <View style={styles.topTextContainer}>
-                <Text style={styles.topHeading}>
-                    Meet the Sellers of IndyMandi
-                </Text>
-                <Text style={styles.topDescription}>
-                    Meet the Sellers of IndyMandi
-                </Text>
-                <TouchableOpacity onPress={() => null} style={styles.button}>
-                    <Text style={styles.whiteText}>Become a Seller</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
-    )
-}
+
 
 export default SellerStories;
 

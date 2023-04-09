@@ -17,7 +17,7 @@ const CollectionOrder = ({ handleChange, collectionOrder }) => {
     const [pickerValue, setPickerValue] = useState(collectionOrder);
 
     return (
-        <View>
+        <View style={{ zIndex: 1 }}>
             <DropDownPicker
                 open={open}
                 value={pickerValue}

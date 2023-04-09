@@ -1,9 +1,13 @@
 import { get, post, put, remove } from "./HttpClient"
 import {
     API_DELETE_PRODUCT_FROM_WISHLISTS,
+    API_GET_ALL_SELLER_STORIES,
+    API_GET_BLOGS_CATEGORIES,
+    API_GET_BLOGS_EXPLORE,
     API_GET_COUNTRY_STATES,
     API_GET_PAYMENTS,
     API_GET_PAYMENTS_INVOICE,
+    API_GET_SINGLE_SELLER_STORY,
     API_GET_USER_WISHLIST,
     API_GET_WISHLIST_LISTS,
     API_POST_PRODUCT_TO_WISHLISTS,
@@ -169,3 +173,42 @@ export const ServiceGetUserPaymentsInvoice = (id) => {
     });
 }
 
+export const ServiceGetBlogsCategories = () => {
+    return new Promise((resolve, reject) => {
+        get(`${API_GET_BLOGS_CATEGORIES}`).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const ServiceGetBlogsToExplore = (payload, page = 1) => {
+    return new Promise((resolve, reject) => {
+        post(`${API_GET_BLOGS_EXPLORE}?page=${page}`, payload).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const ServiceGetAllSellerStories = (page = 1) => {
+    return new Promise((resolve, reject) => {
+        get(`${API_GET_ALL_SELLER_STORIES}?page=${page}`).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const ServiceGetSingleStory = (slug) => {
+    return new Promise((resolve, reject) => {
+        get(`${API_GET_SINGLE_SELLER_STORY}/${slug}`).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}

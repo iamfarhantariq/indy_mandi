@@ -5,24 +5,24 @@ import BackLarge from '../../assets/images/back-large.svg';
 import { useNavigation } from '@react-navigation/native';
 import AppStyle from '../../assets/styles/AppStyle';
 
-const ImageHeader = () => {
+const ImageHeader = ({ image, description }) => {
     const navigation = useNavigation();
 
     return (
         <ImageBackground
             resizeMode='cover'
-            source={require('../../assets/images/demo-cover-bg.png')}
+            source={{ uri: image }}
             style={styles.imageContainer}
         >
             <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.pop()}>
                 <BackLarge />
             </TouchableOpacity>
 
-            <View style={styles.insideContainer}>
+            {description && <View style={styles.insideContainer}>
                 <Text style={styles.nameText}>
-                    The secrets of not tired of wearing shoe
+                    {description}
                 </Text>
-            </View>
+            </View>}
             <View style={styles.darkBackground} />
         </ImageBackground>
     )

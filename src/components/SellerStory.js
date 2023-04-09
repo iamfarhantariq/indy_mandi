@@ -7,7 +7,12 @@ const SellerStory = ({ title = null, item }) => {
     const navigation = useNavigation();
     return (
         <View>
-            {title && <Text style={styles.heading}>{title}</Text>}
+            {title &&
+                <TouchableOpacity onPress={() => navigation.navigate('SellerStoriesScreen')}>
+                    <Text style={styles.heading}>{title}</Text>
+                </TouchableOpacity>
+
+            }
             <View style={styles.container}>
                 <View style={styles.imageContainer}>
                     <Image resizeMode='contain'
@@ -21,7 +26,7 @@ const SellerStory = ({ title = null, item }) => {
                     <Text style={styles.coloredText}>
                         {item?.first_line}
                     </Text>
-                    <TouchableOpacity onPress={() => navigation.navigate('SellerStoriesScreen')}>
+                    <TouchableOpacity onPress={() => navigation.navigate('SellerStoryContentScreen', { slug: item?.slug })}>
                         <Text style={styles.whiteText}>
                             {"Read story >"}
                         </Text>

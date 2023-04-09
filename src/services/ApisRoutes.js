@@ -29,6 +29,10 @@ export const API_DELETE_PRODUCT_FROM_WISHLISTS = `${BASE_URL}/customer/wishlist/
 export const API_POST_RAISE_DISPUTE = `${BASE_URL}/raise-an-dispute/store`;
 export const API_GET_PAYMENTS = `${BASE_URL}/payments`;
 export const API_GET_PAYMENTS_INVOICE = `${BASE_URL}/view-invoice`;
+export const API_GET_BLOGS_EXPLORE = `${BASE_URL}/explore`;
+export const API_GET_BLOGS_CATEGORIES = `${BASE_URL}/explore/blog-categories`;
+export const API_GET_ALL_SELLER_STORIES = `${BASE_URL}/seller-stories`;
+export const API_GET_SINGLE_SELLER_STORY = `${BASE_URL}/seller-story`;
 
 // IndyView 
 export const API_GET_DAYS_SLOTS = `${BASE_URL}/indyviews/getdates`;
