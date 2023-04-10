@@ -7,11 +7,13 @@ import {
     API_GET_BLOGS_CATEGORIES,
     API_GET_BLOGS_EXPLORE,
     API_GET_COUNTRY_STATES,
+    API_GET_DELETE_STORE_TEXT,
     API_GET_PAYMENTS,
     API_GET_PAYMENTS_INVOICE,
     API_GET_SINGLE_SELLER_STORY,
     API_GET_USER_WISHLIST,
     API_GET_WISHLIST_LISTS,
+    API_POST_DELETE_STORE,
     API_POST_DUPLICATE_PRODUCT,
     API_POST_NEW_COLLECTION,
     API_POST_PRODUCT_TO_WISHLISTS,
@@ -218,7 +220,6 @@ export const ServiceGetSingleStory = (slug) => {
     });
 }
 
-
 export const ServiceCreateCollection = (payload) => {
     return new Promise((resolve, reject) => {
         postMultipartData(`${API_POST_NEW_COLLECTION}`, payload).then(response => {
@@ -262,6 +263,26 @@ export const ServiceDuplicateProduct = (id) => {
 export const ServiceDeleteProduct = (id) => {
     return new Promise((resolve, reject) => {
         remove(`${API_DELETE_PRODUCT}/${id}`).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const ServiceGetLogoutText = () => {
+    return new Promise((resolve, reject) => {
+        get(`${API_GET_DELETE_STORE_TEXT}`).then(response => {
+            resolve(response?.data);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const ServiceDeleteStore = () => {
+    return new Promise((resolve, reject) => {
+        post(`${API_POST_DELETE_STORE}`).then(response => {
             resolve(response);
         }).catch(error => {
             reject(error);

@@ -84,7 +84,7 @@ const GeneralProduct = (
         >
           {loginConfig?.isLogin &&
             loginConfig?.user?.role !== 'v' &&
-            loginConfig?.user?.store?.id !== storeId &&
+            loginConfig?.user?.store?.id !== item?.store_id &&
             (optionIcon ?
               <TouchableOpacity onPress={handleOptions} style={{ position: 'absolute', right: 0, top: 0 }}>
                 <MoreOption />

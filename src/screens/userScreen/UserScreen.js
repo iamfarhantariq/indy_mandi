@@ -1,15 +1,16 @@
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import AppStyle from '../../assets/styles/AppStyle'
-import { commonStyle, UpdatedUserInTheApp } from '../../helpers/common'
+import { commonStyle, showToastHandler, UpdatedUserInTheApp } from '../../helpers/common'
 import AppConfig from '../../helpers/config'
 import UserAvatar from '../../assets/images/user-avatar.svg';
 import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
-import { getLoginConfig, setLogout } from '../../store/slices/loginConfigSlice'
+import { getLoginConfig, setLogout, setUser } from '../../store/slices/loginConfigSlice'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { setActivityIndicator } from '../../store/slices/appConfigSlice'
 import { ServiceLogout } from '../../services/AuthServices'
+import { ServiceDeleteStore, ServiceGetLogoutText } from '../../services/AppService'
 import Toast from 'react-native-toast-message';
 import { SheetManager } from 'react-native-actions-sheet';
 import { useEffect } from 'react'
@@ -69,7 +70,38 @@ const UserScreen = () => {
     const sellerOptions = [
         { title: 'Order enquiries', func: () => navigation.navigate('OrderEnquiries') },
         { title: 'Payments', func: () => navigation.navigate('PaymentHistory') },
-        { title: 'Delete store', func: () => null },
+        {
+            title: 'Delete store', func: async () => {
+                const text = await ServiceGetLogoutText();
+                console.log({ text });
+                SheetManager.show('example-two', {
+                    payload: {
+                        header: text,
+                        actions: [
+                            { title: 'Yes! Delete my store', value: 'yes' },
+                            { title: 'No!', value: 'no' }
+                        ],
+                        filterHandler: (_action) => {
+                            if (_action === 'yes') {
+                                dispatch(setActivityIndicator(true));
+                                ServiceDeleteStore().then(response => {
+                                    console.log({ response });
+                                    dispatch(setUser(response?.data?.data));
+                                    dispatch(setActivityIndicator(false));
+                                    Toast.show({
+                                        type: 'success',
+                                        text1: 'Success',
+                                        text2: 'Success',
+                                    });
+                                }).catch(e => {
+                                    showToastHandler(e, dispatch);
+                                });
+                            }
+                        }
+                    }
+                });
+            }
+        },
         { title: 'Account settings', func: () => navigation.navigate('AccountSettings') },
         { title: 'Seller handbook', func: () => null },
         { title: 'Raise a dispute', func: () => navigation.navigate('RaiseDispute') },
