@@ -1,20 +1,24 @@
 import React from 'react';
 import AppStyle from '../assets/styles/AppStyle';
-import { FlatList, ImageBackground, StyleSheet, Text, View } from 'react-native';
+import { FlatList, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const ProductCategories = ({ data }) => {
+    const navigation = useNavigation();
 
     const _renderItem = ({ item, index }) => {
         return (
             <ImageBackground
                 resizeMode='cover'
-                source={{uri: item?.image}}
+                source={{ uri: item?.image }}
                 style={{ ...styles.imageContainer, marginLeft: index === 0 ? 16 : 0 }}
                 imageStyle={{ borderRadius: 50 }}
             >
-                <View style={styles.chipContainer}>
-                    <Text numberOfLines={2} style={styles.chipText}>{item?.name}</Text>
-                </View>
+                <TouchableOpacity onPress={() => navigation.navigate('MainCategoryScreen', { category: item })}>
+                    <View style={styles.chipContainer}>
+                        <Text numberOfLines={2} style={styles.chipText}>{item?.name}</Text>
+                    </View>
+                </TouchableOpacity>
             </ImageBackground>
         )
     }

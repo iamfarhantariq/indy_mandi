@@ -16,7 +16,7 @@ const NestedCategoryScreen = () => {
     const [active, setActive] = useState(null);
 
     useEffect(() => {
-        setData([{ id: 1, name: "All clothing", level: "1" }, ...products?.categories]);
+        setData(products?.categories);
     }, [products?.categories])
 
     const Header = ({ i, active, setActive, subTypes, category }) => {
@@ -55,12 +55,16 @@ const NestedCategoryScreen = () => {
                             );
                         }
                         return (
-                            <Text key={item?.name} style={{
-                                ...styles.headerHeading, fontWeight: item?.level !== "1" ? '400' : '600',
-                                marginLeft: isNaN((Number(item?.level) * 10)) ? 0 : Number(item?.level) * 10
+                            <TouchableOpacity key={item?.name} onPress={() => {
+                                navigation.navigate('MainCategoryScreen', { category: item });
                             }}>
-                                {item?.name}
-                            </Text>
+                                <Text key={item?.name} style={{
+                                    ...styles.headerHeading, fontWeight: item?.level !== "1" ? '400' : '600',
+                                    marginLeft: isNaN((Number(item?.level) * 10)) ? 0 : Number(item?.level) * 10
+                                }}>
+                                    {item?.name}
+                                </Text>
+                            </TouchableOpacity>
                         );
                     })}
             </TouchableOpacity>

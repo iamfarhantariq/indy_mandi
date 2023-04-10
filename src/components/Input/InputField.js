@@ -34,9 +34,6 @@ function InputField({
     editable = true,
 }) {
     // const { values, errors, touched, setFieldTouched, setFieldValue, handleBlur } = otherProps;
-    const [openFilters, setOpenFilters] = useState(false);
-
-    // console.log(otherProps, name);
 
     return (
         <View>
@@ -98,7 +95,7 @@ function InputField({
                         </View>}
                 </View>
                 {filterIcon &&
-                    <TouchableOpacity onPress={() => setOpenFilters(true)} style={{ marginLeft: 8 }}>
+                    <TouchableOpacity onPress={() => filterHandler && filterHandler()} style={{ marginLeft: 8 }}>
                         <SortIcon />
                     </TouchableOpacity>
                 }
