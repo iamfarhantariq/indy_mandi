@@ -84,7 +84,7 @@ const RaiseDispute = () => {
         />
 
         <View style={{ marginVertical: 16 }}>
-          <UploadImages getImage={(blobfile) => setFieldValue('disputefile', blobfile)} ˇ />
+          <UploadImages getImage={(blobfile) => setFieldValue('disputefile', blobfile)} />
         </View>
 
         <InputFieldBase

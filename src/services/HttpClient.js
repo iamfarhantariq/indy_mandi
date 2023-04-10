@@ -14,12 +14,29 @@ export const post = (api, data, source) => {
 
 export const postMultipartData = async (api, data) => {
     const value = await AsyncStorage.getItem("auth_token");
+    const headers = {
+        'Content-Type': 'multipart/form-data',
+        'Accept': 'application/json',
+    };
+    if (value !== null) {
+        headers['Authorization'] = `Bearer ${value}`
+    }
     return axios.post(api, data, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-            'Accept': 'application/json',
-            'Authorization': `Bearer ${value}`
-        }
+        headers
+    });
+};
+
+export const putMultipartData = async (api, data) => {
+    const value = await AsyncStorage.getItem("auth_token");
+    const headers = {
+        'Content-Type': 'multipart/form-data',
+        'Accept': 'application/json',
+    };
+    if (value !== null) {
+        headers['Authorization'] = `Bearer ${value}`
+    }
+    return axios.put(api, data, {
+        headers
     });
 };
 

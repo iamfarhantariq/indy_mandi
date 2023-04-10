@@ -11,12 +11,16 @@ import { useEffect } from 'react'
 import CollectionOrder from '../../components/Store/CollectionOrder'
 import { useDispatch } from 'react-redux'
 import { setActivityIndicator } from '../../store/slices/appConfigSlice'
-import { useNavigation } from '@react-navigation/native'
+import { useIsFocused, useNavigation } from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
+import { SheetManager } from 'react-native-actions-sheet';
+import { ServiceDeleteProduct, ServiceDuplicateProduct } from '../../services/AppService'
 
 const ManageProducts = ({ route }) => {
     const { storeId } = route?.params;
     const dispatch = useDispatch();
     const navigation = useNavigation();
+    const isFocus = useIsFocused();
     const [search, setSearch] = useState('');
     const [collectionOrder, setCollectionOrder] = useState('');
     const [page, setPage] = useState(1);
@@ -32,7 +36,7 @@ const ManageProducts = ({ route }) => {
         } else {
             navigation.pop();
         }
-    }, []);
+    }, [isFocus]);
 
     useEffect(() => {
         if (selectedCollection) {
@@ -112,16 +116,65 @@ const ManageProducts = ({ route }) => {
             const index = _products.findIndex(f => f?.id === productId);
             _products[index].status = status;
             setProducts[_products];
+            Toast.show({
+                type: 'success',
+                text1: 'Success',
+                text2: 'Success',
+            });
         }).catch(e => {
             showToastHandler(e);
         });
+    }
 
+    const onProductOptionClick = (product) => {
+        SheetManager.show('example-two', {
+            payload: {
+                header: 'Choose your action',
+                actions: [
+                    { title: 'Edit product', value: 'edit' },
+                    { title: 'Duplicate product', value: 'duplicate' },
+                    { title: 'Delete product', value: 'remove' },
+                ],
+                filterHandler: (_action) => filterHandler(_action)
+            }
+        });
+
+        const filterHandler = (action) => {
+            SheetManager.hide('example-two');
+            if (action === 'edit') {
+                navigation.navigate('AddProduct', { product })
+            } else if (action === 'duplicate') {
+                dispatch(setActivityIndicator(true));
+                ServiceDuplicateProduct(product?.id).then(response => {
+                    console.log({ response });
+                    getCollectionProducts();
+                    dispatch(setActivityIndicator(false));
+                }).catch(e => {
+                    showToastHandler(e, dispatch);
+                });
+            } else if (action === 'remove') {
+                dispatch(setActivityIndicator(true));
+                ServiceDeleteProduct(product?.id).then(response => {
+                    console.log({ response });
+                    getCollectionProducts();
+                    dispatch(setActivityIndicator(false));
+                }).catch(e => {
+                    showToastHandler(e, dispatch);
+                });
+            }
+        }
     }
 
     const _renderItem = ({ item, index }) => {
         return (
             <View style={{ marginBottom: 16, paddingRight: index % 2 == 0 ? 8 : 0, paddingLeft: index % 2 == 0 ? 0 : 8 }}>
-                <GeneralProduct item={item} index={index} flex={true} discountPrice={false} enable={true} options={true} handleToggle={(value) => updateProductStatus(value, item?.id)} />
+                <GeneralProduct
+                    item={item} index={index} flex={true}
+                    discountPrice={false} options={true}
+                    optionIcon={true}
+                    handleOptions={() => onProductOptionClick(item)}
+                    enable={true} selectedCollection={selectedCollection}
+                    handleToggle={(value) => updateProductStatus(value, item?.id)} />
             </View>
         )
     }
@@ -139,9 +192,14 @@ const ManageProducts = ({ route }) => {
 
     return (
         <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }}>
-            <HeaderWithBack title={'Manage products'} iconType='manageProducts' handleManageCollection={() => {
-                navigation.navigate('ManageCollection', { storeId });
-            }} />
+            <HeaderWithBack
+                title={'Manage products'}
+                iconType='manageProducts'
+                handleManageCollection={() => {
+                    navigation.navigate('ManageCollection', { storeId });
+                }}
+                addButtonClicked={() => navigation.navigate('AddProduct', { product: null })}
+            />
             <View style={{ flex: 1, marginHorizontal: 16 }}>
                 <View style={{ marginVertical: 18 }}>
                     <InputField value={search} onTextChange={(t) => setSearch(t)} />

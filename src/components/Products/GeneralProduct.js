@@ -2,7 +2,7 @@ import { ImageBackground, Platform, StyleSheet, Switch, Text, TouchableOpacity, 
 import React, { useState } from 'react'
 import WishIcon from '../../assets/images/wish-icon.svg';
 import WishIconLiked from '../../assets/images/wish-icon-liked.svg';
-import Option from '../../assets/images/options-icon.svg';
+import MoreOption from '../../assets/images/more-option-icon.svg';
 import AppStyle from '../../assets/styles/AppStyle';
 import AppConfig from '../../helpers/config';
 import { useNavigation } from '@react-navigation/native';
@@ -13,14 +13,24 @@ import Toast from 'react-native-toast-message';
 import { useSelector } from 'react-redux';
 import { getLoginConfig } from '../../store/slices/loginConfigSlice';
 
-const GeneralProduct = ({ item, index, flex = false, enable = false, optionIcon = false, handleOptions = null, handleToggle = null }) => {
+const GeneralProduct = (
+  {
+    item,
+    index,
+    flex = false,
+    enable = false,
+    optionIcon = false,
+    handleOptions = null,
+    handleToggle = null,
+    selectedCollection = null
+  }) => {
   const navigation = useNavigation();
   const loginConfig = useSelector(getLoginConfig);
-  const [isEnabled, setIsEnabled] = useState(item?.status);
+  const [isEnabled, setIsEnabled] = useState(item?.status === 1);
   const [liked, setLiked] = useState(item?.is_liked || false);
-  
+
   const toggleSwitch = () => {
-    setIsEnabled(isEnabled === 1 ? 0 : 1);
+    setIsEnabled(!isEnabled);
     handleToggle(isEnabled === 1 ? 0 : 1);
   };
 
@@ -72,13 +82,16 @@ const GeneralProduct = ({ item, index, flex = false, enable = false, optionIcon 
           style={flexStyle}
           imageStyle={{ borderRadius: 8 }}
         >
-          {loginConfig?.isLogin && (optionIcon ?
-            <TouchableOpacity onPress={handleOptions} style={{ position: 'absolute', right: 0, top: 0 }}>
-              <WishIconLiked />
-            </TouchableOpacity> :
-            <TouchableOpacity onPress={getWishListListing} style={{ position: 'absolute', right: 0, top: 0 }}>
-              {liked ? <WishIconLiked /> : <WishIcon />}
-            </TouchableOpacity>)}
+          {loginConfig?.isLogin &&
+            loginConfig?.user?.role !== 'v' &&
+            loginConfig?.user?.store?.id !== storeId &&
+            (optionIcon ?
+              <TouchableOpacity onPress={handleOptions} style={{ position: 'absolute', right: 0, top: 0 }}>
+                <MoreOption />
+              </TouchableOpacity> :
+              <TouchableOpacity onPress={getWishListListing} style={{ position: 'absolute', right: 0, top: 0 }}>
+                {liked ? <WishIconLiked /> : <WishIcon />}
+              </TouchableOpacity>)}
         </ImageBackground>
         <Text style={{ ...styles.name, width: flexStyle.width, marginLeft: index === 0 && !flex ? 16 : 0 }}>{item?.name}</Text>
         <View style={{ flexDirection: 'row' }}>
@@ -90,7 +103,7 @@ const GeneralProduct = ({ item, index, flex = false, enable = false, optionIcon 
           </Text>}
         </View>
       </TouchableOpacity>
-      {enable &&
+      {enable && selectedCollection?.name === 'All' &&
         <View style={{ marginVertical: 0, height: 24, alignItems: 'flex-start', marginLeft: -10 }}>
           <Switch
             trackColor={{ false: '#767577', true: '#007AFF' }}

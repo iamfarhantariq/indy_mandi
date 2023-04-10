@@ -5,8 +5,8 @@ import UploadIcon from '../../assets/images/add-images.svg';
 import { commonStyle } from '../../helpers/common';
 import ImagePicker from 'react-native-image-crop-picker';
 
-const UploadImages = ({ getImage = null }) => {
-    const [cropedImage, setCropedImage] = useState(null);
+const UploadImages = ({ getImage = null, imageUrl = null }) => {
+    const [cropedImage, setCropedImage] = useState(imageUrl);
 
     const openGallery = async () => {
         ImagePicker.openPicker({
@@ -20,7 +20,7 @@ const UploadImages = ({ getImage = null }) => {
             const mimeImage = {
                 uri: imageUri,
                 type: image?.mime,
-                name: imageUri.split("/").pop(),              
+                name: imageUri.split("/").pop(),
             }
             setCropedImage(image);
             getImage(mimeImage);
@@ -31,12 +31,15 @@ const UploadImages = ({ getImage = null }) => {
 
     return (
         <>
-            {cropedImage ? <ImageBackground source={{ uri: Platform.OS === 'ios' ? cropedImage.sourceURL : cropedImage?.path }}
+            {cropedImage ? <ImageBackground source={{ uri: imageUrl ? imageUrl : Platform.OS === 'ios' ? cropedImage.sourceURL : cropedImage?.path }}
                 style={styles.container}
                 imageStyle={{ borderRadius: 22, opacity: 0.7 }}
                 resizeMode={'cover'}>
-                <TouchableOpacity onPress={() => setCropedImage(null)} style={{ alignItems: 'center' }}>
-                    <Text style={{...styles.text, color: AppStyle.colorSet.primaryColorA}}>X Remove image</Text>
+                <TouchableOpacity onPress={() => {
+                    setCropedImage(null);
+                    getImage(null);
+                }} style={{ alignItems: 'center' }}>
+                    <Text style={{ ...styles.text, color: AppStyle.colorSet.primaryColorA }}>X Remove image</Text>
                 </TouchableOpacity>
             </ImageBackground> :
                 <TouchableOpacity style={styles.container} onPress={openGallery}>

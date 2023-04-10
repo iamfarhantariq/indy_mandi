@@ -52,5 +52,12 @@ export const API_GET_STORE_PRODUCTS = `${BASE_URL}/store/products`;
 export const API_GET_STORE_COLLECTION_SORTED_PRODUCTS = `${BASE_URL}/vendor/update-products-order`;
 export const API_GET_UPDATE_PRODUCT_STATUS = `${BASE_URL}/vendor/updateproductstatus`;
 
+// Collection
+export const API_POST_NEW_COLLECTION = `${BASE_URL}/vendor/collection/store`;
+export const API_PUT_UPDATE_COLLECTION = `${BASE_URL}/vendor/collection/update`;
+export const API_DELETE_COLLECTION = `${BASE_URL}/vendor/collection/delete`;
+export const API_POST_DUPLICATE_PRODUCT = `${BASE_URL}/vendor/duplicate-product`;
+export const API_DELETE_PRODUCT = `${BASE_URL}/vendor/delete-product`;
+
 // Explore
 export const API_POST_EXPLORE = `${BASE_URL}/explore`;

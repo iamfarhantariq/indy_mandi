@@ -12,7 +12,8 @@ import HeadingAndDescription from '../../components/Store/HeadingAndDescription'
 import UploadIcon from '../../assets/images/add-images.svg';
 import { useNavigation } from '@react-navigation/native'
 
-const AddProduct = () => {
+const AddProduct = ({ route }) => {
+    const params = route?.params;
     const navigation = useNavigation();
     const [opened, setOpened] = useState(false);
     const [title, setTitle] = useState('');
@@ -246,7 +247,7 @@ const AddProduct = () => {
 
     return (
         <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }}>
-            <HeaderWithBack title={'Add Product'} cross={true} />
+            <HeaderWithBack title={params?.product ? 'Edit Product' : 'Add Product'} cross={true} />
 
             <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
                 <View style={{ marginHorizontal: 16, flex: 1, paddingBottom: 108 }}>

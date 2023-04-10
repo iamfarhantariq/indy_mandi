@@ -2,7 +2,7 @@ import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react
 import React from 'react'
 import HeaderWithBack from '../../components/Headers/HeaderWithBack'
 import AppStyle from '../../assets/styles/AppStyle'
-import { useNavigation } from '@react-navigation/native'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 import AppConfig from '../../helpers/config'
 import { useDispatch } from 'react-redux'
 import { useEffect } from 'react'
@@ -10,9 +10,14 @@ import { ServiceGetStoreFirstCollection, ServiceGetStoreOtherCollection } from '
 import { showToastHandler } from '../../helpers/common'
 import { useState } from 'react'
 import { setActivityIndicator } from '../../store/slices/appConfigSlice'
+import MoreOption from '../../assets/images/more-option-icon.svg';
+import { SheetManager } from 'react-native-actions-sheet';
+import { ServiceDeleteCollection, ServiceUpdateCollection } from '../../services/AppService';
+import Toast from 'react-native-toast-message';
 
 const ManageCollection = ({ route }) => {
     const { storeId } = route?.params;
+    const isFocus = useIsFocused();
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const [collections, setCollections] = useState([]);
@@ -23,7 +28,7 @@ const ManageCollection = ({ route }) => {
         } else {
             navigation.pop();
         }
-    }, []);
+    }, [isFocus]);
 
     const getStoreCollection = () => {
         dispatch(setActivityIndicator(true));
@@ -31,6 +36,7 @@ const ManageCollection = ({ route }) => {
             ServiceGetStoreOtherCollection(storeId).then(_response => {
                 const combinedCollection = [response?.data, ..._response?.data];
                 setCollections(combinedCollection);
+                console.log({combinedCollection});
                 dispatch(setActivityIndicator(false));
             }).catch(e => {
                 showToastHandler(e, dispatch);
@@ -40,10 +46,29 @@ const ManageCollection = ({ route }) => {
         });
     }
 
+    const filterHandler = (action, item) => {
+        if (action === 'remove') {
+            ServiceDeleteCollection(item?.id).then(async (response) => {
+                console.log({ response });
+                getStoreCollection();
+                dispatch(setActivityIndicator(false));
+                Toast.show({
+                    type: 'success',
+                    text1: 'Success',
+                    text2: 'Success',
+                });
+            }).catch(e => {
+                showToastHandler(e, dispatch);
+            });
+        }
+        if (action === 'edit') {
+            navigation.navigate('CreateCollection', { collection: item });
+        }
+    }
+
     const _renderItem = ({ item, index }) => {
         return (
-            <TouchableOpacity onPress={() => null}
-                style={{ marginRight: index % 2 === 0 ? 16 : 0, marginBottom: 16 }}>
+            <View style={{ marginRight: index % 2 === 0 ? 16 : 0, marginBottom: 16 }}>
                 <Image
                     resizeMode='cover'
                     source={{ uri: item?.image }}
@@ -53,7 +78,21 @@ const ManageCollection = ({ route }) => {
                 <Text style={styles.name}>
                     {item?.name}
                 </Text>
-            </TouchableOpacity>
+                <TouchableOpacity onPress={() => {
+                    SheetManager.show('example-two', {
+                        payload: {
+                            header: 'Choose your action',
+                            actions: [
+                                { title: 'Edit collection', value: 'edit' },
+                                { title: 'Delete collection', value: 'remove' },
+                            ],
+                            filterHandler: (_action) => filterHandler(_action, item)
+                        }
+                    });
+                }} style={{ position: 'absolute', top: 4, right: 4 }}>
+                    <MoreOption />
+                </TouchableOpacity>
+            </View>
         )
     }
 

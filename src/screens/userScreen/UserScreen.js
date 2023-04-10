@@ -26,9 +26,36 @@ const UserScreen = () => {
         }
         fetchUserDetails();
     }, [isFocused]);
-    
 
-    const items = [
+    const logoutFunction = () => {
+        dispatch(setActivityIndicator(true));
+        ServiceLogout({ email: loginConfig?.user?.email }).then(async response => {
+            console.log({ response });
+            Toast.show({
+                type: 'info',
+                text1: 'Success',
+                text2: 'You have been logged out!',
+            });
+            dispatch(setLogout());
+            await AsyncStorage.removeItem("auth_token");
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'ProfileScreen' }]
+            });
+            dispatch(setActivityIndicator(false));
+        }).catch(e => {
+            dispatch(setActivityIndicator(false));
+            console.log(e);
+            const errors = e?.response?.data?.errors;
+            Toast.show({
+                type: 'error',
+                text1: e?.response?.data?.message || e?.message,
+                text2: errors ? errors[Object.keys(errors)[0]][0] : '',
+            });
+        });
+    }
+
+    const customerOptions = [
         { title: 'Order enquiries', func: () => navigation.navigate('OrderEnquiries') },
         { title: 'Indyviews payments', func: () => navigation.navigate('PaymentHistory') },
         { title: 'Wishlist', func: () => navigation.navigate('WishList') },
@@ -36,35 +63,17 @@ const UserScreen = () => {
         { title: 'Account settings', func: () => navigation.navigate('AccountSettings') },
         { title: 'Become a seller', func: () => navigation.navigate('BecomeSeller') },
         { title: 'Raise a dispute', func: () => navigation.navigate('RaiseDispute') },
-        {
-            title: 'Logout', func: () => {
-                dispatch(setActivityIndicator(true));
-                ServiceLogout({ email: loginConfig?.user?.email }).then(async response => {
-                    console.log({ response });
-                    Toast.show({
-                        type: 'info',
-                        text1: 'Success',
-                        text2: 'You have been logged out!',
-                    });
-                    dispatch(setLogout());
-                    await AsyncStorage.removeItem("auth_token");
-                    navigation.reset({
-                        index: 0,
-                        routes: [{ name: 'ProfileScreen' }]
-                    });
-                    dispatch(setActivityIndicator(false));
-                }).catch(e => {
-                    dispatch(setActivityIndicator(false));
-                    console.log(e);
-                    const errors = e?.response?.data?.errors;
-                    Toast.show({
-                        type: 'error',
-                        text1: e?.response?.data?.message || e?.message,
-                        text2: errors ? errors[Object.keys(errors)[0]][0] : '',
-                    });
-                });
-            }
-        },
+        { title: 'Logout', func: logoutFunction },
+    ]
+
+    const sellerOptions = [
+        { title: 'Order enquiries', func: () => navigation.navigate('OrderEnquiries') },
+        { title: 'Payments', func: () => navigation.navigate('PaymentHistory') },
+        { title: 'Delete store', func: () => null },
+        { title: 'Account settings', func: () => navigation.navigate('AccountSettings') },
+        { title: 'Seller handbook', func: () => null },
+        { title: 'Raise a dispute', func: () => navigation.navigate('RaiseDispute') },
+        { title: 'Logout', func: logoutFunction },
     ]
 
     const Option = ({ item, index }) => (
@@ -102,8 +111,11 @@ const UserScreen = () => {
             <View style={{ flex: 1, marginHorizontal: 16 }}>
                 <FlatList
                     horizontal={false}
-                    
-                    data={items}
+                    data={loginConfig?.user?.role === 'v' ||
+                        loginConfig?.user?.role === 's' ?
+                        sellerOptions : loginConfig?.user?.role === 'u' ?
+                            customerOptions :
+                            [{ title: 'Logout', func: logoutFunction }]}
                     key={(index) => 'option' + index + 'action'}
                     renderItem={Option}
                     showsVerticalScrollIndicator={false}

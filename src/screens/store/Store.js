@@ -8,9 +8,8 @@ import StarRating from '../../components/Store/StarRating';
 import { useNavigation } from '@react-navigation/native';
 import Van from '../../assets/images/store-van.svg';
 import Response from '../../assets/images/store-response.svg';
-import TabViewSection from '../../components/Store/TabViewSection';
 import Button from '../../components/Button';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setActivityIndicator } from '../../store/slices/appConfigSlice';
 import { ServiceGetStoreDetail, ServiceGetStoreFirstCollection, ServiceGetStoreOtherCollection, ServiceGetStoreProducts } from '../../services/ProductService';
 import ProductSectionStore from '../../components/Store/ProductSectionStore';
@@ -19,12 +18,14 @@ import AboutSectionStore from '../../components/Store/AboutSectionStore';
 import PolicySectionStore from '../../components/Store/PolicySectionStore';
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
 import InputField from '../../components/Input/InputField';
+import { getLoginConfig } from '../../store/slices/loginConfigSlice';
 
 const Store = ({ route }) => {
-    const { storeId } = route?.params;
-    console.log({ storeId });
+    const params = route?.params;
     const dispatch = useDispatch();
     const navigation = useNavigation();
+    const [storeId] = useState(loginConfig?.user?.role === 'v' ?
+        loginConfig?.user?.store?.id : params?.storeId);
     const [index, setIndex] = React.useState(0);
     const [routes] = React.useState([
         { key: 'first', title: 'Products' },
@@ -37,6 +38,7 @@ const Store = ({ route }) => {
     const [collections, setCollections] = useState([]);
     const [selectedCollection, setSelectedCollection] = useState(null);
     const [products, setProducts] = useState([]);
+    const loginConfig = useSelector(getLoginConfig);
 
     useEffect(() => {
         if (storeId) {
@@ -159,27 +161,25 @@ const Store = ({ route }) => {
                 <View style={{ marginHorizontal: 16, marginBottom: 16 }}>
                     <Text style={styles.name}>{storeData?.store_name}</Text>
                     <Text style={styles.description}>{storeData?.seller_name}</Text>
-                    {/* <Text style={styles.description}>Ahmedabad, Gujarat</Text> */}
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <View style={{ height: 20, width: 90 }}>
                             <StarRating rating={4} />
                         </View>
-                        {/* <Text style={styles.ratingText}>(4/5) 500 sales</Text> */}
                     </View>
                 </View>
-                <View style={{ flexDirection: 'row', marginHorizontal: 16, justifyContent: 'space-between', marginBottom: 16 }}>
-                    <View style={{ width: '49%' }}>
-                        <Button text={'Manage products'} handleClick={() => navigation.navigate('ManageProducts', { storeId })} />
-                    </View>
-                    <View style={{ width: '49%' }}>
-                        <Button text={'Edit profile'} />
-                    </View>
-                </View>
+                {loginConfig?.user?.role === 'v' &&
+                    loginConfig?.user?.store?.id === storeId && <View style={{ flexDirection: 'row', marginHorizontal: 16, justifyContent: 'space-between', marginBottom: 16 }}>
+                        <View style={{ width: '49%' }}>
+                            <Button text={'Manage products'} handleClick={() => navigation.navigate('ManageProducts', { storeId })} />
+                        </View>
+                        <View style={{ width: '49%' }}>
+                            <Button text={'Edit profile'} />
+                        </View>
+                    </View>}
                 <View style={{ marginHorizontal: 16, flexDirection: 'row', justifyContent: 'space-between' }}>
                     <StoreDetail Icon={<Van />} text={'Smooth Dispatcher'} description='Has a history of dispatching orders on time' />
                     <StoreDetail Icon={<Response />} text={'Speedy Replies'} description='Has a history of dispatching orders on time' />
                 </View>
-                {/* <TabViewSection storeData={storeData} storeId={storeId} /> */}
                 <View style={{
                     height: AppConfig.screenHeight - (Platform.OS === 'ios' ? 20 : 50)
                 }}>

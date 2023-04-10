@@ -11,13 +11,15 @@ import UploadIcon from '../../assets/images/add-images.svg';
 import { useFormik } from 'formik'
 import Toast from 'react-native-toast-message';
 import { useDispatch, useSelector } from 'react-redux'
-import { getLoginConfig } from '../../store/slices/loginConfigSlice'
+import { getLoginConfig, setIsAuthorized, setIsLogin, setUser } from '../../store/slices/loginConfigSlice'
 import { becomeASellerAuthorizedFormSchema, becomeASellerGuestFormSchema } from '../../validation'
 import { setActivityIndicator, setCountryStates } from '../../store/slices/appConfigSlice'
 import { ServicePostBecomeASeller } from '../../services/IndyViewService'
 import GetCountryState from '../../components/GetCountryState'
 import { GetCountryStates } from '../../services/AppService';
 import ImagePicker from 'react-native-image-crop-picker';
+import DeviceInfo from 'react-native-device-info'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const BecomeSeller = () => {
     const dispatch = useDispatch();
@@ -80,7 +82,8 @@ const BecomeSeller = () => {
             email: '',
             password: '',
             mobile: '',
-            upload_adhar_no: null
+            upload_adhar_no: null,
+            device_name: DeviceInfo.getBrand()
         },
         onSubmit: (values) => {
             console.log({ values });
@@ -88,6 +91,7 @@ const BecomeSeller = () => {
             if (loginConfig?.isLogin) {
                 delete values.email;
                 delete values.password;
+                delete values.device_name;
             }
 
             if (!values.upload_adhar_no) {
@@ -104,6 +108,12 @@ const BecomeSeller = () => {
             dispatch(setActivityIndicator(true));
             ServicePostBecomeASeller(formData).then(async (response) => {
                 console.log({ response });
+                if(response?.data?.token){
+                    await AsyncStorage.setItem("auth_token", response?.data?.token);
+                }
+                dispatch(setUser(response?.data));
+                dispatch(setIsLogin(true));
+                dispatch(setIsAuthorized(response?.data?.is_verified === 1));
                 dispatch(setActivityIndicator(false));
                 Toast.show({
                     type: 'success',

@@ -90,4 +90,9 @@ export const becomeASellerGuestFormSchema = Yup.object().shape({
     coupon: Yup.string().trim(),
     seller_name: Yup.string().trim().required('Seller name is required'),
     mobile: Yup.string().trim().required('Mobile is required'),
+    device_name: Yup.string().trim(),
+});
+
+export const createCollectionSchema = Yup.object().shape({
+    name: Yup.string().trim().required('Name is required'),
 });

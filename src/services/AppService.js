@@ -1,5 +1,7 @@
-import { get, post, put, remove } from "./HttpClient"
+import { get, post, postMultipartData, put, putMultipartData, remove } from "./HttpClient"
 import {
+    API_DELETE_COLLECTION,
+    API_DELETE_PRODUCT,
     API_DELETE_PRODUCT_FROM_WISHLISTS,
     API_GET_ALL_SELLER_STORIES,
     API_GET_BLOGS_CATEGORIES,
@@ -10,10 +12,13 @@ import {
     API_GET_SINGLE_SELLER_STORY,
     API_GET_USER_WISHLIST,
     API_GET_WISHLIST_LISTS,
+    API_POST_DUPLICATE_PRODUCT,
+    API_POST_NEW_COLLECTION,
     API_POST_PRODUCT_TO_WISHLISTS,
     API_POST_STORE_ADDRESS,
     API_POST_USER_WISHLIST_STORE,
     API_POST_WISHLIST_PRODUCTS,
+    API_PUT_UPDATE_COLLECTION,
     API_PUT_USER_WISHLIST_UPDATE
 } from "./ApisRoutes"
 
@@ -206,6 +211,57 @@ export const ServiceGetAllSellerStories = (page = 1) => {
 export const ServiceGetSingleStory = (slug) => {
     return new Promise((resolve, reject) => {
         get(`${API_GET_SINGLE_SELLER_STORY}/${slug}`).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+
+export const ServiceCreateCollection = (payload) => {
+    return new Promise((resolve, reject) => {
+        postMultipartData(`${API_POST_NEW_COLLECTION}`, payload).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const ServiceUpdateCollection = (collectionId, payload) => {
+    return new Promise((resolve, reject) => {
+        postMultipartData(`${API_PUT_UPDATE_COLLECTION}/${collectionId}?_method=PUT`, payload).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const ServiceDeleteCollection = (collectionId) => {
+    return new Promise((resolve, reject) => {
+        remove(`${API_DELETE_COLLECTION}/${collectionId}`).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const ServiceDuplicateProduct = (id) => {
+    return new Promise((resolve, reject) => {
+        post(`${API_POST_DUPLICATE_PRODUCT}/${id}`).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const ServiceDeleteProduct = (id) => {
+    return new Promise((resolve, reject) => {
+        remove(`${API_DELETE_PRODUCT}/${id}`).then(response => {
             resolve(response);
         }).catch(error => {
             reject(error);

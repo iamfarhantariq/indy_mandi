@@ -10,7 +10,16 @@ import Add from '../../assets/images/add-icon.svg';
 import Option from '../../assets/images/options-icon.svg';
 import { SheetManager } from 'react-native-actions-sheet';
 
-const HeaderWithBack = ({ title, cross = false, iconType = '', route = '', shouldBack = true, handleOptions = null, handleManageCollection = null }) => {
+const HeaderWithBack = ({
+    title,
+    cross = false,
+    iconType = '',
+    route = '',
+    shouldBack = true,
+    handleOptions = null,
+    handleManageCollection = null,
+    addButtonClicked = null
+}) => {
     const navigation = useNavigation();
 
     const icons = [
@@ -19,7 +28,7 @@ const HeaderWithBack = ({ title, cross = false, iconType = '', route = '', shoul
         {
             name: 'manageProducts',
             icon: <View style={{ flexDirection: 'row', width: 70, justifyContent: 'space-between' }}>
-                <TouchableOpacity onPress={() => navigation.navigate('AddProduct')}>
+                <TouchableOpacity onPress={addButtonClicked}>
                     <Add />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => {
