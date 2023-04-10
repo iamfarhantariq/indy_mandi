@@ -93,6 +93,16 @@ export const becomeASellerGuestFormSchema = Yup.object().shape({
     device_name: Yup.string().trim(),
 });
 
+export const updateVecomeASellerFormSchema = Yup.object().shape({
+    store_id: Yup.number(),
+    seller_name: Yup.string().trim().required('Seller name is required'),
+    gstn: Yup.string().trim(),
+    mobile: Yup.string().trim().required('Mobile is required'),
+    state: Yup.string().trim().required('State is required'),
+    address: Yup.string().trim().required('Address is required'),
+    description: Yup.string().trim().required('Description is required'),
+});
+
 export const createCollectionSchema = Yup.object().shape({
     name: Yup.string().trim().required('Name is required'),
 });

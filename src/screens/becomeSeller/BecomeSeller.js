@@ -6,28 +6,31 @@ import HeaderWithBack from '../../components/Headers/HeaderWithBack'
 import Button from '../../components/Button'
 import { useNavigation } from '@react-navigation/native'
 import { useState } from 'react'
-import { commonStyle, convertToFormDataObject, showToastHandler } from '../../helpers/common'
+import { commonStyle, convertToFormDataObject, showToastHandler, UpdatedUserInTheApp } from '../../helpers/common'
 import UploadIcon from '../../assets/images/add-images.svg';
 import { useFormik } from 'formik'
 import Toast from 'react-native-toast-message';
 import { useDispatch, useSelector } from 'react-redux'
 import { getLoginConfig, setIsAuthorized, setIsLogin, setUser } from '../../store/slices/loginConfigSlice'
-import { becomeASellerAuthorizedFormSchema, becomeASellerGuestFormSchema } from '../../validation'
+import { becomeASellerAuthorizedFormSchema, becomeASellerGuestFormSchema, updateVecomeASellerFormSchema } from '../../validation'
 import { setActivityIndicator, setCountryStates } from '../../store/slices/appConfigSlice'
-import { ServicePostBecomeASeller } from '../../services/IndyViewService'
+import { ServicePostBecomeASeller, ServiceUpdateBecomeASeller } from '../../services/IndyViewService'
 import GetCountryState from '../../components/GetCountryState'
 import { GetCountryStates } from '../../services/AppService';
 import ImagePicker from 'react-native-image-crop-picker';
 import DeviceInfo from 'react-native-device-info'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-const BecomeSeller = () => {
+const BecomeSeller = ({ route }) => {
+    const params = route?.params;
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const loginConfig = useSelector(getLoginConfig);
+    const [sellerData, setSellerData] = useState(params?.sellerData);
     const [cropedImage, setCropedImage] = useState(null);
 
     useEffect(() => {
+        console.log(sellerData);
         getCountryStates();
     }, []);
 
@@ -72,16 +75,17 @@ const BecomeSeller = () => {
         handleReset,
     } = useFormik({
         initialValues: {
-            name: '',
-            description: '',
-            address: '',
-            state: '',
-            gstn: '',
+            store_id: sellerData?.id,
+            name: loginConfig?.user?.store?.name || '',
+            description: sellerData?.description || '',
+            address: sellerData?.address || '',
+            state: sellerData?.state || '',
+            gstn: sellerData?.gstn || '',
             coupon: 'INDYEARLYBIRD',
-            seller_name: '',
+            seller_name: sellerData?.seller_name || '',
             email: '',
             password: '',
-            mobile: '',
+            mobile: sellerData?.mobile || '',
             upload_adhar_no: null,
             device_name: DeviceInfo.getBrand()
         },
@@ -94,7 +98,15 @@ const BecomeSeller = () => {
                 delete values.device_name;
             }
 
-            if (!values.upload_adhar_no) {
+            if (sellerData) {
+                delete values.name;
+                delete values.coupon;
+                delete values.upload_adhar_no;
+            } else {
+                delete values.store_id;
+            }
+
+            if (!sellerData && !values.upload_adhar_no) {
                 return Toast.show({
                     type: 'error',
                     text1: 'Required',
@@ -106,27 +118,48 @@ const BecomeSeller = () => {
             console.log({ formData });
 
             dispatch(setActivityIndicator(true));
-            ServicePostBecomeASeller(formData).then(async (response) => {
-                console.log({ response });
-                if(response?.data?.token){
-                    await AsyncStorage.setItem("auth_token", response?.data?.token);
-                }
-                dispatch(setUser(response?.data));
-                dispatch(setIsLogin(true));
-                dispatch(setIsAuthorized(response?.data?.is_verified === 1));
-                dispatch(setActivityIndicator(false));
-                Toast.show({
-                    type: 'success',
-                    text1: 'Success',
-                    text2: response?.message,
+            if (sellerData) {
+                ServiceUpdateBecomeASeller(formData).then(async (response) => {
+                    console.log({ response });
+                    await UpdatedUserInTheApp(dispatch);
+                    dispatch(setActivityIndicator(false));
+                    Toast.show({
+                        type: 'success',
+                        text1: 'Success',
+                        text2: 'Success',
+                    });
+                    handleReset();
+                    navigation.pop();
+                }).catch(e => {
+                    showToastHandler(e, dispatch);
                 });
-                handleReset();
-                navigation.pop();
-            }).catch(e => {
-                showToastHandler(e, dispatch);
-            });
+            } else {
+                ServicePostBecomeASeller(formData).then(async (response) => {
+                    console.log({ response });
+                    if (response?.data?.token) {
+                        await AsyncStorage.setItem("auth_token", response?.data?.token);
+                    }
+                    dispatch(setUser(response?.data));
+                    dispatch(setIsLogin(true));
+                    dispatch(setIsAuthorized(response?.data?.is_verified === 1));
+                    dispatch(setActivityIndicator(false));
+                    Toast.show({
+                        type: 'success',
+                        text1: 'Success',
+                        text2: response?.message,
+                    });
+                    handleReset();
+                    navigation.pop();
+                }).catch(e => {
+                    showToastHandler(e, dispatch);
+                });
+            }
         },
-        validationSchema: loginConfig?.isLogin ? becomeASellerAuthorizedFormSchema : becomeASellerGuestFormSchema,
+        validationSchema: loginConfig?.isLogin ?
+            sellerData ?
+                updateVecomeASellerFormSchema :
+                becomeASellerAuthorizedFormSchema :
+            becomeASellerGuestFormSchema,
     });
 
     const otherProps = { values, errors, touched, setFieldValue, setFieldTouched, handleBlur };
@@ -134,22 +167,67 @@ const BecomeSeller = () => {
 
     return (
         <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }}>
-            <HeaderWithBack title={'Become a seller'} cross={true} />
+            <HeaderWithBack title={sellerData ? 'Update store' : 'Become a seller'} cross={true} />
             <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
                 <View style={{ marginHorizontal: 16, flex: 1, paddingBottom: 108 }}>
-
                     <View style={{ width: '100%', marginVertical: 16 }}>
                         <Text style={styles.middleText}>Store Details</Text>
                     </View>
 
-                    <InputFieldBase
-                        otherProps={otherProps}
-                        title={'Store Name'}
-                        placeholder={'Store Name'}
-                        name='name'
-                    />
-
-                    {/* {['Between 4-20 characters', 'No special characters, spaces, or accented letters'].map((item, index) => {
+                    {sellerData ?
+                        <>
+                            <InputFieldBase
+                                otherProps={otherProps}
+                                title={'Store name'}
+                                placeholder={'Store name'}
+                                name='name'
+                                editable={false}
+                            />
+                            <InputFieldBase
+                                otherProps={otherProps}
+                                title={'Seller name'}
+                                placeholder={'Seller name'}
+                                name='seller_name'
+                            />
+                            <InputFieldBase
+                                otherProps={otherProps}
+                                title={'GSTIN (Optional)'}
+                                placeholder={'GSTIN (Optional)'}
+                                name='gstn'
+                            />
+                            <InputFieldBase
+                                otherProps={otherProps}
+                                title={'Contact'}
+                                placeholder={'Contact'}
+                                name='mobile'
+                            />
+                            <GetCountryState
+                                otherProps={otherProps}
+                                placeholder={'State'}
+                                name='state'
+                            />
+                            <InputFieldBase
+                                otherProps={otherProps}
+                                title={'Address'}
+                                placeholder={'Address'}
+                                name='address'
+                            />
+                            <InputFieldBase
+                                otherProps={otherProps}
+                                title={'Description'}
+                                placeholder={'Description'}
+                                numberOfLines={3}
+                                name='description'
+                            />
+                        </> :
+                        <>
+                            <InputFieldBase
+                                otherProps={otherProps}
+                                title={'Store Name'}
+                                placeholder={'Store Name'}
+                                name='name'
+                            />
+                            {/* {['Between 4-20 characters', 'No special characters, spaces, or accented letters'].map((item, index) => {
                         return (
                             <View key={index} style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <GreenTick height={16} width={16} style={{ color: '#50CD8D' }} />
@@ -158,114 +236,104 @@ const BecomeSeller = () => {
                         )
                     })} */}
 
-                    {/* <View style={{ marginVertical: 16, height: 176 }}>
+                            {/* <View style={{ marginVertical: 16, height: 176 }}>
                         <UploadImages />
                     </View> */}
-
-                    <InputFieldBase
-                        otherProps={otherProps}
-                        title={'Description'}
-                        placeholder={'Description'}
-                        numberOfLines={3}
-                        name='description'
-                    />
-
-                    <InputFieldBase
-                        otherProps={otherProps}
-                        title={'Address'}
-                        placeholder={'Address'}
-                        name='address'
-                    />
-
-                    <GetCountryState
-                        otherProps={otherProps}
-                        placeholder={'State'}
-                        name='state'
-                    />
-
-                    <InputFieldBase
-                        otherProps={otherProps}
-                        title={'GSTIN (Optional)'}
-                        placeholder={'GSTIN (Optional)'}
-                        name='gstn'
-                    />
-
-                    {/* <InputFieldBase
+                            <InputFieldBase
+                                otherProps={otherProps}
+                                title={'Description'}
+                                placeholder={'Description'}
+                                numberOfLines={3}
+                                name='description'
+                            />
+                            <InputFieldBase
+                                otherProps={otherProps}
+                                title={'Address'}
+                                placeholder={'Address'}
+                                name='address'
+                            />
+                            <GetCountryState
+                                otherProps={otherProps}
+                                placeholder={'State'}
+                                name='state'
+                            />
+                            <InputFieldBase
+                                otherProps={otherProps}
+                                title={'GSTIN (Optional)'}
+                                placeholder={'GSTIN (Optional)'}
+                                name='gstn'
+                            />
+                            {/* <InputFieldBase
                         otherProps={otherProps}
                         title={'Coupon (Optional)'}
                         placeholder={'Coupon (Optional)'}
                         name='coupon'
                     /> */}
-
-                    <View style={{ width: '100%', marginTop: 24, marginBottom: 16 }}>
-                        <Text style={styles.middleText}>Seller details</Text>
-                    </View>
-
-                    <InputFieldBase
-                        otherProps={otherProps}
-                        title={'Seller name'}
-                        placeholder={'Seller name'}
-                        name='seller_name'
-                    />
-
-                    {!loginConfig?.isLogin &&
-                        <>
+                            <View style={{ width: '100%', marginTop: 24, marginBottom: 16 }}>
+                                <Text style={styles.middleText}>Seller details</Text>
+                            </View>
                             <InputFieldBase
                                 otherProps={otherProps}
-                                title={'Email'}
-                                placeholder={'Email'}
-                                name='email'
+                                title={'Seller name'}
+                                placeholder={'Seller name'}
+                                name='seller_name'
                             />
+                            {!loginConfig?.isLogin &&
+                                <>
+                                    <InputFieldBase
+                                        otherProps={otherProps}
+                                        title={'Email'}
+                                        placeholder={'Email'}
+                                        name='email'
+                                    />
+                                    <InputFieldBase
+                                        otherProps={otherProps}
+                                        title={'Password'}
+                                        placeholder={'Password'}
+                                        secure={true}
+                                        name='password'
+                                    />
+                                </>
+                            }
+                            <InputFieldBase
+                                otherProps={otherProps}
+                                title={'Contact'}
+                                placeholder={'Contact'}
+                                name='mobile'
+                            />
+                            <TouchableOpacity style={styles.idContainer} onPress={openGallery}>
+                                {cropedImage ? <ImageBackground source={{ uri: Platform.OS === 'ios' ? cropedImage.sourceURL : cropedImage?.path }}
+                                    style={styles.container}
+                                    imageStyle={{ opacity: 0.7 }}
+                                    resizeMode={'cover'}>
+                                    <TouchableOpacity onPress={() => setFieldValue('upload_adhar_no', null)} style={{ alignItems: 'center' }}>
+                                        <Text style={{ ...styles.text, color: AppStyle.colorSet.primaryColorA }}>X</Text>
+                                    </TouchableOpacity>
+                                </ImageBackground> : <UploadIcon />}
+
+                                <View>
+                                    <Text style={styles.proofText}>
+                                        {cropedImage ? Platform.OS === 'ios' ? cropedImage?.filename :
+                                            cropedImage?.path?.split('/')[cropedImage?.path?.split('/')?.length - 1] :
+                                            'Upload ID Proof (Driver\'s License, PAN card, Aadhar, Voter\'s ID)'}
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
 
                             <InputFieldBase
                                 otherProps={otherProps}
-                                title={'Password'}
-                                placeholder={'Password'}
-                                secure={true}
-                                name='password'
+                                title={'Coupon code'}
+                                placeholder={'Have a coupon code? Apply here'}
+                                name='coupon'
                             />
                         </>
                     }
-
-                    <InputFieldBase
-                        otherProps={otherProps}
-                        title={'Contact'}
-                        placeholder={'Contact'}
-                        name='mobile'
-                    />
-
-                    <TouchableOpacity style={styles.idContainer} onPress={openGallery}>
-                        {cropedImage ? <ImageBackground source={{ uri: Platform.OS === 'ios' ? cropedImage.sourceURL : cropedImage?.path }}
-                            style={styles.container}
-                            imageStyle={{ opacity: 0.7 }}
-                            resizeMode={'cover'}>
-                            <TouchableOpacity onPress={() => setFieldValue('upload_adhar_no', null)} style={{ alignItems: 'center' }}>
-                                <Text style={{ ...styles.text, color: AppStyle.colorSet.primaryColorA }}>X</Text>
-                            </TouchableOpacity>
-                        </ImageBackground> : <UploadIcon />}
-
-                        <View>
-                            <Text style={styles.proofText}>
-                                {cropedImage ? Platform.OS === 'ios' ? cropedImage?.filename :
-                                    cropedImage?.path?.split('/')[cropedImage?.path?.split('/')?.length - 1] :
-                                    'Upload ID Proof (Driver\'s License, PAN card, Aadhar, Voter\'s ID)'}
-                            </Text>
-                        </View>
-                    </TouchableOpacity>
-
-                    <InputFieldBase
-                        otherProps={otherProps}
-                        title={'Coupon code'}
-                        placeholder={'Have a coupon code? Apply here'}
-                        name='coupon'
-                    />
-
                 </View>
             </ScrollView>
 
             <View style={AppStyle.buttonContainerBottom}>
                 {/* <Button text={'Next'} fill={true} handleClick={() => navigation.navigate('BuyPlan')} /> */}
-                <Button text={'Next'} fill={true} handleClick={handleSubmit} />
+                <Button text={sellerData ? 'Update' : 'Next'} fill={true} handleClick={handleSubmit} />
             </View>
         </View>
     )

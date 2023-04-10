@@ -171,7 +171,7 @@ const MyShop = () => {
             <Button text={'Manage products'} handleClick={() => navigation.navigate('ManageProducts', { storeId })} />
           </View>
           <View style={{ width: '49%' }}>
-            <Button text={'Edit profile'} />
+            <Button text={'Edit profile'} handleClick={() => navigation.navigate('BecomeSeller', { sellerData: loginConfig?.user?.store })} />
           </View>
         </View>
         <View style={{ marginHorizontal: 16, flexDirection: 'row', justifyContent: 'space-between' }}>

@@ -31,8 +31,8 @@ const CreateCollection = ({ route }) => {
         handleReset,
     } = useFormik({
         initialValues: {
-            name: collection.name || '',
-            image: collection.image || '',
+            name: collection?.name || '',
+            image: collection?.image || '',
         },
         onSubmit: (values) => {
             console.log({ values });
@@ -53,7 +53,7 @@ const CreateCollection = ({ route }) => {
             console.log({ formData });
             dispatch(setActivityIndicator(true));
             if (params?.collection) {
-                ServiceUpdateCollection(collection.id, formData).then(async (response) => {
+                ServiceUpdateCollection(collection?.id, formData).then(async (response) => {
                     console.log({ response });
                     dispatch(setActivityIndicator(false));
                     Toast.show({

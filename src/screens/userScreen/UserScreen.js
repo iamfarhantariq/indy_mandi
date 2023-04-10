@@ -62,7 +62,7 @@ const UserScreen = () => {
         { title: 'Wishlist', func: () => navigation.navigate('WishList') },
         { title: 'Addresses', func: () => navigation.navigate('Addresses') },
         { title: 'Account settings', func: () => navigation.navigate('AccountSettings') },
-        { title: 'Become a seller', func: () => navigation.navigate('BecomeSeller') },
+        { title: 'Become a seller', func: () => navigation.navigate('BecomeSeller', { sellerData: null }) },
         { title: 'Raise a dispute', func: () => navigation.navigate('RaiseDispute') },
         { title: 'Logout', func: logoutFunction },
     ]

@@ -168,12 +168,13 @@ const Store = ({ route }) => {
                     </View>
                 </View>
                 {loginConfig?.user?.role === 'v' &&
-                    loginConfig?.user?.store?.id === storeId && <View style={{ flexDirection: 'row', marginHorizontal: 16, justifyContent: 'space-between', marginBottom: 16 }}>
+                    loginConfig?.user?.store?.id === storeId &&
+                    <View style={{ flexDirection: 'row', marginHorizontal: 16, justifyContent: 'space-between', marginBottom: 16 }}>
                         <View style={{ width: '49%' }}>
                             <Button text={'Manage products'} handleClick={() => navigation.navigate('ManageProducts', { storeId })} />
                         </View>
                         <View style={{ width: '49%' }}>
-                            <Button text={'Edit profile'} />
+                            <Button text={'Edit profile'} handleClick={() => navigation.navigate('BecomeSeller', { sellerData: loginConfig?.user?.store })} />
                         </View>
                     </View>}
                 <View style={{ marginHorizontal: 16, flexDirection: 'row', justifyContent: 'space-between' }}>

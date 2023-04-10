@@ -14,7 +14,7 @@ const GetCountryState = ({ otherProps = null, value = '', name = '' }) => {
     const appConfig = useSelector(getAppConfig);
     const [open, setOpen] = useState(false);
     const [items, setItems] = useState([]);
-    const [pickerValue, setPickerValue] = useState('');
+    const [pickerValue, setPickerValue] = useState(otherProps.values[name]);
 
     useEffect(() => {
         setItems(appConfig?.countryStates?.map(p => ({

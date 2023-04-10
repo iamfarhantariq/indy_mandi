@@ -62,7 +62,7 @@ const SellerStories = () => {
                     <Text style={styles.topDescription}>
                         Meet the Sellers of IndyMandi
                     </Text>
-                    <TouchableOpacity onPress={() => navigation.navigate('BecomeSeller')} style={styles.button}>
+                    <TouchableOpacity onPress={() => navigation.navigate('BecomeSeller', { sellerData: null })} style={styles.button}>
                         <Text style={styles.whiteText}>Become a Seller</Text>
                     </TouchableOpacity>
                 </View>
