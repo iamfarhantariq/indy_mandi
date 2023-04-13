@@ -15,6 +15,8 @@ import { useDispatch } from 'react-redux';
 import { ServiceGetProductDetail } from '../../services/ProductService';
 import { showToastHandler } from '../../helpers/common';
 import { setActivityIndicator } from '../../store/slices/appConfigSlice';
+import OrientationLocker from 'react-native-orientation-locker';
+import VideoPlayer from 'react-native-video-controls';
 
 const ProductDetail = ({ route }) => {
     const { productId } = route?.params;
@@ -23,6 +25,20 @@ const ProductDetail = ({ route }) => {
     const [productDetail, setProductDetail] = useState(null);
     const [moreProducts, setMoreProducts] = useState([]);
     const [similarProducts, setSimilarProducts] = useState([]);
+    const [videoLink, setVideoLink] = useState('');
+
+    useEffect(() => {
+        if (videoLink) {
+            OrientationLocker.unlockAllOrientations();
+            OrientationLocker.lockToLandscape();
+        } else {
+            OrientationLocker.lockToPortrait();
+        }
+
+        return () => {
+            OrientationLocker.lockToPortrait();
+        }
+    }, [videoLink]);
 
     useEffect(() => {
         if (productId) {
@@ -35,6 +51,7 @@ const ProductDetail = ({ route }) => {
     const getProductDetails = () => {
         dispatch(setActivityIndicator(true));
         ServiceGetProductDetail(productId).then(response => {
+            // ServiceGetProductDetail(160).then(response => {
             console.log({ response });
             dispatch(setActivityIndicator(false));
             setProductDetail(response?.data?.product);
@@ -45,10 +62,27 @@ const ProductDetail = ({ route }) => {
         });
     }
 
+    const getLinks = () => {
+        let links = [];
+
+        if (productDetail?.side_images) {
+            productDetail?.side_images?.forEach(element => {
+                links.push(element?.image);
+            });
+        }
+        if (productDetail?.videos) {
+            productDetail?.videos.forEach(element => {
+                links.push(element);
+            });
+        }
+
+        return links;
+    }
+
     return (
         <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }}>
             <ScrollView style={{ flex: 1 }} horizontal={false} nestedScrollEnabled showsVerticalScrollIndicator={false}>
-                <ImagesSlider images={productDetail?.side_images}/>
+                <ImagesSlider images={getLinks()} setVideoLink={setVideoLink} />
                 <ProductName productDetail={productDetail} />
                 <View style={{ marginHorizontal: 16 }}>
                     <Button text={'Buy it now'} handleClick={() => null} />
@@ -65,6 +99,26 @@ const ProductDetail = ({ route }) => {
                 </View>
             </ScrollView>
             <AddToCart productDetail={productDetail} />
+            {videoLink && (
+                <VideoPlayer
+                    source={{ uri: videoLink }}
+                    resizeMode={'contain'}
+                    tapAnywhereToPause={true}
+                    playInBackground={false}
+                    onBack={() => {
+                        setVideoLink('')
+                    }}
+                    style={{
+                        flex: 1,
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        bottom: 0,
+                        right: 0,
+                        zIndex: 100,
+                    }}
+                />
+            )}
         </View>
     )
 }
