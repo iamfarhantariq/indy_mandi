@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import AppStyle from '../../assets/styles/AppStyle'
 import HeaderWithBack from '../../components/Headers/HeaderWithBack'
 import Button from '../../components/Button'
-import { commonStyle } from '../../helpers/common'
+import { commonStyle, convertToFormDataObject } from '../../helpers/common'
 import InputFieldBase from '../../components/Input/InputFieldBase'
 import AppConfig from '../../helpers/config'
 import ArrowDown from '../../assets/images/arrow-down.svg';
@@ -11,155 +11,95 @@ import ArrowUp from '../../assets/images/arrow-up.svg';
 import HeadingAndDescription from '../../components/Store/HeadingAndDescription'
 import UploadIcon from '../../assets/images/add-images.svg';
 import { useNavigation } from '@react-navigation/native'
+import { useFormik } from 'formik';
+import Toast from 'react-native-toast-message';
+import GetCategories from '../../components/Store/GetCategories'
+import { useSelector } from 'react-redux'
+import { getProducts } from '../../store/slices/productsSlice'
 
 const AddProduct = ({ route }) => {
     const params = route?.params;
     const navigation = useNavigation();
+    const { categories } = useSelector(getProducts);
     const [opened, setOpened] = useState(false);
-    const [title, setTitle] = useState('');
-    const [category, setCategory] = useState('');
-    const [metaTags, setMetaTags] = useState('');
-    const [price, setPrice] = useState('');
-    const [discount, setDiscount] = useState('');
-    const [description, setDescription] = useState('');
-    const [fabric, setFabric] = useState('');
-    const [sizes, setSizes] = useState([]);
-    const [pattern, setPattern] = useState('');
-    const [neckType, setNeckType] = useState('');
-    const [sleeveLength, setSleeveLength] = useState('');
-    const [fitType, setFitType] = useState('');
-    const [itemWeight, setItemWeight] = useState('');
-    const [care, setCare] = useState('');
-    const [shipTo, setShipTo] = useState('');
+    const [category, setCategory] = useState(categories);
+    const [subCategory, setSubCategory] = useState([]);
+    const [grandCategory, setGrandCategory] = useState([]);
+    const [childCategory, setChildCategory] = useState([]);
     const [isReturnable, setIsReturnable] = useState(true);
-    const [days, setDays] = useState('');
-    const [condition, setCondition] = useState('');
 
-    const GeneralInfo = () => (
-        <View>
-            <InputFieldBase
-                title={'Title'}
-                placeholder={'Title'}
-                value={title}
-                onTextChange={(t) => setTitle(t)}
-            />
-            <InputFieldBase
-                title={'Category'}
-                placeholder={'Category'}
-                value={category}
-                onTextChange={(t) => setCategory(t)}
-            />
-            <InputFieldBase
-                title={'Meta tags'}
-                placeholder={'Meta tags'}
-                value={metaTags}
-                onTextChange={(t) => setMetaTags(t)}
-            />
+    const _initialValues = {
+        product_name: '',
+        category_id: '',
+        subcategory_id: '',
+        grandcategory_id: '',
+        childcategory_id: '',
+        product_tags: '',
+        price: '',
+        offer_price: '',
+        product_detail: '',
+        front_image: '',
+        side_image: [],
+        is_returnable: 1,
+        no_of_days: '',
+        return_codition: '',
+        vedios: [],
+    }
 
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <View style={{ width: '49%' }}>
-                    <InputFieldBase
-                        title={'Price'}
-                        placeholder={'Price'}
-                        value={price}
-                        onTextChange={(t) => setPrice(t)}
-                    />
-                </View>
-                <View style={{ width: '49%' }}>
-                    <InputFieldBase
-                        title={'Discounted price'}
-                        placeholder={'Discounted price'}
-                        value={discount}
-                        onTextChange={(t) => setDiscount(t)}
-                    />
-                </View>
-            </View>
+    const {
+        errors,
+        touched,
+        values,
+        setFieldValue,
+        setFieldTouched,
+        handleBlur,
+        handleSubmit,
+        handleReset,
+    } = useFormik({
+        initialValues: _initialValues,
+        onSubmit: (values) => {
+            console.log({ values });
 
-            <InputFieldBase
-                title={'Description'}
-                placeholder={'Description'}
-                value={description}
-                numberOfLines={2}
-                onTextChange={(t) => setDescription(t)}
-            />
-        </View>
-    )
+            const formData = convertToFormDataObject(values);
+            console.log({ formData });
+            // dispatch(setActivityIndicator(true));
+            // ServicePostRaiseDispute(formData).then(async (response) => {
+            //     console.log({ response });
+            //     dispatch(setActivityIndicator(false));
+            //     Toast.show({
+            //         type: 'success',
+            //         text1: 'Success',
+            //         text2: response?.message,
+            //     });
+            //     handleReset();
+            //     navigation.pop();
+            // }).catch(e => {
+            //     showToastHandler(e, dispatch);
+            // });
+        },
+        validationSchema: null,
+    });
 
-    const SubTypes = () => opened && (
-        <View>
-            <InputFieldBase
-                title={'Fabric'}
-                placeholder={'Fabric'}
-                value={fabric}
-                onTextChange={(t) => setFabric(t)}
-            />
+    const otherProps = { values, errors, touched, setFieldValue, setFieldTouched, handleBlur };
 
-            <Text style={{ ...commonStyle('600', 14, 'primaryColorA'), marginTop: 16, marginBottom: 8 }}>Size</Text>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
-                {['xs', 's', 'm', 'l', 'xl', '2xl'].map((s, i) => (
-                    <TouchableOpacity
-                        key={i + s} onPress={() => {
-                            let _sizes = [...sizes];
-                            if (_sizes.includes(s)) {
-                                _sizes = _sizes.filter(_s => _s !== s);
-                            } else {
-                                _sizes.push(s);
-                            }
-                            setSizes(_sizes);
-                        }}
-                        style={{
-                            ...styles.sizeContainer,
-                            borderColor: sizes.includes(s) ? AppStyle.colorSet.primaryColorB : AppStyle.colorSet.borderLightGrayColor
-                        }}>
-                        <Text style={styles.sText}>{s}</Text>
-                    </TouchableOpacity>
-                ))}
-            </View>
-
-            <InputFieldBase
-                title={'Pattern'}
-                placeholder={'Pattern'}
-                value={pattern}
-                onTextChange={(t) => setPattern(t)}
-            />
-
-            <InputFieldBase
-                title={'Neck Type'}
-                placeholder={'Neck Type'}
-                value={neckType}
-                onTextChange={(t) => setNeckType(t)}
-            />
-
-            <InputFieldBase
-                title={'Sleeve length'}
-                placeholder={'Sleeve length'}
-                value={sleeveLength}
-                onTextChange={(t) => setSleeveLength(t)}
-            />
-
-            <InputFieldBase
-                title={'Fit Type'}
-                placeholder={'Fit Type'}
-                value={fitType}
-                onTextChange={(t) => setFitType(t)}
-            />
-
-            <InputFieldBase
-                title={'Item Weight'}
-                placeholder={'Item Weight'}
-                value={itemWeight}
-                onTextChange={(t) => setItemWeight(t)}
-            />
-
-            <InputFieldBase
-                title={'Care'}
-                placeholder={'Care'}
-                value={care}
-                onTextChange={(t) => setCare(t)}
-            />
-
-        </View>
-    );
+    const handleOnSelect = (item, name) => {
+        if (name === 'category_id' && item?.subTypes?.length) {
+            setFieldValue('subcategory_id', '', true);
+            setFieldValue('grandcategory_id', '', true);
+            setFieldValue('childcategory_id', '', true);
+            setSubCategory(item?.subTypes);
+            setGrandCategory([]);
+            setChildCategory([]);
+        } else if (name === 'subcategory_id' && item?.subTypes?.length) {
+            setFieldValue('grandcategory_id', '', true);
+            setFieldValue('childcategory_id', '', true);
+            setGrandCategory(item?.subTypes);
+            setChildCategory([]);
+        } else if (name === 'grandcategory_id' && item?.subTypes?.length) {
+            setFieldValue('childcategory_id', '', true);
+            setChildCategory(item?.subTypes);
+        }
+    }
 
     const ProductMedia = (props) => {
         const MediaContainer = () => (
@@ -200,51 +140,6 @@ const AddProduct = ({ route }) => {
         )
     }
 
-    const ShipReturnPolicy = () => (
-        <View>
-            <InputFieldBase
-                title={'Where do you ship to?*'}
-                placeholder={'All India'}
-                value={shipTo}
-                onTextChange={(t) => setShipTo(t)}
-            />
-
-            <Text style={{ ...commonStyle('600', 14, 'primaryColorA'), marginBottom: 8 }}>Is this item returnable?</Text>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
-                <TouchableOpacity onPress={() => setIsReturnable(true)}
-                    style={{
-                        ...styles.returnContainer,
-                        borderColor: isReturnable ? AppStyle.colorSet.primaryColorB : AppStyle.colorSet.borderLightGrayColor
-                    }}>
-                    <Text style={styles.sText}>Yes</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => setIsReturnable(false)}
-                    style={{
-                        ...styles.returnContainer,
-                        borderColor: !isReturnable ? AppStyle.colorSet.primaryColorB : AppStyle.colorSet.borderLightGrayColor
-                    }}>
-                    <Text style={styles.sText}>No</Text>
-                </TouchableOpacity>
-            </View>
-
-            {isReturnable && <>
-                <InputFieldBase
-                    title={'Within how many days?'}
-                    placeholder={'Within how many days'}
-                    value={days}
-                    onTextChange={(t) => setDays(t)}
-                />
-
-                <InputFieldBase
-                    title={'Conditions for Return'}
-                    placeholder={'Conditions for Return'}
-                    value={condition}
-                    onTextChange={(t) => setCondition(t)}
-                />
-            </>}
-        </View>
-    )
-
     return (
         <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }}>
             <HeaderWithBack title={params?.product ? 'Edit Product' : 'Add Product'} cross={true} />
@@ -256,9 +151,81 @@ const AddProduct = ({ route }) => {
                         <Text style={styles.middleText}>Store Details</Text>
                     </View>
 
-                    <GeneralInfo />
+                    <InputFieldBase
+                        otherProps={otherProps}
+                        title={'Title'}
+                        placeholder={'Title'}
+                        name='product_name'
+                    />
+                    <GetCategories
+                        onSelect={handleOnSelect}
+                        otherProps={otherProps}
+                        placeholder={'Category'}
+                        name='category_id'
+                        categories={category}
+                    />
+                    {category?.length && subCategory?.length ?
+                        <GetCategories
+                            onSelect={handleOnSelect}
+                            otherProps={otherProps}
+                            placeholder={'Sub category'}
+                            name='subcategory_id'
+                            categories={subCategory}
+                        /> : null
+                    }
+                    {subCategory?.length && grandCategory?.length ?
+                        <GetCategories
+                            onSelect={handleOnSelect}
+                            otherProps={otherProps}
+                            placeholder={'Grand category'}
+                            name='grandcategory_id'
+                            categories={grandCategory}
+                        /> : null
+                    }
+                    {grandCategory?.length && childCategory?.length ?
+                        <GetCategories
+                            onSelect={handleOnSelect}
+                            otherProps={otherProps}
+                            placeholder={'Child category'}
+                            name='childcategory_id'
+                            categories={childCategory}
+                        /> : null
+                    }
+                    <InputFieldBase
+                        otherProps={otherProps}
+                        title={'Meta tags'}
+                        placeholder={'Meta tags'}
+                        name='product_tags'
+                    />
 
-                    <TouchableOpacity onPress={() => setOpened(!opened)} style={styles.headerContainer}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <View style={{ width: '49%' }}>
+                            <InputFieldBase
+                                otherProps={otherProps}
+                                title={'Price'}
+                                placeholder={'Price'}
+                                name='price'
+                            />
+                        </View>
+                        <View style={{ width: '49%' }}>
+                            <InputFieldBase
+                                otherProps={otherProps}
+                                title={'Discounted price'}
+                                placeholder={'Discounted price'}
+                                name='offer_price'
+                            />
+                        </View>
+                    </View>
+
+                    <InputFieldBase
+                        otherProps={otherProps}
+                        title={'Description'}
+                        placeholder={'Description'}
+                        numberOfLines={2}
+                        name='product_detail'
+                    />
+
+                    {/* <TouchableOpacity onPress={() => setOpened(!opened)} style={styles.headerContainer}>
                         <Text style={styles.headerHeading}>
                             Additional Information
                         </Text>
@@ -267,7 +234,83 @@ const AddProduct = ({ route }) => {
                         </View>
                     </TouchableOpacity>
 
-                    <SubTypes />
+                    <InputFieldBase
+                        otherProps={otherProps}
+                        title={'Fabric'}
+                        placeholder={'Fabric'}
+                        value={fabric}
+                        onTextChange={(t) => setFabric(t)}
+                    />
+
+                    <Text style={{ ...commonStyle('600', 14, 'primaryColorA'), marginTop: 16, marginBottom: 8 }}>Size</Text>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
+                        {['xs', 's', 'm', 'l', 'xl', '2xl'].map((s, i) => (
+                            <TouchableOpacity
+                                key={i + s} onPress={() => {
+                                    let _sizes = [...sizes];
+                                    if (_sizes.includes(s)) {
+                                        _sizes = _sizes.filter(_s => _s !== s);
+                                    } else {
+                                        _sizes.push(s);
+                                    }
+                                    setSizes(_sizes);
+                                }}
+                                style={{
+                                    ...styles.sizeContainer,
+                                    borderColor: sizes.includes(s) ? AppStyle.colorSet.primaryColorB : AppStyle.colorSet.borderLightGrayColor
+                                }}>
+                                <Text style={styles.sText}>{s}</Text>
+                            </TouchableOpacity>
+                        ))}
+                    </View>
+
+                    <InputFieldBase
+                        otherProps={otherProps}
+                        title={'Pattern'}
+                        placeholder={'Pattern'}
+                        value={pattern}
+                        onTextChange={(t) => setPattern(t)}
+                    />
+
+                    <InputFieldBase
+                        otherProps={otherProps}
+                        title={'Neck Type'}
+                        placeholder={'Neck Type'}
+                        value={neckType}
+                        onTextChange={(t) => setNeckType(t)}
+                    />
+
+                    <InputFieldBase
+                        otherProps={otherProps}
+                        title={'Sleeve length'}
+                        placeholder={'Sleeve length'}
+                        value={sleeveLength}
+                        onTextChange={(t) => setSleeveLength(t)}
+                    />
+
+                    <InputFieldBase
+                        otherProps={otherProps}
+                        title={'Fit Type'}
+                        placeholder={'Fit Type'}
+                        value={fitType}
+                        onTextChange={(t) => setFitType(t)}
+                    />
+
+                    <InputFieldBase
+                        otherProps={otherProps}
+                        title={'Item Weight'}
+                        placeholder={'Item Weight'}
+                        value={itemWeight}
+                        onTextChange={(t) => setItemWeight(t)}
+                    />
+
+                    <InputFieldBase
+                        otherProps={otherProps}
+                        title={'Care'}
+                        placeholder={'Care'}
+                        value={care}
+                        onTextChange={(t) => setCare(t)}
+                    /> */}
 
                     <ProductMedia />
 
@@ -275,17 +318,58 @@ const AddProduct = ({ route }) => {
                         <Text style={styles.middleText}>Shipping & return policy</Text>
                     </View>
 
-                    <ShipReturnPolicy />
+                    {/* <InputFieldBase
+                        otherProps={otherProps}
+                        title={'Where do you ship to?*'}
+                        placeholder={'All India'}
+                        value={shipTo}
+                        onTextChange={(t) => setShipTo(t)}
+                    /> */}
+
+                    <Text style={{ ...commonStyle('600', 14, 'primaryColorA'), marginBottom: 8 }}>Is this item returnable?</Text>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
+                        <TouchableOpacity onPress={() => { 
+                            setIsReturnable(true);
+                            setFieldValue('is_returnable', 1, true);
+                         }}
+                            style={{
+                                ...styles.returnContainer,
+                                borderColor: isReturnable ? AppStyle.colorSet.primaryColorB : AppStyle.colorSet.borderLightGrayColor
+                            }}>
+                            <Text style={styles.sText}>Yes</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => { 
+                            setIsReturnable(false);
+                            setFieldValue('is_returnable', 0, true);
+                         }}
+                            style={{
+                                ...styles.returnContainer,
+                                borderColor: !isReturnable ? AppStyle.colorSet.primaryColorB : AppStyle.colorSet.borderLightGrayColor
+                            }}>
+                            <Text style={styles.sText}>No</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                    {isReturnable && <>
+                        <InputFieldBase
+                            otherProps={otherProps}
+                            title={'Within how many days?'}
+                            placeholder={'Within how many days'}
+                            name='no_of_days'
+                        />
+
+                        <InputFieldBase
+                            otherProps={otherProps}
+                            title={'Conditions for Return'}
+                            placeholder={'Conditions for Return'}
+                            name='return_codition'
+                        />
+                    </>}
 
                 </View>
             </ScrollView>
-            <View style={{ ...AppStyle.buttonContainerBottom, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <View style={{ width: '49%' }}>
-                    <Button text={'Preview'} handleClick={() => navigation.navigate('BuyPlan')} />
-                </View>
-                <View style={{ width: '49%' }}>
-                    <Button text={'Save'} fill={true} handleClick={() => navigation.navigate('BuyPlan')} />
-                </View>
+            <View style={AppStyle.buttonContainerBottom}>
+                <Button text={'Create'} fill={true} handleClick={handleSubmit} />
             </View>
         </View>
     )
