@@ -29,32 +29,10 @@ const AddProduct = ({ route }) => {
     const [isReturnable, setIsReturnable] = useState(true);
 
     const _initialValues = {
-        product_name: '',
-        category_id: '',
-        subcategory_id: '',
-        grandcategory_id: '',
-        childcategory_id: '',
-        product_tags: '',
-        price: '',
-        offer_price: '',
-        product_detail: '',
-        front_image: '',
-        side_image: [],
-        is_returnable: 1,
-        no_of_days: '',
-        return_codition: '',
-        vedios: [],
+        product_name: '', category_id: '', subcategory_id: '', grandcategory_id: '', childcategory_id: '', product_tags: '', price: '', offer_price: '', product_detail: '', front_image: '', side_image: [], is_returnable: 1, no_of_days: '', return_codition: '', vedios: [],
     }
 
-    const {
-        errors,
-        touched,
-        values,
-        setFieldValue,
-        setFieldTouched,
-        handleBlur,
-        handleSubmit,
-        handleReset,
+    const { errors, touched, values, setFieldValue, setFieldTouched, handleBlur, handleSubmit, handleReset,
     } = useFormik({
         initialValues: _initialValues,
         onSubmit: (values) => {
@@ -151,79 +129,29 @@ const AddProduct = ({ route }) => {
                         <Text style={styles.middleText}>Store Details</Text>
                     </View>
 
-                    <InputFieldBase
-                        otherProps={otherProps}
-                        title={'Title'}
-                        placeholder={'Title'}
-                        name='product_name'
-                    />
-                    <GetCategories
-                        onSelect={handleOnSelect}
-                        otherProps={otherProps}
-                        placeholder={'Category'}
-                        name='category_id'
-                        categories={category}
-                    />
+                    <InputFieldBase otherProps={otherProps} title={'Title'} placeholder={'Title'} name='product_name' />
+                    <GetCategories onSelect={handleOnSelect} otherProps={otherProps} placeholder={'Category'} name='category_id' categories={category} />
                     {category?.length && subCategory?.length ?
-                        <GetCategories
-                            onSelect={handleOnSelect}
-                            otherProps={otherProps}
-                            placeholder={'Sub category'}
-                            name='subcategory_id'
-                            categories={subCategory}
-                        /> : null
+                        <GetCategories onSelect={handleOnSelect} otherProps={otherProps} placeholder={'Sub category'} name='subcategory_id' categories={subCategory} /> : null
                     }
                     {subCategory?.length && grandCategory?.length ?
-                        <GetCategories
-                            onSelect={handleOnSelect}
-                            otherProps={otherProps}
-                            placeholder={'Grand category'}
-                            name='grandcategory_id'
-                            categories={grandCategory}
-                        /> : null
+                        <GetCategories onSelect={handleOnSelect} otherProps={otherProps} placeholder={'Grand category'} name='grandcategory_id' categories={grandCategory} /> : null
                     }
                     {grandCategory?.length && childCategory?.length ?
-                        <GetCategories
-                            onSelect={handleOnSelect}
-                            otherProps={otherProps}
-                            placeholder={'Child category'}
-                            name='childcategory_id'
-                            categories={childCategory}
-                        /> : null
+                        <GetCategories onSelect={handleOnSelect} otherProps={otherProps} placeholder={'Child category'} name='childcategory_id' categories={childCategory} /> : null
                     }
-                    <InputFieldBase
-                        otherProps={otherProps}
-                        title={'Meta tags'}
-                        placeholder={'Meta tags'}
-                        name='product_tags'
-                    />
+                    <InputFieldBase otherProps={otherProps} title={'Meta tags'} placeholder={'Meta tags'} name='product_tags' />
 
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                         <View style={{ width: '49%' }}>
-                            <InputFieldBase
-                                otherProps={otherProps}
-                                title={'Price'}
-                                placeholder={'Price'}
-                                name='price'
-                            />
+                            <InputFieldBase otherProps={otherProps} title={'Price'} placeholder={'Price'} name='price' />
                         </View>
                         <View style={{ width: '49%' }}>
-                            <InputFieldBase
-                                otherProps={otherProps}
-                                title={'Discounted price'}
-                                placeholder={'Discounted price'}
-                                name='offer_price'
-                            />
+                            <InputFieldBase otherProps={otherProps} title={'Discounted price'} placeholder={'Discounted price'} name='offer_price' />
                         </View>
                     </View>
 
-                    <InputFieldBase
-                        otherProps={otherProps}
-                        title={'Description'}
-                        placeholder={'Description'}
-                        numberOfLines={2}
-                        name='product_detail'
-                    />
+                    <InputFieldBase otherProps={otherProps} title={'Description'} placeholder={'Description'} numberOfLines={2} name='product_detail' />
 
                     {/* <TouchableOpacity onPress={() => setOpened(!opened)} style={styles.headerContainer}>
                         <Text style={styles.headerHeading}>
@@ -328,20 +256,20 @@ const AddProduct = ({ route }) => {
 
                     <Text style={{ ...commonStyle('600', 14, 'primaryColorA'), marginBottom: 8 }}>Is this item returnable?</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16 }}>
-                        <TouchableOpacity onPress={() => { 
+                        <TouchableOpacity onPress={() => {
                             setIsReturnable(true);
                             setFieldValue('is_returnable', 1, true);
-                         }}
+                        }}
                             style={{
                                 ...styles.returnContainer,
                                 borderColor: isReturnable ? AppStyle.colorSet.primaryColorB : AppStyle.colorSet.borderLightGrayColor
                             }}>
                             <Text style={styles.sText}>Yes</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => { 
+                        <TouchableOpacity onPress={() => {
                             setIsReturnable(false);
                             setFieldValue('is_returnable', 0, true);
-                         }}
+                        }}
                             style={{
                                 ...styles.returnContainer,
                                 borderColor: !isReturnable ? AppStyle.colorSet.primaryColorB : AppStyle.colorSet.borderLightGrayColor
