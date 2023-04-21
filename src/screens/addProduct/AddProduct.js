@@ -1,9 +1,9 @@
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ImageBackground, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import AppStyle from '../../assets/styles/AppStyle'
 import HeaderWithBack from '../../components/Headers/HeaderWithBack'
 import Button from '../../components/Button'
-import { commonStyle, convertToFormDataObject } from '../../helpers/common'
+import { commonStyle, convertToFormDataObject, showToastHandler } from '../../helpers/common'
 import InputFieldBase from '../../components/Input/InputFieldBase'
 import AppConfig from '../../helpers/config'
 import ArrowDown from '../../assets/images/arrow-down.svg';
@@ -14,52 +14,63 @@ import { useNavigation } from '@react-navigation/native'
 import { useFormik } from 'formik';
 import Toast from 'react-native-toast-message';
 import GetCategories from '../../components/Store/GetCategories'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { getProducts } from '../../store/slices/productsSlice'
+import { getLoginConfig } from '../../store/slices/loginConfigSlice';
+import ImagePicker from 'react-native-image-crop-picker';
+import { ServiceCreateProductToStore, ServiceUploadImageForStore } from '../../services/ProductService'
+import { setActivityIndicator } from '../../store/slices/appConfigSlice'
+import NoOfDaysDropDown from '../../components/Store/NoOfDaysDropDown'
 
 const AddProduct = ({ route }) => {
     const params = route?.params;
+    const dispatch = useDispatch();
     const navigation = useNavigation();
     const { categories } = useSelector(getProducts);
+    const { user } = useSelector(getLoginConfig);
+    const { other_detail } = user;
+    const front_image_dimension = other_detail?.crop_dimension?.product_front_image;
+    const side_image_dimension = other_detail?.crop_dimension?.product_side_image;
     const [opened, setOpened] = useState(false);
     const [category, setCategory] = useState(categories);
     const [subCategory, setSubCategory] = useState([]);
     const [grandCategory, setGrandCategory] = useState([]);
     const [childCategory, setChildCategory] = useState([]);
     const [isReturnable, setIsReturnable] = useState(true);
+    const [images, setImages] = useState([...Array(other_detail?.product_no_of_side_images + 1).keys()].map(i => ({ serverName: '', localImage: null })));
+    const [videos, setVideos] = useState([...Array(other_detail?.product_no_of_vedios).keys()].map(i => ({ localPath: null, mimeVideo: null })));
 
     const _initialValues = {
         product_name: '', category_id: '', subcategory_id: '', grandcategory_id: '', childcategory_id: '', product_tags: '', price: '', offer_price: '', product_detail: '', front_image: '', side_image: [], is_returnable: 1, no_of_days: '', return_codition: '', vedios: [],
     }
 
-    const { errors, touched, values, setFieldValue, setFieldTouched, handleBlur, handleSubmit, handleReset,
-    } = useFormik({
+    const { errors, touched, values, setFieldValue, setFieldTouched, handleBlur, handleSubmit, handleReset } = useFormik({
         initialValues: _initialValues,
         onSubmit: (values) => {
             console.log({ values });
-
             const formData = convertToFormDataObject(values);
             console.log({ formData });
-            // dispatch(setActivityIndicator(true));
-            // ServicePostRaiseDispute(formData).then(async (response) => {
-            //     console.log({ response });
-            //     dispatch(setActivityIndicator(false));
-            //     Toast.show({
-            //         type: 'success',
-            //         text1: 'Success',
-            //         text2: response?.message,
-            //     });
-            //     handleReset();
-            //     navigation.pop();
-            // }).catch(e => {
-            //     showToastHandler(e, dispatch);
-            // });
+            dispatch(setActivityIndicator(true));
+            ServiceCreateProductToStore(formData).then(async (response) => {
+                console.log({ response });
+                dispatch(setActivityIndicator(false));
+                Toast.show({
+                    type: 'success',
+                    text1: 'Success',
+                    text2: 'Success',
+                });
+                handleReset();
+                navigation.pop();
+            }).catch(e => {
+                showToastHandler(e, dispatch);
+            });
         },
         validationSchema: null,
     });
 
     const otherProps = { values, errors, touched, setFieldValue, setFieldTouched, handleBlur };
 
+    // This handles categories childs.
     const handleOnSelect = (item, name) => {
         if (name === 'category_id' && item?.subTypes?.length) {
             setFieldValue('subcategory_id', '', true);
@@ -79,20 +90,118 @@ const AddProduct = ({ route }) => {
         }
     }
 
-    const ProductMedia = (props) => {
-        const MediaContainer = () => (
-            <TouchableOpacity onPress={() => navigation.navigate('CropImage')} style={styles.mediaContainer}>
-                <UploadIcon style={{ color: 'white' }} />
-                <Text style={styles.text}>Side image {props._index}</Text>
-            </TouchableOpacity>
-        )
+    const ProductMedia = () => {
+
+        const openGallery = async (_index) => {
+            ImagePicker.openPicker({
+                width: (_index === -1 ? front_image_dimension?.width : side_image_dimension?.width) || 400,
+                height: (_index === -1 ? front_image_dimension?.height : side_image_dimension?.height) || 400,
+                cropping: true,
+                mediaType: 'photo',
+            }).then(async image => {
+                console.log(image);
+                const imageUri = Platform.OS === 'ios' ? image?.sourceURL : image?.path
+                const mimeImage = {
+                    uri: imageUri,
+                    type: image?.mime,
+                    name: imageUri.split("/").pop(),
+                }
+                let _images = [...images];
+                _images[_index].localImage = imageUri;
+
+                const payload = {
+                    type: _index === 0 ? 'product_front_image' : 'product_side_image',
+                    image: mimeImage,
+                };
+
+                console.log({ payload });
+
+                const formData = convertToFormDataObject(payload);
+                console.log({ formData });
+
+                dispatch(setActivityIndicator(true));
+                ServiceUploadImageForStore(formData).then(response => {
+                    console.log({ response });
+                    _images[_index].serverName = response?.data?.image_name;
+                    setImages(_images);
+                    dispatch(setActivityIndicator(false));
+                }).catch(e => {
+                    showToastHandler(e, dispatch);
+                });
+            }).catch(e => {
+                console.log({ e });
+            });
+        }
+
+        const openGalleryVideos = async (_index) => {
+            ImagePicker.openPicker({
+                mediaType: "video",
+            }).then(async video => {
+                console.log(video);
+                const videoUri = Platform.OS === 'ios' ? video?.sourceURL : video?.path
+                const mimeVideo = {
+                    uri: videoUri,
+                    type: video?.mime,
+                    name: videoUri.split("/").pop(),
+                }
+                let _vidoes = [...videos];
+                _vidoes[_index].localPath = videoUri;
+                _vidoes[_index].mimeVideo = mimeVideo;
+                setImages(_vidoes);
+            }).catch(e => {
+                console.log({ e });
+            });
+        }
+
+        const MediaContainer = ({ _index, type }) => {
+            return (
+                <>
+                    {type === 'image' ?
+                        <>
+                            {images[_index]?.localImage && images[_index]?.serverName ?
+                                <ImageBackground
+                                    source={{ uri: images[_index]?.localImage }}
+                                    style={styles.mediaContainerServer}
+                                    imageStyle={{ borderRadius: 8, opacity: 0.7 }}
+                                    resizeMode={'cover'}>
+                                    <TouchableOpacity onPress={() => openGallery(_index)}>
+                                        <Text style={{ ...styles.imageNameText, color: AppStyle.colorSet.primaryColorA }}>X Change</Text>
+                                    </TouchableOpacity>
+                                </ImageBackground> :
+                                <TouchableOpacity onPress={() => openGallery(_index)} style={styles.mediaContainer}>
+                                    <UploadIcon style={{ color: 'white' }} />
+                                    <Text style={styles.text}>{_index === 0 ? `Front image` : `Side image ${_index}`}</Text>
+                                </TouchableOpacity>
+                            }
+                        </> :
+                        <>
+                            {videos[_index]?.localPath ?
+                                <ImageBackground
+                                    source={require('../../assets/images/play_button.png')}
+                                    style={{ ...styles.mediaContainerServer }}
+                                    imageStyle={{ borderRadius: 8, opacity: 0.7 }}
+                                    resizeMode={'cover'}>
+                                    <TouchableOpacity onPress={() => openGalleryVideos(_index)}>
+                                        <Text style={{ ...styles.imageNameText, color: AppStyle.colorSet.primaryColorA }}>X Change</Text>
+                                    </TouchableOpacity>
+                                </ImageBackground> :
+                                <TouchableOpacity onPress={() => openGalleryVideos(_index)} style={styles.mediaContainer}>
+                                    <UploadIcon style={{ color: 'white' }} />
+                                    <Text style={styles.text}>{`Video ${_index + 1}`}</Text>
+                                </TouchableOpacity>
+                            }
+                        </>
+                    }
+                </>
+            )
+        }
 
         return (
             <View>
                 <View style={{ marginTop: 33 }}>
                     <HeadingAndDescription
                         heading={'Product media'}
-                        description={"You can add upto 5 photos & videos of the product. It is suggested to show different angles of photos to show your item's most important qualities. The video won't feature sound, so let your product do the talking!"}
+                        description={`You can add upto ${other_detail?.product_no_of_side_images + 1} photos & videos of the product. It is suggested to show different angles of photos to show your item's most important qualities. The video won't feature sound, so let your product do the talking!`}
                         marginHorizontal={0}
                         textAlign='center'
                     />
@@ -101,16 +210,17 @@ const AddProduct = ({ route }) => {
                 <Text style={{ ...commonStyle('600', 14, 'primaryColorA'), marginBottom: 8 }}>Images</Text>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                     <View style={{ flexDirection: 'row' }}>
-                        {[1, 2, 3, 4, 5].map((_image, _index) => (
-                            <MediaContainer _image={_image} _index={_index} />
+                        <MediaContainer _image={null} _index={0} type='image' />
+                        {[...Array(other_detail?.product_no_of_side_images).keys()].map((_image, _index) => (
+                            <MediaContainer _index={_index + 1} type='image' />
                         ))}
                     </View>
                 </ScrollView>
 
                 <Text style={{ ...commonStyle('600', 14, 'primaryColorA'), marginVertical: 8 }}>Videos</Text>
                 <View style={{ flexDirection: 'row', marginBottom: 33 }}>
-                    {[1, 2].map((_image, _index) => (
-                        <MediaContainer _image={_image} _index={_index} />
+                    {[...Array(other_detail?.product_no_of_vedios).keys()].map((_image, _index) => (
+                        <MediaContainer _index={_index} type='video' />
                     ))}
                 </View>
 
@@ -140,7 +250,7 @@ const AddProduct = ({ route }) => {
                     {grandCategory?.length && childCategory?.length ?
                         <GetCategories onSelect={handleOnSelect} otherProps={otherProps} placeholder={'Child category'} name='childcategory_id' categories={childCategory} /> : null
                     }
-                    <InputFieldBase otherProps={otherProps} title={'Meta tags'} placeholder={'Meta tags'} name='product_tags' />
+                    <InputFieldBase otherProps={otherProps} title={'Meta tags'} placeholder={'season, dress, shoe'} name='product_tags' />
 
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                         <View style={{ width: '49%' }}>
@@ -279,9 +389,8 @@ const AddProduct = ({ route }) => {
                     </View>
 
                     {isReturnable && <>
-                        <InputFieldBase
+                        <NoOfDaysDropDown
                             otherProps={otherProps}
-                            title={'Within how many days?'}
                             placeholder={'Within how many days'}
                             name='no_of_days'
                         />
@@ -297,7 +406,29 @@ const AddProduct = ({ route }) => {
                 </View>
             </ScrollView>
             <View style={AppStyle.buttonContainerBottom}>
-                <Button text={'Create'} fill={true} handleClick={handleSubmit} />
+                <Button text={'Create'} fill={true} handleClick={() => {
+                    if (images.length && images[0]?.serverName) {
+                        let _images = [];
+                        images.forEach((_image, _index) => {
+                            if (_image?.serverName) {
+                                if (_index === 0) {
+                                    setFieldValue('front_image', _image?.serverName, true);
+                                } else {
+                                    _images.push(_image.serverName);
+                                }
+                            }
+                        });
+                        setFieldValue('side_image', _images, true);
+                    }
+                    if (videos.length && videos[0]?.localPath) {
+                        let _videos = [];
+                        videos.forEach((_vidoe, _index) => {
+                            _videos.push(_vidoe.mimeVideo);
+                        });
+                        setFieldValue('vedios', _videos, true);
+                    }
+                    handleSubmit();
+                }} />
             </View>
         </View>
     )
@@ -345,6 +476,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    mediaContainerServer: {
+        height: 88,
+        width: 88,
+        borderRadius: 8,
+        marginRight: 8,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
     text: {
         ...commonStyle('400', 10, 'whiteColor'),
         marginTop: 8
@@ -355,5 +494,8 @@ const styles = StyleSheet.create({
         height: 32,
         borderRadius: 22,
         justifyContent: 'center',
+    },
+    imageNameText: {
+        ...commonStyle('600', 12, 'primaryColorB'),
     }
 })

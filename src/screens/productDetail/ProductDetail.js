@@ -11,17 +11,19 @@ import AddToCart from '../../components/Store/AddToCart';
 import Reviews from '../../components/Store/Reviews';
 import ProductSection from '../../components/Products/ProductSection';
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ServiceGetProductDetail } from '../../services/ProductService';
 import { showToastHandler } from '../../helpers/common';
 import { setActivityIndicator } from '../../store/slices/appConfigSlice';
 import OrientationLocker from 'react-native-orientation-locker';
 import VideoPlayer from 'react-native-video-controls';
+import { getLoginConfig } from '../../store/slices/loginConfigSlice';
 
 const ProductDetail = ({ route }) => {
     const { productId } = route?.params;
     const dispatch = useDispatch();
     const navigation = useNavigation();
+    const loginConfig = useSelector(getLoginConfig);
     const [productDetail, setProductDetail] = useState(null);
     const [moreProducts, setMoreProducts] = useState([]);
     const [similarProducts, setSimilarProducts] = useState([]);
@@ -84,9 +86,13 @@ const ProductDetail = ({ route }) => {
             <ScrollView style={{ flex: 1 }} horizontal={false} nestedScrollEnabled showsVerticalScrollIndicator={false}>
                 <ImagesSlider images={getLinks()} setVideoLink={setVideoLink} />
                 <ProductName productDetail={productDetail} />
-                <View style={{ marginHorizontal: 16 }}>
-                    <Button text={'Buy it now'} handleClick={() => null} />
-                </View>
+                {loginConfig?.isLogin &&
+                    loginConfig?.user?.role !== 'v' &&
+                    loginConfig?.user?.store?.id !== item?.store_id &&
+                    <View style={{ marginHorizontal: 16 }}>
+                        <Button text={'Buy it now'} handleClick={() => null} />
+                    </View>
+                }
                 <SellerDetails productDetail={productDetail} />
                 <HeadingAndDescription heading={'Product details'} description={productDetail?.product_detail} />
                 <HeadingAndDescription heading={'About the brand '} description={productDetail?.about_brand} />
@@ -98,7 +104,11 @@ const ProductDetail = ({ route }) => {
                     <ProductSection items={similarProducts} title={'Similar Brands in this category'} />
                 </View>
             </ScrollView>
-            <AddToCart productDetail={productDetail} />
+            {loginConfig?.isLogin &&
+                loginConfig?.user?.role !== 'v' &&
+                loginConfig?.user?.store?.id !== item?.store_id &&
+                <AddToCart productDetail={productDetail} />
+            }
             {videoLink && (
                 <VideoPlayer
                     source={{ uri: videoLink }}

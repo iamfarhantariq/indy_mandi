@@ -69,9 +69,12 @@ const ProductName = ({ productDetail }) => {
                         <StarRating rating={4} />
                     </View>
                 </View>
-                {loginConfig?.isLogin && <TouchableOpacity onPress={getWishListListing} style={{ marginLeft: 16 }}>
-                    {liked ? <FavLiked /> : <FavBlank />}
-                </TouchableOpacity>}
+                {loginConfig?.isLogin &&
+                    loginConfig?.user?.role !== 'v' &&
+                    loginConfig?.user?.store?.id !== item?.store_id &&
+                    <TouchableOpacity onPress={getWishListListing} style={{ marginLeft: 16 }}>
+                        {liked ? <FavLiked /> : <FavBlank />}
+                    </TouchableOpacity>}
             </View>
             <Text style={styles.price} numberOfLines={1} lineBreakMode='tail'>
                 ₹{productDetail?.offer_price ? productDetail?.offer_price : productDetail?.price}

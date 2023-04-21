@@ -54,6 +54,8 @@ export const API_GET_STORE_OTHER_COLLECTION = `${BASE_URL}/store/collections`;
 export const API_GET_STORE_PRODUCTS = `${BASE_URL}/store/products`;
 export const API_GET_STORE_COLLECTION_SORTED_PRODUCTS = `${BASE_URL}/vendor/update-products-order`;
 export const API_GET_UPDATE_PRODUCT_STATUS = `${BASE_URL}/vendor/updateproductstatus`;
+export const API_UPLOAD_STORE_IMAGE = `${BASE_URL}/vendor/product/crop-image/store`;
+export const API_POST_CREATE_PRODUCT = `${BASE_URL}/vendor/product/store`;
 
 // Collection
 export const API_POST_NEW_COLLECTION = `${BASE_URL}/vendor/collection/store`;
