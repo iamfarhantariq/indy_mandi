@@ -17,7 +17,7 @@ const ImagesSlider = ({ images, setVideoLink }) => {
         <TouchableOpacity style={styles.videoContainer} onPress={() => {
           setVideoLink(item)
         }}>
-          <Image source={require('../../assets/images/play_button.png')} resizeMode='cover' style={{ height: 70, width: 70 }} />
+          <Image source={require('../../assets/images/play_button.jpg')} resizeMode='cover' style={{ height: 70, width: 70 }} />
         </TouchableOpacity>
         :
         <Image source={{ uri: item }} resizeMode='cover' style={{ height: 300 }} />}

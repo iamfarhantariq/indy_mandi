@@ -177,7 +177,7 @@ const AddProduct = ({ route }) => {
                         <>
                             {videos[_index]?.localPath ?
                                 <ImageBackground
-                                    source={require('../../assets/images/play_button.png')}
+                                    source={require('../../assets/images/play_button.jpg')}
                                     style={{ ...styles.mediaContainerServer }}
                                     imageStyle={{ borderRadius: 8, opacity: 0.7 }}
                                     resizeMode={'cover'}>
@@ -240,15 +240,15 @@ const AddProduct = ({ route }) => {
                     </View>
 
                     <InputFieldBase otherProps={otherProps} title={'Title'} placeholder={'Title'} name='product_name' />
-                    <GetCategories onSelect={handleOnSelect} otherProps={otherProps} placeholder={'Category'} name='category_id' categories={category} />
+                    <GetCategories onSelect={handleOnSelect} otherProps={otherProps} placeholder={'Category-Level-1'} name='category_id' categories={category} />
                     {category?.length && subCategory?.length ?
-                        <GetCategories onSelect={handleOnSelect} otherProps={otherProps} placeholder={'Sub category'} name='subcategory_id' categories={subCategory} /> : null
+                        <GetCategories onSelect={handleOnSelect} otherProps={otherProps} placeholder={'Category-Level-2'} name='subcategory_id' categories={subCategory} /> : null
                     }
                     {subCategory?.length && grandCategory?.length ?
-                        <GetCategories onSelect={handleOnSelect} otherProps={otherProps} placeholder={'Grand category'} name='grandcategory_id' categories={grandCategory} /> : null
+                        <GetCategories onSelect={handleOnSelect} otherProps={otherProps} placeholder={'Category-Level-3'} name='grandcategory_id' categories={grandCategory} /> : null
                     }
                     {grandCategory?.length && childCategory?.length ?
-                        <GetCategories onSelect={handleOnSelect} otherProps={otherProps} placeholder={'Child category'} name='childcategory_id' categories={childCategory} /> : null
+                        <GetCategories onSelect={handleOnSelect} otherProps={otherProps} placeholder={'Category-Level-4'} name='childcategory_id' categories={childCategory} /> : null
                     }
                     <InputFieldBase otherProps={otherProps} title={'Meta tags'} placeholder={'season, dress, shoe'} name='product_tags' />
 

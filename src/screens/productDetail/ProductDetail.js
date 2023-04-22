@@ -67,6 +67,10 @@ const ProductDetail = ({ route }) => {
     const getLinks = () => {
         let links = [];
 
+        if (productDetail?.front_image) {
+            links.push(productDetail?.front_image)
+        }
+
         if (productDetail?.side_images) {
             productDetail?.side_images?.forEach(element => {
                 links.push(element?.image);
