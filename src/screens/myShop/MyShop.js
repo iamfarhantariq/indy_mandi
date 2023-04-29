@@ -19,6 +19,7 @@ import PolicySectionStore from '../../components/Store/PolicySectionStore';
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
 import InputField from '../../components/Input/InputField';
 import { getLoginConfig } from '../../store/slices/loginConfigSlice';
+import { SheetManager } from 'react-native-actions-sheet';
 
 const MyShop = () => {
   const dispatch = useDispatch();
@@ -136,27 +137,38 @@ const MyShop = () => {
     fourth: FourthRoute,
   });
 
+  const onImageClick = () => {
+    SheetManager.show('example-two', {
+      payload: {
+        header: 'Choose your action',
+        actions: [
+          // { title: 'View photo', value: 'view' },
+          { title: 'Upload photo', value: 'edit' }
+        ],
+        filterHandler: (_action) => navigation.navigate('UserImage', { action: _action, prevRoute: 'store' })
+      }
+    });
+  }
+
   return (
     <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }}>
       <ScrollView
         showsVerticalScrollIndicator={false}>
-        <ImageBackground
-          resizeMode='cover'
-          source={{ uri: storeData?.store_banner_image }}
-          style={styles.imageContainer}
-        >
-          {/* <TouchableOpacity style={styles.buttonContainer} onPress={() => navigation.pop()}>
-            <BackLarge />
-          </TouchableOpacity> */}
-
-          <View style={styles.profileContainer}>
-            <Image
-              source={{ uri: storeData?.store_image }}
-              resizeMode='cover'
-              style={styles.imageStyle}
-            />
-          </View>
-        </ImageBackground>
+        <TouchableOpacity onPress={onImageClick}>
+          <ImageBackground
+            resizeMode='cover'
+            source={{ uri: storeData?.store_banner_image }}
+            style={styles.imageContainer}
+          >
+            <View style={styles.profileContainer}>
+              <Image
+                source={{ uri: storeData?.store_image }}
+                resizeMode='cover'
+                style={styles.imageStyle}
+              />
+            </View>
+          </ImageBackground>
+        </TouchableOpacity>
         <View style={{ marginHorizontal: 16, marginBottom: 16 }}>
           <Text style={styles.name}>{storeData?.store_name}</Text>
           <Text style={styles.description}>{storeData?.seller_name}</Text>

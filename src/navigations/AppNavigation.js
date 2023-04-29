@@ -79,6 +79,7 @@ import ChangeName from '../screens/changeName/ChangeName';
 import ChangeEmail from '../screens/changeEmail/ChangeEmail';
 import VerifyEmailLoggedUser from '../screens/verifyEmail/VerifyEmailLoggedUser';
 import { UpdatedUserInTheApp } from '../helpers/common';
+import ProductsToCollection from '../screens/addProductsToCollection/ProductsToCollection';
 
 const Tab = createBottomTabNavigator();
 
@@ -403,6 +404,7 @@ const AppNavigation = () => {
                     <AppStack.Screen name="ResetPasswordWithCode" component={ResetPasswordWithCode} />
                     <AppStack.Screen name="UserImage" component={UserImage} />
                     <AppStack.Screen name="VerifyEmailLoggedUser" component={VerifyEmailLoggedUser} />
+                    <AppStack.Screen name="ProductsToCollection" component={ProductsToCollection} />
                 </AppStack.Navigator>
             </NavigationContainer>
 

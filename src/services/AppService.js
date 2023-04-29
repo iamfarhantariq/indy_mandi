@@ -2,6 +2,7 @@ import { get, post, postMultipartData, put, putMultipartData, remove } from "./H
 import {
     API_DELETE_COLLECTION,
     API_DELETE_PRODUCT,
+    API_DELETE_PRODUCT_FROM_COLLECTION,
     API_DELETE_PRODUCT_FROM_WISHLISTS,
     API_GET_ALL_SELLER_STORIES,
     API_GET_BLOGS_CATEGORIES,
@@ -16,6 +17,7 @@ import {
     API_POST_DELETE_STORE,
     API_POST_DUPLICATE_PRODUCT,
     API_POST_NEW_COLLECTION,
+    API_POST_PRODUCT_TO_COLLECTION,
     API_POST_PRODUCT_TO_WISHLISTS,
     API_POST_STORE_ADDRESS,
     API_POST_USER_WISHLIST_STORE,
@@ -283,6 +285,37 @@ export const ServiceGetLogoutText = () => {
 export const ServiceDeleteStore = () => {
     return new Promise((resolve, reject) => {
         post(`${API_POST_DELETE_STORE}`).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const ServicePostProductToCollection = (targetCollectionId, productId, action = 'copy', currectCollection) => {
+    let URL = `${API_POST_PRODUCT_TO_COLLECTION}/${targetCollectionId}/product/${productId}/${action}/${currectCollection}`
+    return new Promise((resolve, reject) => {
+        post(URL).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const ServiceDeleteProductFromCollection = (collectionId, productId) => {
+    return new Promise((resolve, reject) => {
+        remove(`${API_DELETE_PRODUCT_FROM_COLLECTION}/${collectionId}/product/${productId}`).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const ServiceGetProductsForCollection = (collectionId) => {
+    return new Promise((resolve, reject) => {
+        get(`${API_POST_PRODUCT_TO_COLLECTION}/${collectionId}/products`).then(response => {
             resolve(response);
         }).catch(error => {
             reject(error);

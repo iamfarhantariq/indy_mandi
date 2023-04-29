@@ -122,7 +122,7 @@ const UserScreen = () => {
                     // { title: 'View photo', value: 'view' },
                     { title: 'Upload photo', value: 'edit' }
                 ],
-                filterHandler: (_action) => navigation.navigate('UserImage', { action: _action })
+                filterHandler: (_action) => navigation.navigate('UserImage', { action: _action, prevRoute: 'profile' })
             }
         });
     }

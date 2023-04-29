@@ -43,27 +43,32 @@ const UserImage = ({ route }) => {
             const formData = convertToFormDataObject(values);
             console.log({ formData });
             dispatch(setActivityIndicator(true));
-            ServiceUserChangeImage(formData).then(async (response) => {
-                console.log({ response });
-                await UpdatedUserInTheApp(dispatch);
-                dispatch(setActivityIndicator(false));
-                Toast.show({
-                    type: 'success',
-                    text1: 'Success',
-                    text2: response?.data?.message,
+            if (params?.prevRoute === 'store') {
+
+            } else {
+                ServiceUserChangeImage(formData).then(async (response) => {
+                    console.log({ response });
+                    await UpdatedUserInTheApp(dispatch);
+                    dispatch(setActivityIndicator(false));
+                    Toast.show({
+                        type: 'success',
+                        text1: 'Success',
+                        text2: response?.data?.message,
+                    });
+                    navigation.pop();
+                }).catch(e => {
+                    showToastHandler(e, dispatch);
                 });
-                navigation.pop();
-            }).catch(e => {
-                showToastHandler(e, dispatch);
-            });
+            }
         },
     });
 
     return (
         <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }}>
-            <HeaderWithBack title={'Profile Image'} cross={true} />
+            <HeaderWithBack title={params?.prevRoute === 'store' ? 'Banner Image' : 'Profile Image'} cross={true} />
             <View style={{ margin: 16, height: AppConfig.screenWidth - 32, width: AppConfig.screenWidth - 32 }}>
-                <UploadImages getImage={(blobfile) => setFieldValue('image', blobfile)} />
+                <UploadImages getImage={(blobfile) => setFieldValue('image', blobfile)}
+                    isBanner={params?.prevRoute === 'store'} />
             </View>
             <View style={AppStyle.buttonContainerBottom}>
                 <Button text={'Save Changes'} fill={true} handleClick={handleSubmit} />

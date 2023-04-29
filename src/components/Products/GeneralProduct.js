@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import WishIcon from '../../assets/images/wish-icon.svg';
 import WishIconLiked from '../../assets/images/wish-icon-liked.svg';
 import MoreOption from '../../assets/images/more-option-icon.svg';
+import MoreOptionVertical from '../../assets/images/more-option-v.svg';
 import AppStyle from '../../assets/styles/AppStyle';
 import AppConfig from '../../helpers/config';
 import { useNavigation } from '@react-navigation/native';
@@ -12,6 +13,7 @@ import { SheetManager } from 'react-native-actions-sheet';
 import Toast from 'react-native-toast-message';
 import { useSelector } from 'react-redux';
 import { getLoginConfig } from '../../store/slices/loginConfigSlice';
+import CheckBox from '@react-native-community/checkbox';
 
 const GeneralProduct = (
   {
@@ -22,7 +24,10 @@ const GeneralProduct = (
     optionIcon = false,
     handleOptions = null,
     handleToggle = null,
-    selectedCollection = null
+    selectedCollection = null,
+    checkBox = false,
+    checkBoxValue = false,
+    handleCheckBox = null,
   }) => {
   const navigation = useNavigation();
   const loginConfig = useSelector(getLoginConfig);
@@ -85,13 +90,28 @@ const GeneralProduct = (
           {loginConfig?.isLogin &&
             loginConfig?.user?.role !== 'v' &&
             loginConfig?.user?.store?.id !== item?.store_id &&
-            (optionIcon ?
-              <TouchableOpacity onPress={handleOptions} style={{ position: 'absolute', right: 0, top: 0 }}>
-                <MoreOption />
-              </TouchableOpacity> :
-              <TouchableOpacity onPress={getWishListListing} style={{ position: 'absolute', right: 0, top: 0 }}>
-                {liked ? <WishIconLiked /> : <WishIcon />}
-              </TouchableOpacity>)}
+            (<TouchableOpacity onPress={getWishListListing} style={{ position: 'absolute', right: 0, top: 0 }}>
+              {liked ? <WishIconLiked /> : <WishIcon />}
+            </TouchableOpacity>)}
+          {optionIcon &&
+            <TouchableOpacity onPress={handleOptions} style={{ position: 'absolute', right: 0, top: 0 }}>
+              <MoreOption />
+            </TouchableOpacity>}
+          {checkBox && (
+            <CheckBox
+              value={checkBoxValue}
+              onValueChange={handleCheckBox}
+              boxType='square'
+              onFillColor={AppStyle.colorSet.primaryColorB} // IOS
+              onTintColor={AppStyle.colorSet.whiteColor} // IOS
+              onCheckColor={AppStyle.colorSet.whiteColor} // IOS
+              tintColors={{ true: '#713A74', false: '#713A74' }} // Android
+              style={{
+                position: 'absolute', right: 0, top: 0,
+                transform: Platform.OS === 'ios' ? [{ scaleX: 0.7 }, { scaleY: 0.7 }] : [{ scaleX: 0.8 }, { scaleY: 0.8 }]
+              }}
+            />
+          )}
         </ImageBackground>
         <Text style={{ ...styles.name, width: flexStyle.width, marginLeft: index === 0 && !flex ? 16 : 0 }}>{item?.name}</Text>
         <View style={{ flexDirection: 'row' }}>

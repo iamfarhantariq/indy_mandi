@@ -245,7 +245,6 @@ const styles = StyleSheet.create({
         width: ((AppConfig.windowWidth / 1.08) / 2) - 24,
         borderRadius: 8
     },
-
     button: {
         borderRadius: 20,
         padding: 10,

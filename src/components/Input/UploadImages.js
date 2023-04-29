@@ -4,14 +4,19 @@ import AppStyle from '../../assets/styles/AppStyle';
 import UploadIcon from '../../assets/images/add-images.svg';
 import { commonStyle } from '../../helpers/common';
 import ImagePicker from 'react-native-image-crop-picker';
+import { useSelector } from 'react-redux';
+import { getLoginConfig } from '../../store/slices/loginConfigSlice';
 
-const UploadImages = ({ getImage = null, imageUrl = null }) => {
+const UploadImages = ({ getImage = null, imageUrl = null, isBanner = false }) => {
+    const { user } = useSelector(getLoginConfig);
+    const { other_detail } = user;
+    const banner_image = other_detail?.crop_dimension?.store_banner_image;
     const [cropedImage, setCropedImage] = useState(imageUrl);
 
     const openGallery = async () => {
         ImagePicker.openPicker({
-            width: 400,
-            height: 400,
+            width: isBanner ? banner_image?.width : 400,
+            height: isBanner ? banner_image?.height : 400,
             cropping: true,
             mediaType: 'photo',
         }).then(async image => {
