@@ -80,6 +80,8 @@ import ChangeEmail from '../screens/changeEmail/ChangeEmail';
 import VerifyEmailLoggedUser from '../screens/verifyEmail/VerifyEmailLoggedUser';
 import { UpdatedUserInTheApp } from '../helpers/common';
 import ProductsToCollection from '../screens/addProductsToCollection/ProductsToCollection';
+import SellerHandBook from '../screens/sellerHandbook/SellerHandBook';
+import SellerBookContent from '../screens/sellerBookContent/SellerBookContent';
 
 const Tab = createBottomTabNavigator();
 
@@ -405,6 +407,8 @@ const AppNavigation = () => {
                     <AppStack.Screen name="UserImage" component={UserImage} />
                     <AppStack.Screen name="VerifyEmailLoggedUser" component={VerifyEmailLoggedUser} />
                     <AppStack.Screen name="ProductsToCollection" component={ProductsToCollection} />
+                    <AppStack.Screen name="SellerHandBook" component={SellerHandBook} />
+                    <AppStack.Screen name="SellerBookContent" component={SellerBookContent} />
                 </AppStack.Navigator>
             </NavigationContainer>
 

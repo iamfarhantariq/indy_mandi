@@ -72,12 +72,14 @@ const ManageProducts = ({ route }) => {
                 setCollections(combinedCollection);
                 if (!selectedCollection) {
                     setSelectedCollection(combinedCollection[0]);
+                } else {
+                    setSelectedCollection({...selectedCollection});
                 }
             }).catch(e => {
-                showToastHandler(e, dispatch);
+                showToastHandler(e);
             });
         }).catch(e => {
-            showToastHandler(e, dispatch);
+            showToastHandler(e);
         });
     }
 
@@ -235,7 +237,7 @@ const ManageProducts = ({ route }) => {
             <TouchableOpacity onPress={() => {
                 setSelectedCollection(item);
             }} style={{ marginRight: 16, flexWrap: 'wrap' }}>
-                <Image resizeMode='cover' style={item === selectedCollection ? { ...selectedStyle, ...styles.imageStyle } : styles.imageStyle}
+                <Image resizeMode='cover' style={item?.id === selectedCollection?.id ? { ...selectedStyle, ...styles.imageStyle } : styles.imageStyle}
                     source={{ uri: item?.image }} />
                 <Text style={styles.typeText}>{item?.name}</Text>
             </TouchableOpacity>

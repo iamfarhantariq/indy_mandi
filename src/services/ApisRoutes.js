@@ -38,6 +38,10 @@ export const API_POST_DELETE_STORE = `${BASE_URL}/vendor/store/delete`;
 export const API_POST_UPDATE_STORE = `${BASE_URL}/vendor/store/update`;
 export const API_POST_PRODUCT_TO_COLLECTION = `${BASE_URL}/vendor/collection/add`;
 export const API_DELETE_PRODUCT_FROM_COLLECTION = `${BASE_URL}/vendor/collection/delete`;
+export const API_GET_FEATURE_ARTICLE = `${BASE_URL}/vendor/sellerhandbook/feature-article`;
+export const API_GET_SELLER_TYPES = `${BASE_URL}/vendor/sellerhandbook/categories`;
+export const API_GET_SELLER_CATEGORY_BOOK = `${BASE_URL}/vendor/sellerhandbook/articles`;
+export const API_GET_SINGLE_SELLER_CATEGORY_BOOK = `${BASE_URL}/vendor/sellerhandbook/articles/detail`;
 
 // IndyView 
 export const API_GET_DAYS_SLOTS = `${BASE_URL}/indyviews/getdates`;

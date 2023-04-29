@@ -102,10 +102,10 @@ const GeneralProduct = (
               value={checkBoxValue}
               onValueChange={handleCheckBox}
               boxType='square'
-              onFillColor={AppStyle.colorSet.primaryColorB} // IOS
-              onTintColor={AppStyle.colorSet.whiteColor} // IOS
-              onCheckColor={AppStyle.colorSet.whiteColor} // IOS
-              tintColors={{ true: '#713A74', false: '#713A74' }} // Android
+              onFillColor={AppStyle.colorSet.primaryColorA} // IOS
+              onTintColor={AppStyle.colorSet.primaryColorA} // IOS
+              onCheckColor={AppStyle.colorSet.primaryColorA} // IOS
+              tintColors={{ true: AppStyle.colorSet.primaryColorA, false: AppStyle.colorSet.primaryColorA }} // Android
               style={{
                 position: 'absolute', right: 0, top: 0,
                 transform: Platform.OS === 'ios' ? [{ scaleX: 0.7 }, { scaleY: 0.7 }] : [{ scaleX: 0.8 }, { scaleY: 0.8 }]

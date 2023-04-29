@@ -103,7 +103,7 @@ const UserScreen = () => {
             }
         },
         { title: 'Account settings', func: () => navigation.navigate('AccountSettings') },
-        { title: 'Seller handbook', func: () => null },
+        { title: 'Seller handbook', func: () => navigation.navigate('SellerHandBook') },
         { title: 'Raise a dispute', func: () => navigation.navigate('RaiseDispute') },
         { title: 'Logout', func: logoutFunction },
     ]

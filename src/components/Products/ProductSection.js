@@ -30,10 +30,8 @@ const ProductSection = ({ title, items = [], BG = '', color = null, route = '' }
                 <FlatList
                     horizontal
                     data={items}
-                    
                     key={(index) => title + index + 'product'}
                     renderItem={_renderItem}
-                    
                     showsHorizontalScrollIndicator={false}
                 />
             </View>

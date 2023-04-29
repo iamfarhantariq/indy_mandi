@@ -9,8 +9,12 @@ import {
     API_GET_BLOGS_EXPLORE,
     API_GET_COUNTRY_STATES,
     API_GET_DELETE_STORE_TEXT,
+    API_GET_FEATURE_ARTICLE,
     API_GET_PAYMENTS,
     API_GET_PAYMENTS_INVOICE,
+    API_GET_SELLER_CATEGORY_BOOK,
+    API_GET_SELLER_TYPES,
+    API_GET_SINGLE_SELLER_CATEGORY_BOOK,
     API_GET_SINGLE_SELLER_STORY,
     API_GET_USER_WISHLIST,
     API_GET_WISHLIST_LISTS,
@@ -313,9 +317,59 @@ export const ServiceDeleteProductFromCollection = (collectionId, productId) => {
     });
 }
 
-export const ServiceGetProductsForCollection = (collectionId) => {
+export const ServiceGetProductsForCollection = (collectionId, page) => {
     return new Promise((resolve, reject) => {
-        get(`${API_POST_PRODUCT_TO_COLLECTION}/${collectionId}/products`).then(response => {
+        get(`${API_POST_PRODUCT_TO_COLLECTION}/${collectionId}/products?page=${page}`).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const ServiceGetFeaturePost = () => {
+    return new Promise((resolve, reject) => {
+        get(`${API_GET_FEATURE_ARTICLE}`).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const ServiceGetSellerCategories = () => {
+    return new Promise((resolve, reject) => {
+        get(`${API_GET_SELLER_TYPES}`).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const ServicePostNewProducts = (collectionId, payload) => {
+    return new Promise((resolve, reject) => {
+        post(`${API_POST_PRODUCT_TO_COLLECTION}/${collectionId}/products`, payload).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const ServiceGetBooksOfCategory = (categoryId) => {
+    return new Promise((resolve, reject) => {
+        get(`${API_GET_SELLER_CATEGORY_BOOK}/${categoryId}`).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const ServiceGetSingleBooksOfCategory = (bookID) => {
+    return new Promise((resolve, reject) => {
+        get(`${API_GET_SINGLE_SELLER_CATEGORY_BOOK}/${bookID}`).then(response => {
             resolve(response);
         }).catch(error => {
             reject(error);
