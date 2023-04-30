@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import AppStyle from '../../assets/styles/AppStyle'
 import BackLarge from '../../assets/images/back-large.svg';
 import AppConfig from '../../helpers/config';
-import { commonStyle, showToastHandler } from '../../helpers/common';
+import { commonStyle, showToastHandler, UpdatedUserInTheApp } from '../../helpers/common';
 import StarRating from '../../components/Store/StarRating';
 import { useNavigation } from '@react-navigation/native';
 import Van from '../../assets/images/store-van.svg';
@@ -20,6 +20,8 @@ import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
 import InputField from '../../components/Input/InputField';
 import { getLoginConfig } from '../../store/slices/loginConfigSlice';
 import { SheetManager } from 'react-native-actions-sheet';
+import { ServiceDeleteStoreImage } from '../../services/AuthServices';
+import Toast from 'react-native-toast-message';
 
 const Store = ({ route }) => {
     const params = route?.params;
@@ -143,10 +145,29 @@ const Store = ({ route }) => {
             payload: {
                 header: 'Choose your action',
                 actions: [
-                    // { title: 'View photo', value: 'view' },
+                    { title: 'Delete photo', value: 'delete' },
                     { title: 'Upload photo', value: 'edit' }
                 ],
-                filterHandler: (_action) => navigation.navigate('UserImage', { action: _action, prevRoute: 'store' })
+                filterHandler: (_action) => {
+                    if (_action === 'delete') {
+                        dispatch(setActivityIndicator(true));
+                        ServiceDeleteStoreImage().then(async (response) => {
+                            console.log({ response });
+                            await UpdatedUserInTheApp(dispatch);
+                            dispatch(setActivityIndicator(false));
+                            Toast.show({
+                                type: 'success',
+                                text1: 'Success',
+                                text2: response?.data?.message,
+                            });
+                            getStoreDetail();
+                        }).catch(e => {
+                            showToastHandler(e, dispatch);
+                        });
+                    } else {
+                        navigation.navigate('UserImage', { action: _action, prevRoute: 'store' });
+                    }
+                }
             }
         });
     }
@@ -245,6 +266,7 @@ const styles = StyleSheet.create({
     imageContainer: {
         width: AppConfig.screenWidth,
         height: 160,
+        backgroundColor: AppStyle.colorSet.primaryColorC
     },
     buttonContainer: {
         position: 'absolute',

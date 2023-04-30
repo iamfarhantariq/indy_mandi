@@ -6,7 +6,7 @@ import UploadImages from '../../components/Input/UploadImages'
 import { useFormik } from 'formik'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
-import { ServiceUserChangeImage } from '../../services/AuthServices'
+import { ServiceChangeStoreImage, ServiceDeleteStoreImage, ServiceUserChangeImage } from '../../services/AuthServices'
 import { convertToFormDataObject, showToastHandler, UpdatedUserInTheApp } from '../../helpers/common';
 import Toast from 'react-native-toast-message';
 import { setActivityIndicator } from '../../store/slices/appConfigSlice'
@@ -44,7 +44,19 @@ const UserImage = ({ route }) => {
             console.log({ formData });
             dispatch(setActivityIndicator(true));
             if (params?.prevRoute === 'store') {
-
+                ServiceChangeStoreImage(formData).then(async (response) => {
+                    console.log({ response });
+                    await UpdatedUserInTheApp(dispatch);
+                    dispatch(setActivityIndicator(false));
+                    Toast.show({
+                        type: 'success',
+                        text1: 'Success',
+                        text2: response?.data?.message,
+                    });
+                    navigation.pop();
+                }).catch(e => {
+                    showToastHandler(e, dispatch);
+                });
             } else {
                 ServiceUserChangeImage(formData).then(async (response) => {
                     console.log({ response });

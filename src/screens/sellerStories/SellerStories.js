@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Image, View, Text, TouchableOpacity, FlatList } from 'react-native'
+import { ScrollView, StyleSheet, Image, View, Text, TouchableOpacity } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import AppStyle from '../../assets/styles/AppStyle';
 import HeaderWithBack from '../../components/Headers/HeaderWithBack'
@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import SellerStory from '../../components/SellerStory';
 import SellerStoryTwo from '../../components/SellerStoryTwo';
 import { ServiceGetAllSellerStories } from '../../services/AppService';
-import { setActivityIndicator } from '../../store/slices/appConfigSlice';
 import { showToastHandler } from '../../helpers/common';
 import { getLoginConfig } from '../../store/slices/loginConfigSlice';
 
