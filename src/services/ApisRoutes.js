@@ -42,6 +42,8 @@ export const API_GET_FEATURE_ARTICLE = `${BASE_URL}/vendor/sellerhandbook/featur
 export const API_GET_SELLER_TYPES = `${BASE_URL}/vendor/sellerhandbook/categories`;
 export const API_GET_SELLER_CATEGORY_BOOK = `${BASE_URL}/vendor/sellerhandbook/articles`;
 export const API_GET_SINGLE_SELLER_CATEGORY_BOOK = `${BASE_URL}/vendor/sellerhandbook/articles/detail`;
+export const API_GET_All_ORDER = `${BASE_URL}`;
+export const API_GET_All_STATS = `${BASE_URL}/vendor/widgets/qr-code`;
 
 // IndyView 
 export const API_GET_DAYS_SLOTS = `${BASE_URL}/indyviews/getdates`;

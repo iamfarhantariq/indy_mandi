@@ -119,7 +119,6 @@ const UserScreen = () => {
             payload: {
                 header: 'Choose your action',
                 actions: [
-                    // { title: 'View photo', value: 'view' },
                     { title: 'Upload photo', value: 'edit' }
                 ],
                 filterHandler: (_action) => navigation.navigate('UserImage', { action: _action, prevRoute: 'profile' })
@@ -137,7 +136,8 @@ const UserScreen = () => {
                                 resizeMode='cover' style={{ height: 40, width: 40, borderRadius: 50 }} />
                             : <UserAvatar />}
                     </TouchableOpacity>
-                    <Text style={styles.headerText}>Customer</Text>
+                    <Text style={styles.headerText}>{loginConfig?.user?.role === 'v' ||
+                        loginConfig?.user?.role === 's' ? 'Seller' : 'Customer'}</Text>
                 </View>
             </View>
             <View style={{ flex: 1, marginHorizontal: 16 }}>

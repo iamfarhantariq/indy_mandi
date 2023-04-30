@@ -4,7 +4,9 @@ import {
     API_DELETE_PRODUCT,
     API_DELETE_PRODUCT_FROM_COLLECTION,
     API_DELETE_PRODUCT_FROM_WISHLISTS,
+    API_GET_All_ORDER,
     API_GET_ALL_SELLER_STORIES,
+    API_GET_All_STATS,
     API_GET_BLOGS_CATEGORIES,
     API_GET_BLOGS_EXPLORE,
     API_GET_COUNTRY_STATES,
@@ -370,6 +372,26 @@ export const ServiceGetBooksOfCategory = (categoryId) => {
 export const ServiceGetSingleBooksOfCategory = (bookID) => {
     return new Promise((resolve, reject) => {
         get(`${API_GET_SINGLE_SELLER_CATEGORY_BOOK}/${bookID}`).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const ServiceGetOrders = (user = 'customer', type, page) => {
+    return new Promise((resolve, reject) => {
+        get(`${API_GET_All_ORDER}/${user}/all-orders?page=${page}&type=${type}`).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const ServiceGetStats= () => {
+    return new Promise((resolve, reject) => {
+        get(`${API_GET_All_STATS}`).then(response => {
             resolve(response);
         }).catch(error => {
             reject(error);

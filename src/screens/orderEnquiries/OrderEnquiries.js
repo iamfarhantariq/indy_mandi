@@ -1,53 +1,64 @@
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import { ActivityIndicator, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect } from 'react'
 import HeaderWithBack from '../../components/Headers/HeaderWithBack'
 import AppStyle from '../../assets/styles/AppStyle'
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import AppConfig from '../../helpers/config'
-import { commonStyle } from '../../helpers/common';
-
-const items = [
-    {
-        products: [
-            {
-                imageSource: require('../../assets/images/demo-category-image.jpeg'),
-                name: 'New Nike girl shoe', price: '$80.77', quantity: 5
-            },
-            {
-                imageSource: require('../../assets/images/demo-category-image.jpeg'),
-                name: 'New Nike girl shoe', price: '$80.77', quantity: 5
-            },
-        ],
-        orderDate: '2022-12-19 @ 17:51', totalPrice: '$ 660', orderNo: '#97hsSjfks09FkMMn'
-    },
-    {
-        products: [
-            {
-                imageSource: require('../../assets/images/demo-category-image.jpeg'),
-                name: 'New Nike girl shoe', price: '$80.77', quantity: 5
-            }
-        ],
-        orderDate: '2022-12-19 @ 17:51', totalPrice: '$ 660', orderNo: '#97hsSjfks09FkMMn'
-    },
-    {
-        products: [
-            {
-                imageSource: require('../../assets/images/demo-category-image.jpeg'),
-                name: 'New Nike girl shoe', price: '$80.77', quantity: 5
-            }
-        ],
-        orderDate: '2022-12-19 @ 17:51', totalPrice: '$ 660', orderNo: '#97hsSjfks09FkMMn'
-    }
-];
+import { commonStyle, showToastHandler } from '../../helpers/common';
+import { ServiceGetOrders } from '../../services/AppService';
+import { useSelector } from 'react-redux';
+import { getLoginConfig } from '../../store/slices/loginConfigSlice';
+import { useState } from 'react';
 
 const OrderEnquiries = () => {
-    const [index, setIndex] = React.useState(0);
-    const [routes] = React.useState([
-        { key: 'first', title: 'Enquired' },
-        { key: 'second', title: 'Payment Pending' },
-        { key: 'third', title: 'Confirmed' },
-        { key: 'fourth', title: 'Shipped' },
+    const loginConfig = useSelector(getLoginConfig);
+    const [loading, setLoading] = useState(false);
+    const [page, setPage] = useState(1);
+    const [lastPage, setLastPage] = useState(2);
+    const [index, setIndex] = useState(0);
+    const [orders, setOrders] = useState([]);
+    const [routes] = useState([
+        { key: 'first', title: 'Enquired', type: 'enquired' },
+        { key: 'second', title: 'Payment Pending', type: 'payment_pending', },
+        { key: 'third', title: 'Confirmed', type: 'confirmed', },
+        { key: 'fourth', title: 'Shipped', type: 'shipped' },
     ]);
+    const [justCame, setJustCame] = useState(true);
+
+    useEffect(() => {
+        getAllOrders();
+    }, [page]);
+
+    useEffect(() => {
+        if (!justCame) {
+            setOrders([]);
+            setPage(1);
+            getAllOrders(1);
+        } else {
+            setJustCame(false);
+        }
+    }, [index]);
+
+    const getAllOrders = (_page = null) => {
+        setLoading(true);
+        ServiceGetOrders(
+            loginConfig?.user?.role === 'u' ? 'customer' : 'vendor',
+            routes[index].type,
+            _page ? _page : page
+        ).then(response => {
+            console.log({ response });
+            if (page === 1) {
+                setOrders(response?.data?.data);
+            } else {
+                setOrders([...orders, ...response?.data?.data])
+            }
+            setLoading(false);
+            setLastPage(response?.data?.meta?.last_page);
+        }).catch(e => {
+            setLoading(false);
+            showToastHandler(e);
+        });
+    }
 
     const FirstRoute = () => (
         <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }} >
@@ -84,20 +95,28 @@ const OrderEnquiries = () => {
         return (
             <View style={{ flex: 1 }}>
                 <View style={styles.priceContainer}>
-                    <Text style={styles.pHeading}>Total orders enquired</Text>
-                    <Text style={styles.pPrice}>500</Text>
+                    <Text style={styles.pHeading}>{`Total orders ${routes[index]?.title?.toLocaleLowerCase()}`}</Text>
+                    <Text style={styles.pPrice}>{orders?.length || 0}</Text>
                 </View>
                 <View style={{ marginVertical: 8, flex: 1 }}>
                     <FlatList
-                        data={items}
-                        
+                        data={orders}
                         horizontal={false}
                         renderItem={SingleOrder}
                         key={index => 'item' + index + 'order'}
                         showsVerticalScrollIndicator={false}
                         nestedScrollEnabled
+                        onEndReached={info => {
+                            if (page > lastPage) return;
+                            setPage(page + 1);
+                        }}
                     />
                 </View>
+                {loading &&
+                    <View style={{ marginBottom: 20 }}>
+                        <ActivityIndicator size={'large'} />
+                    </View>
+                }
             </View>
         )
     }
@@ -112,7 +131,7 @@ const OrderEnquiries = () => {
             </View>
 
             <View style={{ flexDirection: 'row' }}>
-                <View style={{width: '40%'}}>
+                <View style={{ width: '40%' }}>
                     <Text style={styles.itemDetailText}>
                         Order placed
                     </Text>
@@ -123,23 +142,22 @@ const OrderEnquiries = () => {
                         Order no.
                     </Text>
                 </View>
-                <View style={{width: '60%'}}>
+                <View style={{ width: '60%' }}>
                     <Text style={styles.itemDetailTextR}>
-                        {item.orderDate}
+                        {item?.order_placed}
                     </Text>
                     <Text style={styles.itemDetailTextR}>
-                        {item.totalPrice}
+                        {item?.total}
                     </Text>
                     <Text style={styles.itemDetailTextR}>
-                        {item.orderNo}
+                        {item?.order_no}
                     </Text>
                 </View>
             </View>
 
             <View style={{ flex: 1 }}>
                 <FlatList
-                    data={item?.products}
-                    
+                    data={item?.order_detail || []}
                     horizontal={false}
                     renderItem={ProductItem}
                     key={index => 'item' + index + 'category'}
@@ -154,12 +172,12 @@ const OrderEnquiries = () => {
     const ProductItem = ({ item, index }) => (
         <View style={styles.pIContainer}>
             <View style={{ width: '70%', flexDirection: 'row' }}>
-                <Image source={item.imageSource} resizeMode='cover'
+                <Image source={item?.image} resizeMode='cover'
                     style={styles.imageStyle} />
                 <View>
-                    <Text style={styles.pIHeading}>{item.name}</Text>
-                    <Text style={styles.pIPrice}>{item.price}</Text>
-                    <Text style={styles.pIPrice}>Quantity: {item.quantity}</Text>
+                    <Text style={styles.pIHeading}>{item?.id}</Text>
+                    <Text style={styles.pIPrice}>{item?.price}</Text>
+                    <Text style={styles.pIPrice}>Quantity: {item?.quantity}</Text>
                 </View>
             </View>
         </View>

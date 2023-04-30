@@ -3,16 +3,18 @@ import React, { useState, useEffect } from 'react'
 import AppStyle from '../../assets/styles/AppStyle';
 import HeaderWithBack from '../../components/Headers/HeaderWithBack'
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import SellerStory from '../../components/SellerStory';
 import SellerStoryTwo from '../../components/SellerStoryTwo';
 import { ServiceGetAllSellerStories } from '../../services/AppService';
 import { setActivityIndicator } from '../../store/slices/appConfigSlice';
 import { showToastHandler } from '../../helpers/common';
+import { getLoginConfig } from '../../store/slices/loginConfigSlice';
 
 const SellerStories = () => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
+    const loginConfig = useSelector(getLoginConfig);
     const [page, setPage] = useState(1);
     const [lastPage, setLastPage] = useState(2);
     const [loading, setLoading] = useState(false);
@@ -42,7 +44,7 @@ const SellerStories = () => {
                 setStories([...stories, ...response?.data?.data?.seller_stories?.data]);
             }
             setLoading(false);
-            setLastPage(response?.meta?.last_page);
+            setLastPage(response?.data?.meta?.last_page);
         }).catch(e => {
             setLoading(false);
             showToastHandler(e);
@@ -62,9 +64,10 @@ const SellerStories = () => {
                     <Text style={styles.topDescription}>
                         Meet the Sellers of IndyMandi
                     </Text>
-                    <TouchableOpacity onPress={() => navigation.navigate('BecomeSeller', { sellerData: null })} style={styles.button}>
-                        <Text style={styles.whiteText}>Become a Seller</Text>
-                    </TouchableOpacity>
+                    {loginConfig?.user?.role === 'u' &&
+                        <TouchableOpacity onPress={() => navigation.navigate('BecomeSeller', { sellerData: null })} style={styles.button}>
+                            <Text style={styles.whiteText}>Become a Seller</Text>
+                        </TouchableOpacity>}
                 </View>
             </View>
         )

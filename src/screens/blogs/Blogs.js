@@ -85,7 +85,7 @@ const Blogs = () => {
                 setBlogs([...blogs, ...response?.data?.data]);
             }
             setLoading(false);
-            setLastPage(response?.meta?.last_page);
+            setLastPage(response?.data?.meta?.last_page);
             dispatch(setActivityIndicator(false));
         }).catch(e => {
             setLoading(false);

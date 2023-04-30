@@ -25,6 +25,7 @@ const Store = ({ route }) => {
     const params = route?.params;
     const dispatch = useDispatch();
     const navigation = useNavigation();
+    const loginConfig = useSelector(getLoginConfig);
     const [storeId] = useState(loginConfig?.user?.role === 'v' ?
         loginConfig?.user?.store?.id : params?.storeId);
     const [index, setIndex] = React.useState(0);
@@ -39,7 +40,6 @@ const Store = ({ route }) => {
     const [collections, setCollections] = useState([]);
     const [selectedCollection, setSelectedCollection] = useState(null);
     const [products, setProducts] = useState([]);
-    const loginConfig = useSelector(getLoginConfig);
 
     useEffect(() => {
         if (storeId) {

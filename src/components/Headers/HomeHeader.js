@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux';
 import { setCategories } from '../../store/slices/productsSlice';
 import { showToastHandler } from '../../helpers/common';
 
-const HomeHeader = ({ route }) => {
+const HomeHeader = ({ filters = true }) => {
     const colors = ['#C5F1C4', '#CCDFD6', '#E8CDDE', '#E9DBD7', '#D3E8EB']
     const dispatch = useDispatch();
     const navigation = useNavigation();
@@ -54,16 +54,15 @@ const HomeHeader = ({ route }) => {
             <View style={{ marginHorizontal: 16, marginTop: 8, marginBottom: 18 }}>
                 <AppLogo height={26.35} width={69} />
             </View>
-            <View style={{ marginBottom: 8 }}>
+            {filters && <View style={{ marginBottom: 8 }}>
                 <FlatList
                     horizontal
                     data={items}
-                    
                     key={(index) => 'header' + index + 'chip'}
                     renderItem={_renderItem}
                     showsHorizontalScrollIndicator={false}
                 />
-            </View>
+            </View>}
         </View>
     )
 }

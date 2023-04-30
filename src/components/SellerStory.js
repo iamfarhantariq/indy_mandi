@@ -2,9 +2,13 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import AppStyle from '../assets/styles/AppStyle'
 import { useNavigation } from '@react-navigation/native'
+import { useSelector } from 'react-redux'
+import { getLoginConfig } from '../store/slices/loginConfigSlice'
 
 const SellerStory = ({ title = null, item }) => {
     const navigation = useNavigation();
+    const loginConfig = useSelector(getLoginConfig);
+
     return (
         <View>
             {title &&
@@ -31,9 +35,10 @@ const SellerStory = ({ title = null, item }) => {
                             {"Read story >"}
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate('BecomeSeller', { sellerData: null })} style={styles.button}>
-                        <Text style={styles.whiteText}>Become a Seller</Text>
-                    </TouchableOpacity>
+                    {loginConfig?.user?.role === 'u' &&
+                        <TouchableOpacity onPress={() => navigation.navigate('BecomeSeller', { sellerData: null })} style={styles.button}>
+                            <Text style={styles.whiteText}>Become a Seller</Text>
+                        </TouchableOpacity>}
                 </View>
             </View>
         </View>

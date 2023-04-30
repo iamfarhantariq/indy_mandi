@@ -32,7 +32,7 @@ const PaymentHistory = () => {
                 setPayments([...payments, ...response?.data?.data])
             }
             setLoading(false);
-            setLastPage(response?.meta?.last_page);
+            setLastPage(response?.data?.meta?.last_page);
         }).catch(e => {
             setLoading(false);
             showToastHandler(e);
