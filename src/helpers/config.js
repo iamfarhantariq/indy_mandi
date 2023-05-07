@@ -20,6 +20,9 @@ const PUSHER_APP_KEY = '09dc0a50ffe300c08cb8'
 const PUSHER_APP_SECRET = '6e4cb89e9e6159ef779d'
 const PUSHER_APP_CLUSTER = 'ap2'
 
+const RAZORPAY_KEY = 'rzp_test_d5KOvIhSHN84Ff'
+const RAZORPAY_SECRET = 'CSzWPXeBnO0fTc2kuoxfnL3Z'
+
 const AppConfig = {
   baseApiURL: BASE_API_URL,
   screenWidth: SCREEN_WIDTH,
