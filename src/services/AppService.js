@@ -4,6 +4,9 @@ import {
     API_DELETE_PRODUCT,
     API_DELETE_PRODUCT_FROM_COLLECTION,
     API_DELETE_PRODUCT_FROM_WISHLISTS,
+    API_GET_All_CHAT_MESSAGES,
+    API_GET_All_COVERSATIONS,
+    API_GET_All_KEYS,
     API_GET_All_ORDER,
     API_GET_ALL_SELLER_STORIES,
     API_GET_All_STATS,
@@ -25,6 +28,8 @@ import {
     API_POST_NEW_COLLECTION,
     API_POST_PRODUCT_TO_COLLECTION,
     API_POST_PRODUCT_TO_WISHLISTS,
+    API_POST_READ_BY_RECEIVER,
+    API_POST_SEND_MESSAGE,
     API_POST_STORE_ADDRESS,
     API_POST_USER_WISHLIST_STORE,
     API_POST_WISHLIST_PRODUCTS,
@@ -389,9 +394,59 @@ export const ServiceGetOrders = (user = 'customer', type, page) => {
     });
 }
 
-export const ServiceGetStats= () => {
+export const ServiceGetStats = () => {
     return new Promise((resolve, reject) => {
         get(`${API_GET_All_STATS}`).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const ServiceGetAppKeys = () => {
+    return new Promise((resolve, reject) => {
+        get(`${API_GET_All_KEYS}`).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const ServiceGetAllConversations = () => {
+    return new Promise((resolve, reject) => {
+        post(`${API_GET_All_COVERSATIONS}`).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const ServiceGetAllChatMessages = (payload) => {
+    return new Promise((resolve, reject) => {
+        post(`${API_GET_All_CHAT_MESSAGES}`, payload).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const ServicePostSendMessage = (conversation_id, payload) => {
+    return new Promise((resolve, reject) => {
+        postMultipartData(`${API_POST_SEND_MESSAGE}/${conversation_id}`, payload).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const ServicePostReadMessageByReceiver = (payload) => {
+    return new Promise((resolve, reject) => {
+        post(`${API_POST_READ_BY_RECEIVER}`, payload).then(response => {
             resolve(response);
         }).catch(error => {
             reject(error);

@@ -82,12 +82,16 @@ import { UpdatedUserInTheApp } from '../helpers/common';
 import ProductsToCollection from '../screens/addProductsToCollection/ProductsToCollection';
 import SellerHandBook from '../screens/sellerHandbook/SellerHandBook';
 import SellerBookContent from '../screens/sellerBookContent/SellerBookContent';
+import { Pusher } from '@pusher/pusher-websocket-react-native';
+import { ServiceGetAllConversations } from '../services/AppService';
+import { getAppConfig, setConversationsData } from '../store/slices/appConfigSlice';
 
 const Tab = createBottomTabNavigator();
 
 const AppTabs = () => {
     const navigation = useNavigation();
     const loginConfig = useSelector(getLoginConfig);
+    const { conversationsData } = useSelector(getAppConfig);
     const [role, setRole] = useState(null);
 
     function handleBackButtonClick() {
@@ -125,6 +129,10 @@ const AppTabs = () => {
             marginTop: 20,
             fontSize: 11
         },
+    }
+
+    const getCountForMessages = () => {
+        return conversationsData?.conversations?.reduce((total, current) => total + current?.chat_count, 0);
     }
 
     return (
@@ -188,6 +196,7 @@ const AppTabs = () => {
                 options={{
                     ...tabScreenProps,
                     title: 'Chat',
+                    tabBarBadge: getCountForMessages(),
                     tabBarIcon: ({ focused, color, size }) =>
                         focused ? (
                             <TabChatActive />
@@ -352,6 +361,46 @@ const AppNavigation = () => {
         }
         fetchUserDetails();
     }, []);
+
+    useEffect(() => {
+        if (loginConfig.isLogin && loginConfig.isAutherized) {
+            initializePusher();
+        }
+
+        return async () => {
+            // await pusher.unsubscribe({ channelName: 'global-chat-message' });
+        }
+    }, [loginConfig.isAutherized]);
+
+    const initializePusher = async () => {
+        try {
+            const pusher = Pusher.getInstance();
+
+            await pusher.init({
+                apiKey: AppConfig.pusherAppKey,
+                cluster: AppConfig.pusherAppCluster,
+            });
+
+            const myChannel = await pusher.subscribe({
+                channelName: 'global-chat-message',
+                onSubscriptionSucceeded: (channelName, data) => {
+                    console.log(`Subscribed to ${{ channelName }}`);
+                },
+                onEvent: (event) => {
+                    console.log(`Got channel event: ${event}`);
+                    ServiceGetAllConversations().then(response => {
+                        console.log({ response });
+                        dispatch(setConversationsData(response?.data));
+                    }).catch(e => {
+                        console.log(e);
+                    });
+                }
+            });
+            await pusher.connect();
+        } catch (e) {
+            console.log(`ERROR: ${e}`);
+        }
+    }
 
     return (
         <React.Fragment>

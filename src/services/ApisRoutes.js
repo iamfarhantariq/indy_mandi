@@ -46,6 +46,11 @@ export const API_GET_SELLER_CATEGORY_BOOK = `${BASE_URL}/vendor/sellerhandbook/a
 export const API_GET_SINGLE_SELLER_CATEGORY_BOOK = `${BASE_URL}/vendor/sellerhandbook/articles/detail`;
 export const API_GET_All_ORDER = `${BASE_URL}`;
 export const API_GET_All_STATS = `${BASE_URL}/vendor/widgets/qr-code`;
+export const API_GET_All_KEYS = `${BASE_URL}/get-keys/Hl07rf68BWuY6QLT6UtN4rdsyNl8JVrxT7OxOuOYRNzrLwasOMxc1dPyVBq65LK0`;
+export const API_GET_All_COVERSATIONS = `${BASE_URL}/get/all/conversations`;
+export const API_GET_All_CHAT_MESSAGES = `${BASE_URL}/get/all/chats`;
+export const API_POST_SEND_MESSAGE = `${BASE_URL}/send/message/chat`;
+export const API_POST_READ_BY_RECEIVER = `${BASE_URL}/read/by/reciever`;
 
 // IndyView 
 export const API_GET_DAYS_SLOTS = `${BASE_URL}/indyviews/getdates`;

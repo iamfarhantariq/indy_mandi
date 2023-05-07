@@ -1,39 +1,114 @@
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { commonPageStyle, commonStyle } from '../../helpers/common'
 import AppStyle from '../../assets/styles/AppStyle';
 import SettingIcon from '../../assets/images/setting-icon.svg';
 import InputField from '../../components/Input/InputField';
 import { useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAppConfig, setConversationsData } from '../../store/slices/appConfigSlice';
+import { Pusher } from '@pusher/pusher-websocket-react-native';
+import { ServiceGetAllConversations } from '../../services/AppService';
 
 const ChatScreen = () => {
     const navigation = useNavigation();
+    const pusher = Pusher.getInstance();
+    const dispatch = useDispatch();
+    const isFocused = useIsFocused();
+    const { conversationsData } = useSelector(getAppConfig);
+    const [justCame, setJustCame] = useState(true)
+    const [chats, setChats] = useState([]);
     const [search, setSearch] = useState('');
-    const items = [
-        { name: 'Emma Mayers', message: 'Thank you very much! Your response is appreciated and acknowledged', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-        { name: 'Emma Mayers', message: 'Thank you very much! Your response is appreciated and acknowledged', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-        { name: 'Emma Mayers', message: 'Thank you very much! Your response is appreciated and acknowledged', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-        { name: 'Emma Mayers', message: 'Thank you very much! Your response is appreciated and acknowledged', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-        { name: 'Emma Mayers', message: 'Thank you very much! Your response is appreciated and acknowledged', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-        { name: 'Emma Mayers', message: 'Thank you very much! Your response is appreciated and acknowledged', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-        { name: 'Emma Mayers', message: 'Thank you very much! Your response is appreciated and acknowledged', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-        { name: 'Emma Mayers', message: 'Thank you very much! Your response is appreciated and acknowledged', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-        { name: 'Emma Mayers', message: 'Thank you very much! Your response is appreciated and acknowledged', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-        { name: 'Emma Mayers', message: 'Thank you very much! Your response is appreciated and acknowledged', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-        { name: 'Emma Mayers', message: 'Thank you very much! Your response is appreciated and acknowledged', imageSource: require('../../assets/images/demo-category-image.jpeg') },
-    ]
 
-    const _renderItem = ({ item, index }) => (
-        <TouchableOpacity onPress={() => navigation.navigate('ChatDetail')} style={styles.chatItemContainer}>
-            <Image resizeMode='cover' source={item.imageSource}
-                style={styles.imageStyle} />
-            <View style={{ marginLeft: 12 }}>
-                <Text style={styles.name} numberOfLines={1} lineBreakMode='tail'>{item.name}</Text>
-                <Text style={styles.message} numberOfLines={1} lineBreakMode='tail'>{item.message}</Text>
-            </View>
-        </TouchableOpacity>
-    )
+    useEffect(() => {
+        initializeChatsPusher();
+        return async () => {
+            await pusher.unsubscribe({ channelName: 'chat-message' });
+        }
+    }, []);
+
+    useEffect(() => {
+        if (conversationsData?.conversations?.length) {
+            setChats(
+                [...conversationsData?.conversations].filter(f =>
+                    f?.sender?.name?.toLowerCase()?.includes(search) ||
+                    f?.last_chat[0]?.message?.toLowerCase()?.includes(search)))
+        }
+    }, [search, conversationsData]);
+
+    useEffect(() => {
+        if (!justCame && isFocused) {
+            getChats();
+        } else {
+            setJustCame(false);
+        }
+    }, [isFocused]);
+
+    const getChats = () => {
+        ServiceGetAllConversations().then(response => {
+            console.log({ response });
+            dispatch(setConversationsData(response?.data));
+        }).catch(e => {
+            console.log(e);
+        });
+    }
+
+
+    const initializeChatsPusher = async () => {
+        const myChannel = await pusher.subscribe({
+            channelName: 'chat-message',
+            onSubscriptionSucceeded: (channelName, data) => {
+                console.log(`Subscribed to ${{ channelName }}`);
+            },
+            onEvent: (event) => {
+                console.log(`Got channel event: ${event}`);
+                getChats();
+            }
+        });
+    }
+
+    const _renderItem = ({ item, index }) => {
+        const getChatThumb = () => {
+            if (conversationsData?.userRole === 'u') {
+                return item?.reciever?.store?.image ?
+                    `${conversationsData?.mediaPath}/${item.reciever.store.image}` :
+                    'https://img.icons8.com/bubbles/344/user.png'
+            } else {
+                return item?.sender?.image ?
+                    `${conversationsData?.UmediaPath}/${item.sender.image}` :
+                    'https://img.icons8.com/bubbles/344/user.png'
+            }
+        }
+
+        const getChatName = () => {
+            if (conversationsData?.userRole === 'u') {
+                return item?.reciever?.store?.name;
+            } else {
+                return item?.sender?.name;
+            }
+        }
+
+        return (
+            <TouchableOpacity onPress={() => navigation.navigate('ChatDetail', { conversation: item })} style={styles.chatItemContainer}>
+                <Image resizeMode='cover'
+                    source={{ uri: getChatThumb() }}
+                    style={styles.imageStyle} />
+                <View style={{ marginLeft: 12 }}>
+                    <Text style={styles.name} numberOfLines={1} lineBreakMode='tail'>
+                        {getChatName()}
+                        {item?.chat_count > 0 &&
+                            <Text style={{ fontWeight: '600', color: AppStyle.colorSet.primaryColorB }}>
+                                {" "}{item?.chat_count}
+                            </Text>}
+                    </Text>
+                    <Text style={styles.message} numberOfLines={1} lineBreakMode='tail'>
+                        {item?.last_chat[0]?.type === 'media' ? 'image' : item?.last_chat[0]?.message}
+                    </Text>
+                </View>
+            </TouchableOpacity>
+        )
+    }
 
     return (
         <View style={commonPageStyle}>
@@ -42,13 +117,12 @@ const ChatScreen = () => {
                 <SettingIcon />
             </View>
             <View style={{ marginHorizontal: 16, marginVertical: 16 }}>
-                <InputField value={search} onTextChange={(t) => setSearch(t)} placeholder={'Search'} />
+                <InputField value={search} onTextChange={(t) => setSearch(t?.toLowerCase())} placeholder={'Search'} />
             </View>
             <View style={{ marginHorizontal: 16, flex: 1 }}>
                 <FlatList
-                    data={items}
+                    data={chats}
                     nestedScrollEnabled
-                    
                     key={index => 'chat' + index + 'item'}
                     renderItem={_renderItem}
                     showsVerticalScrollIndicator={false}
@@ -77,7 +151,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         borderBottomColor: AppStyle.colorSet.borderLightGrayColor,
         borderBottomWidth: 1,
-        justifyContent: 'space-between',
+        // justifyContent: 'space-between',
         alignItems: 'center',
         paddingVertical: 8,
     },

@@ -8,7 +8,7 @@ import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 import { getLoginConfig, setLogout, setUser } from '../../store/slices/loginConfigSlice'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { setActivityIndicator } from '../../store/slices/appConfigSlice'
+import { setActivityIndicator, setConversationsData } from '../../store/slices/appConfigSlice'
 import { ServiceLogout } from '../../services/AuthServices'
 import { ServiceDeleteStore, ServiceGetLogoutText } from '../../services/AppService'
 import Toast from 'react-native-toast-message';
@@ -37,6 +37,7 @@ const UserScreen = () => {
                 text1: 'Success',
                 text2: 'You have been logged out!',
             });
+            dispatch(setConversationsData(null));
             dispatch(setLogout());
             await AsyncStorage.removeItem("auth_token");
             navigation.reset({

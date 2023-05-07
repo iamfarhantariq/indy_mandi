@@ -1,7 +1,4 @@
 import { Dimensions, Platform, StatusBar } from 'react-native';
-// import { useSafeAreaInsets } from 'react-native-safe-area-context';
-// const insets = useSafeAreaInsets();
-// const statusBarHeight = insets.top;
 
 // const BASE_API_URL = 'https://indymandi.com/api'; // Dev maybe
 const BASE_API_URL = 'https://staging.indymandi.com/api'; // staging maybe
@@ -18,6 +15,11 @@ const BOTTOM_TABS_HEIGHT = Platform.OS === 'ios' ? 100 : 82;
 
 const _EMAIL_REG_EXP = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
 
+const PUSHER_APP_ID = 859996
+const PUSHER_APP_KEY = '09dc0a50ffe300c08cb8'
+const PUSHER_APP_SECRET = '6e4cb89e9e6159ef779d'
+const PUSHER_APP_CLUSTER = 'ap2'
+
 const AppConfig = {
   baseApiURL: BASE_API_URL,
   screenWidth: SCREEN_WIDTH,
@@ -26,6 +28,10 @@ const AppConfig = {
   windowHeight: WINDOW_HEIGHT,
   statusBarHeight: STATUS_BAR_HEIGHT,
   bottomTabsHeight: BOTTOM_TABS_HEIGHT,
+  pusherAppId: PUSHER_APP_ID,
+  pusherAppKey: PUSHER_APP_KEY,
+  pusherAppSecret: PUSHER_APP_SECRET,
+  pusherAppCluster: PUSHER_APP_CLUSTER,
 };
 
 export default AppConfig;

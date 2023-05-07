@@ -1,10 +1,11 @@
 import moment from 'moment';
 import AppStyle from '../assets/styles/AppStyle';
-import { setActivityIndicator } from '../store/slices/appConfigSlice';
+import { setActivityIndicator, setConversationsData } from '../store/slices/appConfigSlice';
 import AppConfig from './config';
 import Toast from 'react-native-toast-message';
 import { ServiceGetUser } from '../services/AuthServices';
 import { setUser } from '../store/slices/loginConfigSlice';
+import { ServiceGetAllConversations } from '../services/AppService';
 
 /**
  * Get random package from array.
@@ -105,8 +106,14 @@ export const showToastHandler = (e, dispatch = null) => {
 export const UpdatedUserInTheApp = (dispatch) => {
   return new Promise((resolve, reject) => {
     ServiceGetUser().then(response => {
-      console.log({response});
+      console.log({ response });
       dispatch(setUser(response?.data));
+      ServiceGetAllConversations().then(response => {
+        console.log({ response });
+        dispatch(setConversationsData(response?.data));
+      }).catch(e => {
+        console.log(e);
+      });
       resolve();
     }).catch(e => {
       console.log(e);
