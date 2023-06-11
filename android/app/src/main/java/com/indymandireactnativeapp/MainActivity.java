@@ -1,4 +1,4 @@
-package com.indymandireactnativeapp;
+package com.indymandi.app;
 import android.os.Bundle; // here
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
