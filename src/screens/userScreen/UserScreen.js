@@ -71,6 +71,7 @@ const UserScreen = () => {
     const sellerOptions = [
         { title: 'Order enquiries', func: () => navigation.navigate('OrderEnquiries') },
         { title: 'Payments', func: () => navigation.navigate('PaymentHistory') },
+        { title: 'Payment modes', func: () => navigation.navigate('AllPaymentMode') },
         {
             title: 'Delete store', func: async () => {
                 const text = await ServiceGetLogoutText();

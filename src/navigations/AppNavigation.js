@@ -85,6 +85,8 @@ import SellerBookContent from '../screens/sellerBookContent/SellerBookContent';
 import { Pusher } from '@pusher/pusher-websocket-react-native';
 import { ServiceGetAllConversations } from '../services/AppService';
 import { getAppConfig, setConversationsData } from '../store/slices/appConfigSlice';
+import AllPaymentMode from '../screens/paymentMode/AllPaymentMode';
+import CreatePaymentMode from '../screens/createPaymentMode/CreatePaymentMode';
 
 const Tab = createBottomTabNavigator();
 
@@ -458,6 +460,8 @@ const AppNavigation = () => {
                     <AppStack.Screen name="ProductsToCollection" component={ProductsToCollection} />
                     <AppStack.Screen name="SellerHandBook" component={SellerHandBook} />
                     <AppStack.Screen name="SellerBookContent" component={SellerBookContent} />
+                    <AppStack.Screen name="AllPaymentMode" component={AllPaymentMode} />
+                    <AppStack.Screen name="CreatePaymentMode" component={CreatePaymentMode} />
                 </AppStack.Navigator>
             </NavigationContainer>
 

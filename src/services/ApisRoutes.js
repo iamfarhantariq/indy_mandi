@@ -51,6 +51,7 @@ export const API_GET_All_COVERSATIONS = `${BASE_URL}/get/all/conversations`;
 export const API_GET_All_CHAT_MESSAGES = `${BASE_URL}/get/all/chats`;
 export const API_POST_SEND_MESSAGE = `${BASE_URL}/send/message/chat`;
 export const API_POST_READ_BY_RECEIVER = `${BASE_URL}/read/by/reciever`;
+export const API_GET_PAYMENT_MODE_LIST = `${BASE_URL}/vendor/paymentmodes`;
 
 // IndyView 
 export const API_GET_DAYS_SLOTS = `${BASE_URL}/indyviews/getdates`;

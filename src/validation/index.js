@@ -106,3 +106,4 @@ export const updateVecomeASellerFormSchema = Yup.object().shape({
 export const createCollectionSchema = Yup.object().shape({
     name: Yup.string().trim().required('Name is required'),
 });
+

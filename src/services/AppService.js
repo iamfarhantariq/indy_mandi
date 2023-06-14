@@ -17,6 +17,7 @@ import {
     API_GET_FEATURE_ARTICLE,
     API_GET_PAYMENTS,
     API_GET_PAYMENTS_INVOICE,
+    API_GET_PAYMENT_MODE_LIST,
     API_GET_SELLER_CATEGORY_BOOK,
     API_GET_SELLER_TYPES,
     API_GET_SINGLE_SELLER_CATEGORY_BOOK,
@@ -447,6 +448,46 @@ export const ServicePostSendMessage = (conversation_id, payload) => {
 export const ServicePostReadMessageByReceiver = (payload) => {
     return new Promise((resolve, reject) => {
         post(`${API_POST_READ_BY_RECEIVER}`, payload).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const GetPaymentModes = () => {
+    return new Promise((resolve, reject) => {
+        get(API_GET_PAYMENT_MODE_LIST).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const DeletePaymentModes = (id) => {
+    return new Promise((resolve, reject) => {
+        remove(`${API_GET_PAYMENT_MODE_LIST}/${id}`).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const PostPutPaymentMode = (params, id) => {
+    if (id) {
+        return new Promise((resolve, reject) => {
+            postMultipartData(`${API_GET_PAYMENT_MODE_LIST}/${id}?_method=PUT`, params).then(response => {
+                resolve(response);
+            }).catch(error => {
+                reject(error);
+            });
+        });
+    }
+
+    return new Promise((resolve, reject) => {
+        postMultipartData(API_GET_PAYMENT_MODE_LIST, params).then(response => {
             resolve(response);
         }).catch(error => {
             reject(error);
