@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { FlatList, StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import AppStyle from '../../assets/styles/AppStyle'
 import HeaderWithBack from '../../components/Headers/HeaderWithBack'
@@ -60,7 +60,11 @@ const AllPaymentMode = () => {
             <View style={styles.addContainer}>
                 <View>
                     <Text style={styles.title}>{item?.type}</Text>
-                    <Text style={styles.address}>{item?.detail}</Text>
+                    {item?.type !== 'QRCode' ? <Text style={styles.address}>{item?.detail}</Text> :
+                        <View style={{ margin: 16 }}>
+                            <Image resizeMode='cover' source={{ uri: item?.image }} style={{ height: 150, width: 150 }} />
+                        </View>
+                        }
                 </View>
                 <TouchableOpacity onPress={() => {
                     SheetManager.show('example-two', {

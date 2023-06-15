@@ -41,7 +41,7 @@ const AddProduct = ({ route }) => {
     const [videos, setVideos] = useState([...Array(other_detail?.product_no_of_vedios).keys()].map(i => ({ localPath: null, mimeVideo: null })));
 
     const _initialValues = {
-        product_name: '', category_id: '', subcategory_id: '', grandcategory_id: '', childcategory_id: '', product_tags: '', price: '', offer_price: '', product_detail: '', front_image: '', side_image: [], is_returnable: 1, no_of_days: '', return_codition: '', vedios: [],
+        product_name: '', category_id: '', subcategory_id: '', grandcategory_id: '', childcategory_id: '', product_tags: '', price: '', offer_price: '', product_detail: '', front_image: '', is_returnable: 1, no_of_days: '', return_codition: '',
     }
 
     const { errors, touched, values, setFieldValue, setFieldTouched, handleBlur, handleSubmit, handleReset } = useFormik({
@@ -49,7 +49,19 @@ const AddProduct = ({ route }) => {
         onSubmit: (values) => {
             console.log({ values });
             const formData = convertToFormDataObject(values);
+
+            videos.forEach((videoPath) => {
+                if (videoPath?.mimeVideo) {
+                    formData.append(`vedios[]`, videoPath?.mimeVideo);
+                }
+            });
+            images.forEach((imagePath, index) => {
+                if (imagePath?.serverName && index !== 0) {
+                    formData.append(`side_image[]`, imagePath?.serverName);
+                }
+            });
             console.log({ formData });
+
             dispatch(setActivityIndicator(true));
             ServiceCreateProductToStore(formData).then(async (response) => {
                 console.log({ response });
@@ -147,7 +159,7 @@ const AddProduct = ({ route }) => {
                 let _vidoes = [...videos];
                 _vidoes[_index].localPath = videoUri;
                 _vidoes[_index].mimeVideo = mimeVideo;
-                setImages(_vidoes);
+                setVideos(_vidoes);
             }).catch(e => {
                 console.log({ e });
             });
@@ -418,15 +430,15 @@ const AddProduct = ({ route }) => {
                                 }
                             }
                         });
-                        setFieldValue('side_image', _images, true);
+                        // setFieldValue('side_image', _images, true);
                     }
-                    if (videos.length && videos[0]?.localPath) {
-                        let _videos = [];
-                        videos.forEach((_vidoe, _index) => {
-                            _videos.push(_vidoe.mimeVideo);
-                        });
-                        setFieldValue('vedios', _videos, true);
-                    }
+                    // if (videos.length && videos[0]?.localPath) {
+                    //     let _videos = [];
+                    //     videos.forEach((_vidoe, _index) => {
+                    //         _videos.push(_vidoe.mimeVideo);
+                    //     });
+                    //     // setFieldValue('vedios', _videos, true);
+                    // }
                     handleSubmit();
                 }} />
             </View>
