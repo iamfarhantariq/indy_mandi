@@ -1,4 +1,4 @@
-import { ImageBackground, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, ImageBackground, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import AppStyle from '../../assets/styles/AppStyle'
 import HeaderWithBack from '../../components/Headers/HeaderWithBack'
@@ -18,13 +18,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getProducts } from '../../store/slices/productsSlice'
 import { getLoginConfig } from '../../store/slices/loginConfigSlice';
 import ImagePicker from 'react-native-image-crop-picker';
-import { ServiceCreateProductToStore, ServiceUploadImageForStore } from '../../services/ProductService'
+import { ServiceCreateProductToStore, ServiceUpdateProductToStore, ServiceUploadImageForStore } from '../../services/ProductService'
 import { setActivityIndicator } from '../../store/slices/appConfigSlice'
 import NoOfDaysDropDown from '../../components/Store/NoOfDaysDropDown'
+import { useEffect } from 'react'
+import { DeleteProductImage, GetProductToEdit } from '../../services/AppService'
+import ClearMedia from '../../assets/images/clear-all-icon.svg';
 
 const AddProduct = ({ route }) => {
     const params = route?.params;
-    console.log({params});
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const { categories } = useSelector(getProducts);
@@ -40,6 +42,74 @@ const AddProduct = ({ route }) => {
     const [images, setImages] = useState([...Array(other_detail?.product_no_of_side_images + 1).keys()].map(i => ({ serverName: '', localImage: null })));
     const [videos, setVideos] = useState([...Array(other_detail?.product_no_of_vedios).keys()].map(i => ({ localPath: null, mimeVideo: null })));
 
+    useEffect(() => {
+        if (params?.product) {
+            getProduct();
+        }
+    }, []);
+
+    const getProduct = () => {
+        dispatch(setActivityIndicator(true));
+        GetProductToEdit(params?.product?.id).then(response => {
+            const prevProduct = response?.data?.data;
+            console.log({ prevProduct });
+            setFieldValue('product_name', prevProduct?.product_name, true);
+            setFieldValue('product_tags', prevProduct?.product_tags, true);
+            setFieldValue('price', prevProduct?.price?.toString(), true);
+            setFieldValue('offer_price', prevProduct?.offer_price?.toString(), true);
+            setFieldValue('product_detail', prevProduct?.product_detail, true);
+            const _images = [];
+            _images[0] = { image: prevProduct?.front_image, delete_name: prevProduct?.delete_front_image_name };
+
+            [...Array(other_detail?.product_no_of_side_images + 1).keys()].forEach((f, i) => {
+                if (prevProduct?.side_images[i] && prevProduct?.side_images[i]?.image) {
+                    _images.push({
+                        image: prevProduct?.side_images[i]?.image,
+                        delete_name: prevProduct?.side_images[i]?.delete_side_image_name
+                    });
+                } else {
+                    _images.push({ serverName: '', localImage: null });
+                }
+            })
+            // prevProduct?.side_images?.forEach(element => {
+            //     _images.push({ image: element?.image, delete_name: element?.delete_side_image_name });
+            // });
+            setImages(_images);
+
+            const _videos = [];
+            [...Array(other_detail?.product_no_of_vedios).keys()].forEach((f, i) => {
+                if (prevProduct?.videos[i]) {
+                    _videos.push({
+                        video: prevProduct?.videos[i],
+                    });
+                } else {
+                    _videos.push({ localPath: null, mimeVideo: null });
+                }
+            })
+
+            // prevProduct?.videos?.forEach(element => {
+            //     _videos.push({ video: element });
+            // });
+            setVideos(_videos);
+            console.log({ _images }, { _videos });
+
+            setIsReturnable(prevProduct?.is_returnable === "1");
+            setFieldValue('is_returnable', prevProduct?.is_returnable, true);
+            setFieldValue('return_codition', prevProduct?.return_codition, true);
+            setFieldValue('no_of_days', prevProduct?.no_of_days, true);
+
+            dispatch(setActivityIndicator(false));
+        }).catch(e => {
+            console.log({ e });
+            Toast.show({
+                type: 'error',
+                text1: e?.response?.data?.message,
+                text2: e?.response?.data?.message,
+            });
+            dispatch(setActivityIndicator(false));
+        })
+    }
+
     const _initialValues = {
         product_name: '', category_id: '', subcategory_id: '', grandcategory_id: '', childcategory_id: '', product_tags: '', price: '', offer_price: '', product_detail: '', front_image: '', is_returnable: 1, no_of_days: '', return_codition: '',
     }
@@ -48,34 +118,62 @@ const AddProduct = ({ route }) => {
         initialValues: _initialValues,
         onSubmit: (values) => {
             console.log({ values });
+
+            if (params?.product) {
+                values['product_id'] = params?.product?.id;
+            }
+
             const formData = convertToFormDataObject(values);
 
             videos.forEach((videoPath) => {
                 if (videoPath?.mimeVideo) {
                     formData.append(`vedios[]`, videoPath?.mimeVideo);
                 }
+                if (videoPath?.video) {
+                    formData.append(`vedios[]`, videoPath?.video);
+                }
             });
             images.forEach((imagePath, index) => {
                 if (imagePath?.serverName && index !== 0) {
                     formData.append(`side_image[]`, imagePath?.serverName);
                 }
+                if (imagePath?.image && index !== 0) {
+                    formData.append(`side_image[]`, imagePath?.delete_name);
+                }
             });
             console.log({ formData });
 
             dispatch(setActivityIndicator(true));
-            ServiceCreateProductToStore(formData).then(async (response) => {
-                console.log({ response });
-                dispatch(setActivityIndicator(false));
-                Toast.show({
-                    type: 'success',
-                    text1: 'Success',
-                    text2: 'Success',
+
+            if (params?.product) {
+                ServiceUpdateProductToStore(formData).then(async (response) => {
+                    console.log({ response });
+                    dispatch(setActivityIndicator(false));
+                    Toast.show({
+                        type: 'success',
+                        text1: 'Success',
+                        text2: 'Success',
+                    });
+                    handleReset();
+                    navigation.pop();
+                }).catch(e => {
+                    showToastHandler(e, dispatch);
                 });
-                handleReset();
-                navigation.pop();
-            }).catch(e => {
-                showToastHandler(e, dispatch);
-            });
+            } else {
+                ServiceCreateProductToStore(formData).then(async (response) => {
+                    console.log({ response });
+                    dispatch(setActivityIndicator(false));
+                    Toast.show({
+                        type: 'success',
+                        text1: 'Success',
+                        text2: 'Success',
+                    });
+                    handleReset();
+                    navigation.pop();
+                }).catch(e => {
+                    showToastHandler(e, dispatch);
+                });
+            }
         },
         validationSchema: null,
     });
@@ -166,18 +264,37 @@ const AddProduct = ({ route }) => {
         }
 
         const MediaContainer = ({ _index, type }) => {
+            const onDeleteMedia = async () => {
+                if (type === 'image') {
+                    const _images = [...images];
+                    if (_images[_index]?.delete_name) {
+                        const response = await DeleteProductImage(_images[_index]?.delete_name);
+                        console.log({ response });
+                    }
+                    _images[_index] = { serverName: '', localImage: null };
+                    setImages(_images);
+                } else {
+                    const _videos = [...videos];
+                    _videos[_index] = { localPath: null, mimeVideo: null };
+                    setVideos(_videos);
+                }
+            }
+
             return (
-                <>
+                <View style={{ marginTop: 3 }}>
                     {type === 'image' ?
                         <>
-                            {images[_index]?.localImage && images[_index]?.serverName ?
+                            {(images[_index]?.localImage && images[_index]?.serverName) || images[_index]?.image ?
                                 <ImageBackground
-                                    source={{ uri: images[_index]?.localImage }}
+                                    source={{ uri: images[_index]?.localImage || images[_index]?.image }}
                                     style={styles.mediaContainerServer}
                                     imageStyle={{ borderRadius: 8, opacity: 0.7 }}
                                     resizeMode={'cover'}>
                                     <TouchableOpacity onPress={() => openGallery(_index)}>
                                         <Text style={{ ...styles.imageNameText, color: AppStyle.colorSet.primaryColorA }}>X Change</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={onDeleteMedia} style={{ position: 'absolute', top: -3, right: -3 }}>
+                                        <ClearMedia />
                                     </TouchableOpacity>
                                 </ImageBackground> :
                                 <TouchableOpacity onPress={() => openGallery(_index)} style={styles.mediaContainer}>
@@ -187,7 +304,7 @@ const AddProduct = ({ route }) => {
                             }
                         </> :
                         <>
-                            {videos[_index]?.localPath ?
+                            {videos[_index]?.localPath || videos[_index]?.video ?
                                 <ImageBackground
                                     source={require('../../assets/images/play_button.jpg')}
                                     style={{ ...styles.mediaContainerServer }}
@@ -195,6 +312,9 @@ const AddProduct = ({ route }) => {
                                     resizeMode={'cover'}>
                                     <TouchableOpacity onPress={() => openGalleryVideos(_index)}>
                                         <Text style={{ ...styles.imageNameText, color: AppStyle.colorSet.primaryColorA }}>X Change</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={onDeleteMedia} style={{ position: 'absolute', top: -3, right: -3 }}>
+                                        <ClearMedia />
                                     </TouchableOpacity>
                                 </ImageBackground> :
                                 <TouchableOpacity onPress={() => openGalleryVideos(_index)} style={styles.mediaContainer}>
@@ -204,7 +324,7 @@ const AddProduct = ({ route }) => {
                             }
                         </>
                     }
-                </>
+                </View>
             )
         }
 
@@ -224,7 +344,7 @@ const AddProduct = ({ route }) => {
                     <View style={{ flexDirection: 'row' }}>
                         <MediaContainer _image={null} _index={0} type='image' />
                         {[...Array(other_detail?.product_no_of_side_images).keys()].map((_image, _index) => (
-                            <MediaContainer _index={_index + 1} type='image' />
+                            <MediaContainer key={_index + 'Image'} _index={_index + 1} type='image' />
                         ))}
                     </View>
                 </ScrollView>
@@ -232,7 +352,7 @@ const AddProduct = ({ route }) => {
                 <Text style={{ ...commonStyle('600', 14, 'primaryColorA'), marginVertical: 8 }}>Videos</Text>
                 <View style={{ flexDirection: 'row', marginBottom: 33 }}>
                     {[...Array(other_detail?.product_no_of_vedios).keys()].map((_image, _index) => (
-                        <MediaContainer _index={_index} type='video' />
+                        <MediaContainer key={_index + 'Video'} _index={_index} type='video' />
                     ))}
                 </View>
 
@@ -418,27 +538,14 @@ const AddProduct = ({ route }) => {
                 </View>
             </ScrollView>
             <View style={AppStyle.buttonContainerBottom}>
-                <Button text={'Create'} fill={true} handleClick={() => {
+                <Button text={params?.product ? 'Update' : 'Create'} fill={true} handleClick={() => {
                     if (images.length && images[0]?.serverName) {
-                        let _images = [];
-                        images.forEach((_image, _index) => {
-                            if (_image?.serverName) {
-                                if (_index === 0) {
-                                    setFieldValue('front_image', _image?.serverName, true);
-                                } else {
-                                    _images.push(_image.serverName);
-                                }
-                            }
-                        });
-                        // setFieldValue('side_image', _images, true);
+                        setFieldValue('front_image', images[0]?.serverName, true);
                     }
-                    // if (videos.length && videos[0]?.localPath) {
-                    //     let _videos = [];
-                    //     videos.forEach((_vidoe, _index) => {
-                    //         _videos.push(_vidoe.mimeVideo);
-                    //     });
-                    //     // setFieldValue('vedios', _videos, true);
-                    // }
+                    if (images.length && images[0]?.image) {
+                        setFieldValue('front_image', images[0]?.delete_name, true);
+                    }
+
                     handleSubmit();
                 }} />
             </View>

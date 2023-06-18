@@ -4,6 +4,7 @@ import {
     API_DELETE_PRODUCT,
     API_DELETE_PRODUCT_FROM_COLLECTION,
     API_DELETE_PRODUCT_FROM_WISHLISTS,
+    API_DELETE_PRODUCT_IMAGE,
     API_GET_All_CHAT_MESSAGES,
     API_GET_All_COVERSATIONS,
     API_GET_All_KEYS,
@@ -18,6 +19,7 @@ import {
     API_GET_PAYMENTS,
     API_GET_PAYMENTS_INVOICE,
     API_GET_PAYMENT_MODE_LIST,
+    API_GET_PRODUCT_DETAIL_TO_EDIT,
     API_GET_SELLER_CATEGORY_BOOK,
     API_GET_SELLER_TYPES,
     API_GET_SINGLE_SELLER_CATEGORY_BOOK,
@@ -488,6 +490,26 @@ export const PostPutPaymentMode = (params, id) => {
 
     return new Promise((resolve, reject) => {
         postMultipartData(API_GET_PAYMENT_MODE_LIST, params).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const GetProductToEdit = (id) => {
+    return new Promise((resolve, reject) => {
+        post(`${API_GET_PRODUCT_DETAIL_TO_EDIT}/${id}`).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const DeleteProductImage = (value) => {
+    return new Promise((resolve, reject) => {
+        remove(`${API_DELETE_PRODUCT_IMAGE}/${value}`).then(response => {
             resolve(response);
         }).catch(error => {
             reject(error);

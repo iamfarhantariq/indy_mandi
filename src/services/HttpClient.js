@@ -86,11 +86,11 @@ axiosApiInstance.interceptors.response.use((response) => {
     const originalRequest = error.config;
 
     if (error?.response?.status === 401 && !originalRequest._retry) {
-        originalRequest._retry = true;
-        const res = await postWithoutBody(`${AppConfig.baseApiURL}/Authenticate/GetAccessToken`);
-        await AsyncStorage.setItem("auth_token", res.data.access_token);
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.access_token;
-        return axiosApiInstance(originalRequest);
+        // originalRequest._retry = true;
+        // const res = await postWithoutBody(`${AppConfig.baseApiURL}/Authenticate/GetAccessToken`);
+        // await AsyncStorage.setItem("auth_token", res.data.access_token);
+        // axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.data.access_token;
+        // return axiosApiInstance(originalRequest);
     }
     return Promise.reject(error);
 });

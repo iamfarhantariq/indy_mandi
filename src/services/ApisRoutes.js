@@ -52,6 +52,8 @@ export const API_GET_All_CHAT_MESSAGES = `${BASE_URL}/get/all/chats`;
 export const API_POST_SEND_MESSAGE = `${BASE_URL}/send/message/chat`;
 export const API_POST_READ_BY_RECEIVER = `${BASE_URL}/read/by/reciever`;
 export const API_GET_PAYMENT_MODE_LIST = `${BASE_URL}/vendor/paymentmodes`;
+export const API_GET_PRODUCT_DETAIL_TO_EDIT = `${BASE_URL}/vendor/product/edit`;
+export const API_DELETE_PRODUCT_IMAGE = `${BASE_URL}/vendor/product/crop-image/delete`;
 
 // IndyView 
 export const API_GET_DAYS_SLOTS = `${BASE_URL}/indyviews/getdates`;
@@ -72,6 +74,7 @@ export const API_GET_STORE_COLLECTION_SORTED_PRODUCTS = `${BASE_URL}/vendor/upda
 export const API_GET_UPDATE_PRODUCT_STATUS = `${BASE_URL}/vendor/updateproductstatus`;
 export const API_UPLOAD_STORE_IMAGE = `${BASE_URL}/vendor/product/crop-image/store`;
 export const API_POST_CREATE_PRODUCT = `${BASE_URL}/vendor/product/store`;
+export const API_POST_UPDATE_PRODUCT = `${BASE_URL}/vendor/product/update`;
 
 // Collection
 export const API_POST_NEW_COLLECTION = `${BASE_URL}/vendor/collection/store`;
