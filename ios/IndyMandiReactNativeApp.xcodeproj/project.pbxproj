@@ -13,6 +13,7 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		417658ECC74444FD9A12DBB2 /* NotoSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E703F401FC13448E832C5F89 /* NotoSans-Bold.ttf */; };
+		4C78F0D72A3E3F8D006E3D94 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4C78F0D62A3E3F8D006E3D94 /* GoogleService-Info.plist */; };
 		4C8FCE8D296DEBC200A62F4D /* NotoSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E703F401FC13448E832C5F89 /* NotoSans-Bold.ttf */; };
 		4C8FCE8E296DEBC200A62F4D /* NotoSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E42B74F6FD724209B78F5517 /* NotoSans-Regular.ttf */; };
 		7699B88040F8A987B510C191 /* libPods-IndyMandiReactNativeApp-IndyMandiReactNativeAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-IndyMandiReactNativeApp-IndyMandiReactNativeAppTests.a */; };
@@ -42,6 +43,7 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = IndyMandiReactNativeApp/main.m; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-IndyMandiReactNativeApp-IndyMandiReactNativeAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-IndyMandiReactNativeApp-IndyMandiReactNativeAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B4392A12AC88292D35C810B /* Pods-IndyMandiReactNativeApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IndyMandiReactNativeApp.debug.xcconfig"; path = "Target Support Files/Pods-IndyMandiReactNativeApp/Pods-IndyMandiReactNativeApp.debug.xcconfig"; sourceTree = "<group>"; };
+		4C78F0D62A3E3F8D006E3D94 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-IndyMandiReactNativeApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IndyMandiReactNativeApp.release.xcconfig"; path = "Target Support Files/Pods-IndyMandiReactNativeApp/Pods-IndyMandiReactNativeApp.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-IndyMandiReactNativeApp-IndyMandiReactNativeAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IndyMandiReactNativeApp-IndyMandiReactNativeAppTests.debug.xcconfig"; path = "Target Support Files/Pods-IndyMandiReactNativeApp-IndyMandiReactNativeAppTests/Pods-IndyMandiReactNativeApp-IndyMandiReactNativeAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-IndyMandiReactNativeApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-IndyMandiReactNativeApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -92,6 +94,7 @@
 		13B07FAE1A68108700A75B9A /* IndyMandiReactNativeApp */ = {
 			isa = PBXGroup;
 			children = (
+				4C78F0D62A3E3F8D006E3D94 /* GoogleService-Info.plist */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -262,6 +265,7 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				4C78F0D72A3E3F8D006E3D94 /* GoogleService-Info.plist in Resources */,
 				417658ECC74444FD9A12DBB2 /* NotoSans-Bold.ttf in Resources */,
 				F74729D95C8B48D2B4514D60 /* NotoSans-Regular.ttf in Resources */,
 			);

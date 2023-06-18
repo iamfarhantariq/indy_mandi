@@ -18,11 +18,42 @@ import { useDispatch } from 'react-redux';
 import { setActivityIndicator } from '../../store/slices/appConfigSlice';
 import { setIsAuthorized, setIsLogin, setUser } from '../../store/slices/loginConfigSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppConfig from '../../helpers/config';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { useEffect } from 'react';
 
 const SignIn = ({ setView }) => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const [staySigned, setStaySigned] = useState(true);
+
+    useEffect(() => {
+        GoogleSignin.configure({
+          scopes: ['email', 'profile'],
+          webClientId: AppConfig.googleWebClient,
+          offlineAccess: true, // if you want to access user data while offline
+        });
+      }, []);
+    
+      const signIn = async () => {
+        try {
+            await GoogleSignin.hasPlayServices();
+            const userInfo = await GoogleSignin.signIn();
+            console.log({ userInfo });
+            Toast.show({
+                type: 'success',
+                text1: userInfo?.user?.name,
+                text2: userInfo?.user?.email,
+            });
+          } catch (error) {
+            console.log({error});
+            Toast.show({
+                type: 'error',
+                text1: 'Google sign in error',
+                text2: 'Something happened while, signing you up.',
+            });
+          }
+      };
 
     const {
         errors,
@@ -71,7 +102,7 @@ const SignIn = ({ setView }) => {
             <ScrollView showsVerticalScrollIndicator={false}>
 
                 <View style={{ marginVertical: 26 }}>
-                    <TouchableOpacity style={{ ...styles.socialContainer, marginBottom: 8 }}>
+                    <TouchableOpacity style={{ ...styles.socialContainer, marginBottom: 8 }} onPress={signIn}>
                         <GoogleIcon />
                         <Text style={styles.socialText}>Continue with google</Text>
                     </TouchableOpacity>

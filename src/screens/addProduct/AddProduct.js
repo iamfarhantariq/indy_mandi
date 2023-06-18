@@ -24,6 +24,7 @@ import NoOfDaysDropDown from '../../components/Store/NoOfDaysDropDown'
 
 const AddProduct = ({ route }) => {
     const params = route?.params;
+    console.log({params});
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const { categories } = useSelector(getProducts);
@@ -31,8 +32,7 @@ const AddProduct = ({ route }) => {
     const { other_detail } = user;
     const front_image_dimension = other_detail?.crop_dimension?.product_front_image;
     const side_image_dimension = other_detail?.crop_dimension?.product_side_image;
-    const [opened, setOpened] = useState(false);
-    const [category, setCategory] = useState(categories);
+    const [category] = useState(categories);
     const [subCategory, setSubCategory] = useState([]);
     const [grandCategory, setGrandCategory] = useState([]);
     const [childCategory, setChildCategory] = useState([]);

@@ -2,6 +2,7 @@ import { Dimensions, Platform, StatusBar } from 'react-native';
 
 // const BASE_API_URL = 'https://indymandi.com/api'; // Dev maybe
 const BASE_API_URL = 'https://staging.indymandi.com/api'; // staging maybe
+const GOOGLE_WEB_CLIENT_ID = '1085172821890-n17m44c3iigbink292hmsthqrp59vt2t.apps.googleusercontent.com';
 
 const SCREEN_WIDTH = Dimensions.get('screen').width;
 const SCREEN_HEIGHT = Dimensions.get('screen').height;
@@ -35,6 +36,7 @@ const AppConfig = {
   pusherAppKey: PUSHER_APP_KEY,
   pusherAppSecret: PUSHER_APP_SECRET,
   pusherAppCluster: PUSHER_APP_CLUSTER,
+  googleWebClient: GOOGLE_WEB_CLIENT_ID
 };
 
 export default AppConfig;

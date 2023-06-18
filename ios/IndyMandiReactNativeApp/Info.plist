@@ -20,12 +20,17 @@
 	<string>1.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Indy Mandi will acess to your gallery images</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Indy Mandi allow users to take pictures</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Indy Mandi allow users to record voice</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.1085172821890-13b3vk6v6sc94t18eiua2ji3rp2o4ruv</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -41,8 +46,14 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Indy Mandi allow users to take pictures</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Indy Mandi allow users to record voice</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Indy Mandi will acess to your gallery images</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>NotoSans-Bold.ttf</string>
