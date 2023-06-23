@@ -70,8 +70,7 @@ const ProductName = ({ productDetail }) => {
                     </View>
                 </View>
                 {loginConfig?.isLogin &&
-                    loginConfig?.user?.role !== 'v' &&
-                    loginConfig?.user?.store?.id !== item?.store_id &&
+                    loginConfig?.user?.role === 'u' &&
                     <TouchableOpacity onPress={getWishListListing} style={{ marginLeft: 16 }}>
                         {liked ? <FavLiked /> : <FavBlank />}
                     </TouchableOpacity>}

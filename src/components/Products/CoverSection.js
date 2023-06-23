@@ -5,8 +5,11 @@ import CoverFrame from './CoverFrame'
 import { useNavigation } from '@react-navigation/native'
 import RedirectImage from '../../assets/images/redirect-with-indyviews.svg';
 import AppConfig from '../../helpers/config'
+import { getLoginConfig } from '../../store/slices/loginConfigSlice'
+import { useSelector } from 'react-redux'
 
 const CoverSection = ({ title, items = [], detailed = true, discoverOption }) => {
+    const loginConfig = useSelector(getLoginConfig);
     const navigation = useNavigation();
 
     let itemsToShow = [
@@ -20,7 +23,7 @@ const CoverSection = ({ title, items = [], detailed = true, discoverOption }) =>
         return (
             <>
                 {item?.view ?
-                    <TouchableOpacity onPress={() => navigation.navigate('IndyViews')}>
+                    <TouchableOpacity onPress={() =>  navigation.navigate(loginConfig?.isLogin ?'IndyViews' :  'Profile')}>
                         <RedirectImage height={303} width={303} />
                     </TouchableOpacity> :
                     <TouchableOpacity onPress={() => {
@@ -28,10 +31,10 @@ const CoverSection = ({ title, items = [], detailed = true, discoverOption }) =>
 
                         }
                         else {
-                            navigation.navigate('BlogContentScreen');
+                            navigation.navigate('BlogContentScreen', { slug: item?.slug });
                         }
                     }}>
-                        <CoverFrame item={item} index={index} detailed={detailed} indyview={title !== 'Blogs'}/>
+                        <CoverFrame item={item} index={index} detailed={detailed} indyview={title !== 'Blogs'} />
                     </TouchableOpacity>}
             </>
         )
@@ -50,7 +53,7 @@ const CoverSection = ({ title, items = [], detailed = true, discoverOption }) =>
             <FlatList
                 horizontal
                 data={itemsToShow}
-                
+
                 key={(index) => 'Indyview' + index + 'cover'}
                 renderItem={_renderItem}
                 showsHorizontalScrollIndicator={false}

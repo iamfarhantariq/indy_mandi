@@ -1,11 +1,13 @@
-import { ActivityIndicator, FlatList, Image, StyleSheet, Text, View } from 'react-native'
+import { ActivityIndicator, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import ExploreHeading from './ExploreHeading'
 import { commonStyle, showToastHandler } from '../../helpers/common'
 import AppStyle from '../../assets/styles/AppStyle'
 import { ServiceExploreData } from '../../services/ExploreService'
+import { useNavigation } from '@react-navigation/native'
 
 const StoresExplore = ({ searchType, search }) => {
+    const navigation = useNavigation()
     const [page, setPage] = useState(1);
     const [lastPage, setLastPage] = useState(2);
     const [sortBy, setSortBy] = useState('relevancy'); // relevancy, asc, desc
@@ -35,11 +37,11 @@ const StoresExplore = ({ searchType, search }) => {
     }
 
     const _renderItem = ({ item, index }) => (
-        <View style={styles.itemContainer}>
+        <TouchableOpacity onPress={() => navigation.navigate('StoreScreen', { storeId: item?.id })} style={styles.itemContainer}>
             <Image resizeMode='cover' source={{ uri: item?.image }}
                 style={styles.imageStyle} />
             <Text style={styles.text}>{item?.name}</Text>
-        </View>
+        </TouchableOpacity>
     )
 
     return (

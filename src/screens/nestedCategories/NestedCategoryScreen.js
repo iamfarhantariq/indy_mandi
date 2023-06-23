@@ -54,6 +54,7 @@ const NestedCategoryScreen = () => {
                                 />
                             );
                         }
+                        
                         return (
                             <TouchableOpacity key={item?.name} onPress={() => {
                                 navigation.navigate('MainCategoryScreen', { category: item });

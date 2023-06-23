@@ -17,6 +17,7 @@ export const API_UPDATE_USER_NAME = `${BASE_URL}/customer/profile/setting`;
 export const API_GET_UPDATED_USER = `${BASE_URL}/get-updated-user`;
 export const API_UPDATE_CURRENT_EMAIL = `${BASE_URL}/update/current/email/authenticate`;
 export const API_POST_VERIFY_NEW_EMAIL = `${BASE_URL}/update/current/email`;
+export const API_POST_SOCIAL_OBJECT = `${BASE_URL}/social-auth/google/callback`;
 
 // App
 export const API_GET_COUNTRY_STATES = `${BASE_URL}/getstates`;
@@ -54,6 +55,7 @@ export const API_POST_READ_BY_RECEIVER = `${BASE_URL}/read/by/reciever`;
 export const API_GET_PAYMENT_MODE_LIST = `${BASE_URL}/vendor/paymentmodes`;
 export const API_GET_PRODUCT_DETAIL_TO_EDIT = `${BASE_URL}/vendor/product/edit`;
 export const API_DELETE_PRODUCT_IMAGE = `${BASE_URL}/vendor/product/crop-image/delete`;
+export const API_GET_SINGLE_BLOG = `${BASE_URL}/explore/blog`;
 
 // IndyView 
 export const API_GET_DAYS_SLOTS = `${BASE_URL}/indyviews/getdates`;

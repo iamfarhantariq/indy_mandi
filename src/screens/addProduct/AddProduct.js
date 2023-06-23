@@ -1,4 +1,4 @@
-import { Image, ImageBackground, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ImageBackground, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import AppStyle from '../../assets/styles/AppStyle'
 import HeaderWithBack from '../../components/Headers/HeaderWithBack'
@@ -6,8 +6,6 @@ import Button from '../../components/Button'
 import { commonStyle, convertToFormDataObject, showToastHandler } from '../../helpers/common'
 import InputFieldBase from '../../components/Input/InputFieldBase'
 import AppConfig from '../../helpers/config'
-import ArrowDown from '../../assets/images/arrow-down.svg';
-import ArrowUp from '../../assets/images/arrow-up.svg';
 import HeadingAndDescription from '../../components/Store/HeadingAndDescription'
 import UploadIcon from '../../assets/images/add-images.svg';
 import { useNavigation } from '@react-navigation/native'

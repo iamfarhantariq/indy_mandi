@@ -137,6 +137,25 @@ const AppTabs = () => {
         return conversationsData?.conversations?.reduce((total, current) => total + current?.chat_count, 0);
     }
 
+    const chatOptions = () => {
+        let options = {
+            ...tabScreenProps,
+            title: 'Chat',
+            tabBarIcon: ({ focused, color, size }) =>
+                focused ? (
+                    <TabChatActive />
+                ) : (
+                    <TabChatInActive />
+                ),
+        }
+
+        if (getCountForMessages() > 0) {
+            options.tabBarBadge = getCountForMessages()
+        }
+
+        return options;
+    }
+
     return (
         <Tab.Navigator
             initialRouteName="Home"
@@ -195,17 +214,7 @@ const AppTabs = () => {
             {role && <Tab.Screen
                 name="Chat"
                 component={ChatStackScreen}
-                options={{
-                    ...tabScreenProps,
-                    title: 'Chat',
-                    tabBarBadge: getCountForMessages(),
-                    tabBarIcon: ({ focused, color, size }) =>
-                        focused ? (
-                            <TabChatActive />
-                        ) : (
-                            <TabChatInActive />
-                        ),
-                }}
+                options={chatOptions}
             />}
             {(role === 's' || role === 'v') && <Tab.Screen
                 name="MyShop"

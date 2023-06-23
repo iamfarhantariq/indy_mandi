@@ -1,5 +1,5 @@
 import { get, post, postMultipartData, remove } from "./HttpClient"
-import { API_AUTH_FORGOT_PASSWORD, API_AUTH_LOGIN, API_AUTH_LOGOUT, API_AUTH_REGISTER, API_AUTH_RESET_PASSWORD, API_AUTH_VERIFY_EMAIL, API_DELETE_THUMBNAIL_BANNER, API_GET_UPDATED_USER, API_POST_RESET_PASSWORD, API_POST_UPLOAD_THUMBNAIL, API_POST_UPLOAD_THUMBNAIL_BANNER, API_POST_VERIFY_NEW_EMAIL, API_UPDATE_CURRENT_EMAIL, API_UPDATE_USER_NAME } from "./ApisRoutes";
+import { API_AUTH_FORGOT_PASSWORD, API_AUTH_LOGIN, API_AUTH_LOGOUT, API_AUTH_REGISTER, API_AUTH_RESET_PASSWORD, API_AUTH_VERIFY_EMAIL, API_DELETE_THUMBNAIL_BANNER, API_GET_UPDATED_USER, API_POST_RESET_PASSWORD, API_POST_SOCIAL_OBJECT, API_POST_UPLOAD_THUMBNAIL, API_POST_UPLOAD_THUMBNAIL_BANNER, API_POST_VERIFY_NEW_EMAIL, API_UPDATE_CURRENT_EMAIL, API_UPDATE_USER_NAME } from "./ApisRoutes";
 
 export const ServiceRegisterUser = (requestPayload) => {
     return new Promise((resolve, reject) => {
@@ -134,6 +134,16 @@ export const ServiceUserEmailChange = (requestPayload) => {
 export const ServiceUserEmailVerifyNew = (requestPayload) => {
     return new Promise((resolve, reject) => {
         post(`${API_POST_VERIFY_NEW_EMAIL}`, requestPayload).then(response => {
+            resolve(response?.data);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const ServiceVerifySocialAuth = (object) => {
+    return new Promise((resolve, reject) => {
+        post(`${API_POST_SOCIAL_OBJECT}`, object).then(response => {
             resolve(response?.data);
         }).catch(error => {
             reject(error);

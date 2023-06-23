@@ -16,9 +16,11 @@ import Toast from 'react-native-toast-message';
 import { setActivityIndicator } from '../../store/slices/appConfigSlice';
 import { useDispatch } from 'react-redux';
 import { setAddToCart } from '../../store/slices/loginConfigSlice';
+import Share from 'react-native-share';
 
 const WishListDetail = ({ route }) => {
     const { wishListId, wishListName, wishlists } = route?.params;
+    console.log({ wishListName });
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const [search, setSearch] = useState('');
@@ -38,17 +40,23 @@ const WishListDetail = ({ route }) => {
         });
     }
 
+    const actionsArray = () => {
+        let _actions = [];
+        if (wishListName !== 'General List') {
+            _actions.push({ title: 'Edit wishlist', value: 'edit' });
+            _actions.push({ title: 'Delete wishlist', value: 'delete' });
+            // _actions.push({ title: 'Make it public', value: 'public' });
+        }
+        _actions.push({ title: 'Share', value: 'share' });
+        return _actions;
+    }
+
     const handleOptions = () => {
         SheetManager.show('example-two', {
             payload: {
                 header: 'Choose your action',
-                actions: [
-                    { title: 'Edit wishlist', value: 'edit' },
-                    { title: 'Delete wishlist', value: 'delete' },
-                    { title: 'Share', value: 'share' },
-                    { title: 'Make it public', value: 'public' },
-                ],
-                filterHandler: (_action) => {
+                actions: actionsArray(),
+                filterHandler: async (_action) => {
                     if (_action === 'edit') {
                         navigation.navigate('CreateWishList', { wishListData: { name: wishListName, id: wishListId } })
                     } else if (_action === 'delete') {
@@ -65,6 +73,13 @@ const WishListDetail = ({ route }) => {
                         }).catch(e => {
                             showToastHandler(e, dispatch);
                         });
+                    } else if (_action === 'share') {
+                        try {
+                            const response = await Share.open({url: 'www.google.com'});
+                            console.log({response});
+                          } catch (error) {
+                            console.log(error);
+                          }
                     }
                 }
             }
@@ -165,7 +180,7 @@ const WishListDetail = ({ route }) => {
                 <FlatList
                     horizontal={false}
                     data={products}
-                    
+
                     numColumns={2}
                     key={(index) => 'wishlist' + index + 'item'}
                     renderItem={_renderItem}

@@ -5,12 +5,12 @@ import BackLarge from '../../assets/images/back-large.svg';
 import { useNavigation } from '@react-navigation/native';
 import AppStyle from '../../assets/styles/AppStyle';
 
-const ImageHeader = ({ image, description }) => {
+const ImageHeader = ({ image, description, blog }) => {
     const navigation = useNavigation();
 
     return (
         <ImageBackground
-            resizeMode='cover'
+            resizeMode={!blog ? 'contain' : 'cover'}
             source={{ uri: image }}
             style={styles.imageContainer}
         >

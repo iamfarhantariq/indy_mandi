@@ -10,24 +10,24 @@ import { showToastHandler } from '../../helpers/common'
 const BlogExplore = ({ searchType, search }) => {
     const navigation = useNavigation();
     const categories = [
-        { name: 'All', color: '#C5F1C4' },
-        { name: 'Fashion', color: '#CCDFD6' },
-        { name: 'Article', color: '#E8CDDE' },
+        { name: 'All', color: '#C5F1C4', value: '' },
+        { name: 'Fashion', color: '#CCDFD6', value: 'Fashion' },
+        { name: 'Article', color: '#E8CDDE', value: 'Article' },
     ]
 
     const [page, setPage] = useState(1);
     const [lastPage, setLastPage] = useState(2);
-    const [sortBy, setSortBy] = useState('relevancy'); // relevancy, asc, desc
+    const [category, setCategory] = useState('');
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         ExploreSearch();
-    }, [page]);
+    }, [page, category]);
 
     const ExploreSearch = () => {
         setLoading(true);
-        const payload = { type: searchType, sort_by: sortBy, search_keywords: search }
+        const payload = { type: searchType, category: category, search_keywords: search }
         ServiceExploreData(payload, page).then((response) => {
             console.log({ response });
             if (page === 1) {
@@ -45,7 +45,7 @@ const BlogExplore = ({ searchType, search }) => {
 
     const _renderItem = ({ item, index }) => {
         return (
-            <TouchableOpacity onPress={() => navigation.navigate('MainCategoryScreen')}>
+            <TouchableOpacity onPress={() => setCategory(item?.value)}>
                 <View style={{ ...styles.chipContainer, backgroundColor: item?.color, marginLeft: index === 0 ? 16 : 0 }}>
                     <Text style={styles.chipText}>{item?.name}</Text>
                 </View>
@@ -82,7 +82,7 @@ const BlogExplore = ({ searchType, search }) => {
                     scrollEventThrottle={400} showsVerticalScrollIndicator={false} style={{ marginHorizontal: 16 }}>
                     {items?.map((item, index) => {
                         return (
-                            <TouchableOpacity onPress={() => navigation.navigate('BlogContentScreen')} key={index} style={{ marginBottom: 16 }}>
+                            <TouchableOpacity onPress={() => navigation.navigate('BlogContentScreen', { slug: item?.slug })} key={index} style={{ marginBottom: 16 }}>
                                 <CoverFrame item={item} key={index} index={index} detailed={false} flex={true} />
                             </TouchableOpacity>
                         )

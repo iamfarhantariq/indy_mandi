@@ -22,6 +22,7 @@ import {
     API_GET_PRODUCT_DETAIL_TO_EDIT,
     API_GET_SELLER_CATEGORY_BOOK,
     API_GET_SELLER_TYPES,
+    API_GET_SINGLE_BLOG,
     API_GET_SINGLE_SELLER_CATEGORY_BOOK,
     API_GET_SINGLE_SELLER_STORY,
     API_GET_USER_WISHLIST,
@@ -510,6 +511,16 @@ export const GetProductToEdit = (id) => {
 export const DeleteProductImage = (value) => {
     return new Promise((resolve, reject) => {
         remove(`${API_DELETE_PRODUCT_IMAGE}/${value}`).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const ServiceGetSingleBlog = (slug) => {
+    return new Promise((resolve, reject) => {
+        get(`${API_GET_SINGLE_BLOG}/${slug}`).then(response => {
             resolve(response);
         }).catch(error => {
             reject(error);

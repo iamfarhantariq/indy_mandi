@@ -91,8 +91,7 @@ const ProductDetail = ({ route }) => {
                 <ImagesSlider images={getLinks()} setVideoLink={setVideoLink} />
                 <ProductName productDetail={productDetail} />
                 {loginConfig?.isLogin &&
-                    loginConfig?.user?.role !== 'v' &&
-                    loginConfig?.user?.store?.id !== item?.store_id &&
+                    loginConfig?.user?.role === 'u' &&
                     <View style={{ marginHorizontal: 16 }}>
                         <Button text={'Buy it now'} handleClick={() => null} />
                     </View>
@@ -109,8 +108,7 @@ const ProductDetail = ({ route }) => {
                 </View>
             </ScrollView>
             {loginConfig?.isLogin &&
-                loginConfig?.user?.role !== 'v' &&
-                loginConfig?.user?.store?.id !== item?.store_id &&
+                loginConfig?.user?.role === 'u' &&
                 <AddToCart productDetail={productDetail} />
             }
             {videoLink && (

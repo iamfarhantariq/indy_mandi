@@ -59,7 +59,7 @@ const GeneralProduct = (
   }
 
   const getWishListListing = () => {
-    if (!liked) {
+    if (!liked && loginConfig?.user?.role === 'u') {
       ServiceGetWishListListingForUser().then(response => {
         console.log({ response });
         const data = response?.data?.data;
@@ -87,12 +87,12 @@ const GeneralProduct = (
           style={flexStyle}
           imageStyle={{ borderRadius: 8 }}
         >
-          {loginConfig?.isLogin &&
-            loginConfig?.user?.role !== 'v' &&
-            loginConfig?.user?.store?.id !== item?.store_id &&
-            (<TouchableOpacity onPress={getWishListListing} style={{ position: 'absolute', right: 0, top: 0 }}>
-              {liked ? <WishIconLiked /> : <WishIcon />}
-            </TouchableOpacity>)}
+          <TouchableOpacity
+            onPress={() => loginConfig?.isLogin ? getWishListListing() : navigation.navigate('Profile')}
+            style={{ position: 'absolute', right: 0, top: 0 }}
+          >
+            {liked ? <WishIconLiked /> : <WishIcon />}
+          </TouchableOpacity>
           {optionIcon &&
             <TouchableOpacity onPress={handleOptions} style={{ position: 'absolute', right: 0, top: 0 }}>
               <MoreOption />

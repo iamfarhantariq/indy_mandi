@@ -54,7 +54,7 @@ const VerifyEmail = ({ route }) => {
                 });
             });
         },
-        validationSchema: verifyEmailSchema,
+        // validationSchema: verifyEmailSchema,
     });
 
     const otherProps = { values, errors, touched, setFieldValue, setFieldTouched, handleBlur };

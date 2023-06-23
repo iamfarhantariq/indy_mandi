@@ -138,8 +138,7 @@ const UserScreen = () => {
                                 resizeMode='cover' style={{ height: 40, width: 40, borderRadius: 50 }} />
                             : <UserAvatar />}
                     </TouchableOpacity>
-                    <Text style={styles.headerText}>{loginConfig?.user?.role === 'v' ||
-                        loginConfig?.user?.role === 's' ? 'Seller' : 'Customer'}</Text>
+                    <Text style={styles.headerText}>{loginConfig?.user?.name}</Text>
                 </View>
             </View>
             <View style={{ flex: 1, marginHorizontal: 16 }}>

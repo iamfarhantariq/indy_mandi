@@ -6,6 +6,8 @@ import Toast from 'react-native-toast-message';
 import { ServiceGetUser } from '../services/AuthServices';
 import { setUser } from '../store/slices/loginConfigSlice';
 import { ServiceGetAllConversations } from '../services/AppService';
+import { InAppBrowser } from 'react-native-inappbrowser-reborn';
+import { Linking } from 'react-native';
 
 /**
  * Get random package from array.
@@ -120,4 +122,65 @@ export const UpdatedUserInTheApp = (dispatch) => {
       reject();
     })
   });
+}
+
+export const openLinkService = async (url) => {
+  const openURLSocial = (url) => {
+    Linking.canOpenURL(url)
+      .then((supported) => {
+        if (supported) {
+          Linking.openURL(url);
+        } else {
+          Toast.show({
+            type: 'info',
+            text1: 'Issue',
+            text2: 'Unable to open the page',
+          });
+        }
+      })
+      .catch((error) => console.log(error));
+  };
+
+  if (url) {
+    try {
+      if (await InAppBrowser.isAvailable()) {
+        await InAppBrowser.open(url, {
+          // iOS Properties
+          dismissButtonStyle: 'cancel',
+          preferredBarTintColor: '#453AA4',
+          preferredControlTintColor: 'white',
+          readerMode: false,
+          animated: true,
+          modalPresentationStyle: 'fullScreen',
+          modalTransitionStyle: 'coverVertical',
+          modalEnabled: true,
+          enableBarCollapsing: false,
+          // Android Properties
+          showTitle: true,
+          toolbarColor: '#6200EE',
+          secondaryToolbarColor: 'black',
+          navigationBarColor: 'black',
+          navigationBarDividerColor: 'white',
+          enableUrlBarHiding: true,
+          enableDefaultShare: true,
+          forceCloseOnRedirection: false,
+          // Specify full animation resource identifier(package:anim/name)
+          // or only resource name(in case of animation bundled with app).
+          animations: {
+            startEnter: 'slide_in_right',
+            startExit: 'slide_out_left',
+            endEnter: 'slide_in_left',
+            endExit: 'slide_out_right',
+          },
+          headers: {
+            'my-custom-header': 'my custom header value',
+          },
+        });
+      } else {
+        openURLSocial(url);
+      }
+    } catch (error) {
+      openURLSocial(url);
+    }
+  }
 }

@@ -11,7 +11,7 @@ import Button from '../Button';
 import { useNavigation } from '@react-navigation/native';
 import { useFormik } from "formik";
 import DeviceInfo from 'react-native-device-info';
-import { ServiceLoginUser } from '../../services/AuthServices';
+import { ServiceLoginUser, ServiceVerifySocialAuth } from '../../services/AuthServices';
 import Toast from 'react-native-toast-message';
 import { loginFormSchema } from '../../validation';
 import { useDispatch } from 'react-redux';
@@ -29,31 +29,41 @@ const SignIn = ({ setView }) => {
 
     useEffect(() => {
         GoogleSignin.configure({
-          scopes: ['email', 'profile'],
-          webClientId: AppConfig.googleWebClient,
-          offlineAccess: true, // if you want to access user data while offline
+            scopes: ['email', 'profile'],
+            webClientId: AppConfig.googleWebClient,
+            offlineAccess: true, // if you want to access user data while offline
         });
-      }, []);
-    
-      const signIn = async () => {
+    }, []);
+
+    const googleSignIn = async () => {
         try {
+            dispatch(setActivityIndicator(true));
             await GoogleSignin.hasPlayServices();
             const userInfo = await GoogleSignin.signIn();
+            console.log(JSON.stringify(userInfo));
             console.log({ userInfo });
-            Toast.show({
-                type: 'success',
-                text1: userInfo?.user?.name,
-                text2: userInfo?.user?.email,
+            ServiceVerifySocialAuth(userInfo).then(response => {
+                dispatch(setActivityIndicator(false));
+                Toast.show({
+                    type: 'success',
+                    text1: userInfo?.user?.name,
+                    text2: userInfo?.user?.email,
+                });
+                console.log({response});
+            }).catch(e => {
+                dispatch(setActivityIndicator(false));
+                console.log({ e });
             });
-          } catch (error) {
-            console.log({error});
+        } catch (error) {
+            console.log({ error });
+            dispatch(setActivityIndicator(false));
             Toast.show({
                 type: 'error',
                 text1: 'Google sign in error',
                 text2: 'Something happened while, signing you up.',
             });
-          }
-      };
+        }
+    };
 
     const {
         errors,
@@ -102,7 +112,7 @@ const SignIn = ({ setView }) => {
             <ScrollView showsVerticalScrollIndicator={false}>
 
                 <View style={{ marginVertical: 26 }}>
-                    <TouchableOpacity style={{ ...styles.socialContainer, marginBottom: 8 }} onPress={signIn}>
+                    <TouchableOpacity style={{ ...styles.socialContainer, marginBottom: 8 }} onPress={googleSignIn}>
                         <GoogleIcon />
                         <Text style={styles.socialText}>Continue with google</Text>
                     </TouchableOpacity>
@@ -128,7 +138,7 @@ const SignIn = ({ setView }) => {
                     secure={true}
                 />
 
-                <TouchableOpacity onPress={()=> navigation.navigate('ForgotPassword')}>
+                <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
                     <Text style={styles.forgotText}>Forgot your password?</Text>
                 </TouchableOpacity>
 

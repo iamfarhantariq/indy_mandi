@@ -12,8 +12,8 @@ import NoItemFound from '../../components/NoItemFound';
 
 const MainCategoryScreen = ({ route }) => {
     const params = route?.params;
+    const category = params?.category
     const focus = useIsFocused();
-    const [category, setcategory] = useState(params?.category);
     const [search, setSearch] = useState('');
     const [page, setPage] = useState(1);
     const [lastPage, setLastPage] = useState(2);

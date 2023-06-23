@@ -9,6 +9,14 @@ const ProductSection = ({ title, items = [], BG = '', color = null, route = '' }
     const navigation = useNavigation();
 
     const _renderItem = ({ item, index }) => {
+        if (!item?.id && item?.action === 'See All') {
+            return (
+                <View style={styles.seeAllContainer}>
+                    <Text style={styles.seeAll}>
+                        {item?.action}</Text>
+                </View>
+            )
+        }
         return (
             <GeneralProduct item={item} key={index} index={index} />
         )
@@ -48,5 +56,20 @@ const styles = StyleSheet.create({
         color: AppStyle.colorSet.blackColor,
         marginLeft: 16,
         marginBottom: 8
+    },
+    seeAll: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: AppStyle.colorSet.whiteColor
+    },
+    seeAllContainer: {
+        height: 136,
+        width: 136,
+        marginRight: 12,
+        marginBottom: 2,
+        borderRadius: 8,
+        backgroundColor: AppStyle.colorSet.primaryColorB,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 })
