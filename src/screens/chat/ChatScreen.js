@@ -54,7 +54,6 @@ const ChatScreen = () => {
         });
     }
 
-
     const initializeChatsPusher = async () => {
         const myChannel = await pusher.subscribe({
             channelName: 'chat-message',
@@ -103,7 +102,7 @@ const ChatScreen = () => {
                             </Text>}
                     </Text>
                     <Text style={styles.message} numberOfLines={1} lineBreakMode='tail'>
-                        {item?.last_chat[0]?.type === 'media' ? 'image' : item?.last_chat[0]?.message}
+                        {item?.last_message ? item?.last_message : 'media'}
                     </Text>
                 </View>
             </TouchableOpacity>

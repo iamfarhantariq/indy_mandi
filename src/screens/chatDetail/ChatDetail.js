@@ -198,7 +198,7 @@ const ChatDetail = ({ route }) => {
                     <>
                         <Image resizeMode='cover' source={{ uri: getChatThumb(item?.user_id === chatData?.authUser?.id) }}
                             style={styles.imageStyle} />
-                        <Text style={styles.message}>{item.message}</Text>
+                        <Text style={styles.message}>{item?.message}</Text>
                     </>}
             </View>
         )
