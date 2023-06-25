@@ -93,6 +93,13 @@ const CreateCollection = ({ route }) => {
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={{ marginHorizontal: 16, marginVertical: 16 }}>
 
+                    <InputFieldBase
+                        otherProps={otherProps}
+                        title={'Collection name'}
+                        placeholder={'Collection name'}
+                        name='name'
+                        editable={collection?.name !== 'All'}
+                    />
                     <View style={{ height: 343, marginBottom: 16 }}>
                         <UploadImages imageUrl={collection?.image} getImage={(blobfile) => {
                             if (blobfile) {
@@ -106,12 +113,6 @@ const CreateCollection = ({ route }) => {
                         }} />
                     </View>
 
-                    <InputFieldBase
-                        otherProps={otherProps}
-                        title={'Collection name'}
-                        placeholder={'Collection name'}
-                        name='name'
-                    />
                 </View>
             </ScrollView>
 

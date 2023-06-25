@@ -61,7 +61,6 @@ const MyShop = () => {
     ServiceGetStoreFirstCollection(storeId).then(response => {
       ServiceGetStoreOtherCollection(storeId).then(_response => {
         const combinedCollection = [response?.data, ..._response?.data];
-        // console.log(combinedCollection, "********");
         setCollections(combinedCollection);
         if (!selectedCollection) {
           setSelectedCollection(combinedCollection[0]);
@@ -111,7 +110,7 @@ const MyShop = () => {
         storeId={storeId}
         search={search}
       />
-    </View>
+    </View> 
   );
 
   const SecondRoute = () => (

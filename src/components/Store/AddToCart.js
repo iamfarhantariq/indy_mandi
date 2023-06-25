@@ -13,7 +13,7 @@ const AddToCart = ({ productDetail }) => {
     const [counter, setCounter] = useState(1);
     const { cart } = useSelector(getLoginConfig);
 
-    const getCount = () => cart.find(c => c?.id === productDetail?.id)?.count || counter;
+    const getCount = () => cart?.find(c => c?.id === productDetail?.id)?.count || counter;
 
     const updateCount = (type, value) => {
         if (cart.find(c => c?.id === productDetail?.id)) {
@@ -36,7 +36,7 @@ const AddToCart = ({ productDetail }) => {
             </View>
             <View style={{ width: 163.5 }}>
                 <Button fill={true}
-                    text={cart.find(c => c?.id === productDetail?.id) ? "Added" : "Add to cart"}
+                    text={cart?.find(c => c?.id === productDetail?.id) ? "Added" : "Add to cart"}
                     handleClick={() => {
                         dispatch(setAddToCart({ ...productDetail, count: counter }));
                     }} />

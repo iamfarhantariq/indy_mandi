@@ -9,25 +9,29 @@ import UpSell from '../../assets/images/up-sell.svg';
 import DownSell from '../../assets/images/down-sell.svg';
 import { useEffect } from 'react'
 import { ServiceGetStats } from '../../services/AppService'
+import { useIsFocused } from '@react-navigation/native'
 
 const AnalyticsPage = ({ route }) => {
+  const isFocus = useIsFocused();
   const [analytics, setAnalytics] = useState({
     headings: ['Total Sales', 'Total traffic', 'Total orders', 'Total Products Sold'],
     values: ['0', '0', '0', '0'],
     descriptions: ['12% than last week', '3% than last week', '80% than last week', '3.89% than last week']
   });
+  const [qrCode, setQrCode] = useState('');
 
   useEffect(() => {
     getStatistics();
-  }, []);
+  }, [isFocus]);
 
   const getStatistics = () => {
     ServiceGetStats().then(response => {
       console.log({ response });
       let _analytics = { ...analytics };
-      _analytics.values[2] = response?.data?.data?.total_orders;
-      _analytics.values[3] = response?.data?.data?.total_products;
+      _analytics.values[2] = response?.data?.total_orders;
+      _analytics.values[3] = response?.data?.total_products;
       setAnalytics(_analytics);
+      setQrCode(response?.data?.qr_code_link)
     }).catch(e => {
       showToastHandler(e);
     })
@@ -42,10 +46,10 @@ const AnalyticsPage = ({ route }) => {
             <InfoIcon />
           </View>
           <Text style={styles.priceText}>{values[0]}</Text>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          {/* <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <UpSell />
             <Text style={styles.descriptionText}>{descriptions[0]}</Text>
-          </View>
+          </View> */}
         </View>
         <View style={{ ...styles.childContainer, borderLeftColor: AppStyle.colorSet.borderLightGrayColor, borderLeftWidth: 2 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -53,10 +57,10 @@ const AnalyticsPage = ({ route }) => {
             <InfoIcon />
           </View>
           <Text style={styles.priceText}>{values[1]}</Text>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          {/* <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <UpSell />
             <Text style={styles.descriptionText}>{descriptions[1]}</Text>
-          </View>
+          </View> */}
         </View>
       </View>
     )
@@ -64,7 +68,7 @@ const AnalyticsPage = ({ route }) => {
 
   return (
     <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }}>
-      <HomeHeader filters={false} />
+      <HomeHeader filters={false} QR_Code={qrCode} />
       <View style={{ marginHorizontal: 16, flex: 1 }}>
         <Text style={styles.headingText}>Analytics</Text>
 

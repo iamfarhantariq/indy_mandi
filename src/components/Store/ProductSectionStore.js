@@ -8,7 +8,6 @@ import { useEffect } from 'react';
 import { ServiceGetStoreProducts } from '../../services/ProductService';
 
 const ProductSectionStore = ({ collections, selectedCollection, products, setSelectedCollection, storeId, search }) => {
-    console.log({ collections });
     const [page, setPage] = useState(1);
     const [lastPage, setLastPage] = useState(2);
     const [loading, setLoading] = useState(false);
@@ -49,7 +48,7 @@ const ProductSectionStore = ({ collections, selectedCollection, products, setSel
         const selectedStyle = { borderColor: AppStyle.colorSet.primaryColorB, borderWidth: 2 };
         return (
             <TouchableOpacity onPress={() => setSelectedCollection(item)} style={{ marginRight: 16, flexWrap: 'wrap' }}>
-                <Image resizeMode='cover' style={item === selectedCollection ? { ...selectedStyle, ...styles.imageStyle } : styles.imageStyle}
+                <Image resizeMode='cover' style={JSON.stringify(item) === JSON.stringify(selectedCollection) ? { ...selectedStyle, ...styles.imageStyle } : styles.imageStyle}
                     source={{ uri: item?.image }} />
                 <Text style={styles.typeText}>{item?.name}</Text>
             </TouchableOpacity>

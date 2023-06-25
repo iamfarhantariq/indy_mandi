@@ -1,5 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
+import { useNavigation } from '@react-navigation/native';
 import StarRating from './StarRating';
 import FavBlank from '../../assets/images/fav-blank.svg';
 import FavLiked from '../../assets/images/fav-liked.svg';
@@ -12,9 +13,17 @@ import { useSelector } from 'react-redux';
 import { getLoginConfig } from '../../store/slices/loginConfigSlice';
 
 const ProductName = ({ productDetail }) => {
+    const navigation = useNavigation();
     const loginConfig = useSelector(getLoginConfig);
     const [liked, setLiked] = useState(productDetail?.is_liked || false);
-    const getSortedArray = () => productDetail?.categories_path.sort((a, b) => Number(a.level) - Number(b.level));
+
+    const getSortedArray = () => {
+        try {
+            return productDetail?.categories_path?.sort((a, b) => Number(a?.level) - Number(b?.level))
+        } catch (e) {
+            console.log({ e });
+        }
+    };
 
     const addToWishList = (wishListId) => {
         setLiked(true);
@@ -56,7 +65,7 @@ const ProductName = ({ productDetail }) => {
                     <View style={styles.levelsContainer}>
                         {getSortedArray()?.map((lvl, index) => {
                             return (
-                                <TouchableOpacity key={index}>
+                                <TouchableOpacity key={index} onPress={() => navigation.navigate('MainCategoryScreen', { category: lvl })}>
                                     <Text style={styles.nestedCategories}>
                                         {lvl?.name}{getSortedArray()?.length - 1 === index ? '' : ' > '}
                                     </Text>
@@ -77,10 +86,10 @@ const ProductName = ({ productDetail }) => {
             </View>
             <Text style={styles.price} numberOfLines={1} lineBreakMode='tail'>
                 ₹{productDetail?.offer_price ? productDetail?.offer_price : productDetail?.price}
-                {/* <Text style={styles.description}>
-                    <Text style={{ textDecorationLine: 'line-through' }}>$390</Text>
-                    (20% OFF) inclusive all taxes)
-                </Text> */}
+                {productDetail?.price && productDetail?.offer_price &&
+                    <Text style={styles.description}>
+                       {" "} <Text style={{ textDecorationLine: 'line-through' }}>₹{productDetail?.price}</Text>
+                    </Text>}
             </Text>
         </View>
     )

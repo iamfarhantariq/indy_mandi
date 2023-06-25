@@ -11,7 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const SellerDetails = ({ productDetail }) => {
   const navigation = useNavigation();
-
+  console.log({productDetail});
   const data = [
     { Icon: <Box />, text: productDetail?.seller_detail_first_line },
     { Icon: <Coment />, text: productDetail?.seller_detail_second_line },

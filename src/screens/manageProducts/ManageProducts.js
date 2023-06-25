@@ -170,6 +170,11 @@ const ManageProducts = ({ route }) => {
                     console.log({ response });
                     getCollectionProducts(true);
                     dispatch(setActivityIndicator(false));
+                    Toast.show({
+                        type: 'success',
+                        text1: 'Success',
+                        text2: 'Success',
+                    });
                 }).catch(e => {
                     showToastHandler(e, dispatch);
                 });

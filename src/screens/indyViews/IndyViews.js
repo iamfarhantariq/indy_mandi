@@ -1,4 +1,5 @@
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Modal, Pressable } from 'react-native';
 import React from 'react'
 import HeaderWithBack from '../../components/Headers/HeaderWithBack'
 import AppStyle from '../../assets/styles/AppStyle'
@@ -10,12 +11,16 @@ import { useDispatch } from 'react-redux'
 import { setActivityIndicator } from '../../store/slices/appConfigSlice'
 import { ServiceGetDaysSlots } from '../../services/IndyViewService'
 import Toast from 'react-native-toast-message';
-import { useEffect } from 'react'
+import { useEffect } from 'react';
+import Cross from '../../assets/images/cross-icon.svg';
+import IndyViewImage from '../../assets/images/indy-view-image.svg';
+import AppConfig from '../../helpers/config';
 
 const IndyViews = () => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const [daysPeriod, setDaysPeriod] = useState([]);
+    const [modalVisible, setModalVisible] = useState(true);
 
     useEffect(() => {
         GetDaysSlot();
@@ -107,7 +112,6 @@ const IndyViews = () => {
                         nestedScrollEnabled
                         key={index => 'indyview' + index + 'item'}
                         renderItem={_renderItem}
-                        
                         horizontal={false}
                         showsHorizontalScrollIndicator={false}
                     />
@@ -117,9 +121,37 @@ const IndyViews = () => {
                 <View style={AppStyle.buttonContainerBottom}>
                     <Button text={'Next'} fill={true} handleClick={() => navigation.navigate('UploadAd', { slot: daysPeriod?.find(f => f.isSelected) })} />
                 </View>}
+            <FirstModal modalVisible={modalVisible} setModalVisible={setModalVisible} />
         </View>
     )
 }
+
+const FirstModal = ({ modalVisible, setModalVisible }) => {
+
+    return (
+        <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => setModalVisible(!modalVisible)}
+        >
+            <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                    <TouchableOpacity style={{ margin: 10, height: 20, width: AppConfig.windowWidth - 50, alignItems: 'flex-end' }} onPress={() => setModalVisible(!modalVisible)}>
+                        <Cross />
+                    </TouchableOpacity>
+                    <IndyViewImage />
+
+                    <View style={{marginVertical: 20}}>
+                        <Text style={styles.modalText}>Welcome to Indyviews</Text>
+                        <Text style={styles.modalDescription}>Indyviews allows you to redirect traffic to your own site, page or whichever link you want! You don't have to create a store on Indymandi for this. The slots on Indyviews are weekly and need to be prebooked.</Text>
+                    </View>
+
+                </View>
+            </View>
+        </Modal>
+    );
+};
 
 export default IndyViews
 
@@ -160,5 +192,55 @@ const styles = StyleSheet.create({
     sDay: {
         ...commonStyle('400', 12, 'primaryColorA'),
         lineHeight: 16.34
+    },
+
+
+
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: 20,
+    },
+    modalView: {
+        // flex: 1,
+        backgroundColor: AppStyle.colorSet.primaryColorC,
+        margin: 35,
+        // backgroundColor: 'white',
+        borderRadius: 8,
+        // padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+    },
+    buttonOpen: {
+        backgroundColor: '#F194FF',
+    },
+    buttonClose: {
+        backgroundColor: '#2196F3',
+    },
+    modalHeading: {
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    modalText: {
+        ...commonStyle('600', 20, 'primaryColorA'),
+        marginVertical: 10,
+    },
+    modalDescription: {
+        ...commonStyle('400', 14, 'primaryColorA'),
+        lineHeight: 19.07,
     }
 })

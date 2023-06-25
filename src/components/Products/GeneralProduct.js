@@ -87,12 +87,13 @@ const GeneralProduct = (
           style={flexStyle}
           imageStyle={{ borderRadius: 8 }}
         >
-          <TouchableOpacity
-            onPress={() => loginConfig?.isLogin ? getWishListListing() : navigation.navigate('Profile')}
-            style={{ position: 'absolute', right: 0, top: 0 }}
-          >
-            {liked ? <WishIconLiked /> : <WishIcon />}
-          </TouchableOpacity>
+          {!checkBox && !optionIcon &&
+            <TouchableOpacity
+              onPress={() => loginConfig?.isLogin ? getWishListListing() : navigation.navigate('Profile')}
+              style={{ position: 'absolute', right: 0, top: 0 }}
+            >
+              {liked ? <WishIconLiked /> : <WishIcon />}
+            </TouchableOpacity>}
           {optionIcon &&
             <TouchableOpacity onPress={handleOptions} style={{ position: 'absolute', right: 0, top: 0 }}>
               <MoreOption />

@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { FlatList, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import AppConfig from '../../helpers/config';
 import AppLogo from '../../assets/images/app-logo.svg';
+import QRCode from '../../assets/images/qr-code-icon.svg';
+import BellIconActive from '../../assets/images/bell-icon-counter.svg';
+import BellIcon from '../../assets/images/bell-icon.svg';
 import AppStyle from '../../assets/styles/AppStyle';
 import { useNavigation } from '@react-navigation/native';
 import { ServiceGetCategories } from '../../services/ProductService';
@@ -9,7 +12,7 @@ import { useDispatch } from 'react-redux';
 import { setCategories } from '../../store/slices/productsSlice';
 import { showToastHandler } from '../../helpers/common';
 
-const HomeHeader = ({ filters = true }) => {
+const HomeHeader = ({ filters = true, QR_Code = '' }) => {
     const colors = ['#C5F1C4', '#CCDFD6', '#E8CDDE', '#E9DBD7', '#D3E8EB']
     const dispatch = useDispatch();
     const navigation = useNavigation();
@@ -51,8 +54,18 @@ const HomeHeader = ({ filters = true }) => {
 
     return (
         <View style={styles.container}>
-            <View style={{ marginHorizontal: 16, marginTop: 8, marginBottom: 18 }}>
+            <View style={styles.logosContainer}>
                 <AppLogo height={26.35} width={69} />
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    {QR_Code &&
+                        <TouchableOpacity onPress={() => navigation.navigate('QRCode', { QR_Code })}>
+                            <QRCode />
+                        </TouchableOpacity>
+                    }
+                    <TouchableOpacity style={{ marginLeft: 10 }}>
+                        <BellIconActive />
+                    </TouchableOpacity>
+                </View>
             </View>
             {filters && <View style={{ marginBottom: 8 }}>
                 <FlatList
@@ -73,7 +86,15 @@ const styles = StyleSheet.create({
     container: {
         marginTop: AppConfig.statusBarHeight,
         borderBottomColor: AppStyle.colorSet.borderLightGrayColor,
-        borderBottomWidth: 1
+        borderBottomWidth: 1,
+    },
+    logosContainer: {
+        marginHorizontal: 16,
+        marginTop: 8,
+        marginBottom: 18,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
     },
     chipContainer: {
         paddingHorizontal: 12,

@@ -87,6 +87,7 @@ import { ServiceGetAllConversations } from '../services/AppService';
 import { getAppConfig, setConversationsData } from '../store/slices/appConfigSlice';
 import AllPaymentMode from '../screens/paymentMode/AllPaymentMode';
 import CreatePaymentMode from '../screens/createPaymentMode/CreatePaymentMode';
+import QRCode from '../screens/qrCode/QRCode';
 
 const Tab = createBottomTabNavigator();
 
@@ -151,6 +152,25 @@ const AppTabs = () => {
 
         if (getCountForMessages() > 0) {
             options.tabBarBadge = getCountForMessages()
+        }
+
+        return options;
+    }
+
+    const cartOptions = () => {
+        let options = {
+            ...tabScreenProps,
+            title: 'Cart',
+            tabBarIcon: ({ focused, color, size }) =>
+                focused ? (
+                    <TabCartActive />
+                ) : (
+                    <TabCartInActive />
+                ),
+        }
+
+        if (loginConfig?.cart?.length > 0) {
+            options.tabBarBadge = loginConfig?.cart?.length;
         }
 
         return options;
@@ -233,16 +253,7 @@ const AppTabs = () => {
             {role === 'u' && <Tab.Screen
                 name="Cart"
                 component={CartStackScreen}
-                options={{
-                    ...tabScreenProps,
-                    title: 'Cart',
-                    tabBarIcon: ({ focused, color, size }) =>
-                        focused ? (
-                            <TabCartActive />
-                        ) : (
-                            <TabCartInActive />
-                        ),
-                }}
+                options={cartOptions}
             />}
             <Tab.Screen
                 name="Profile"
@@ -471,6 +482,7 @@ const AppNavigation = () => {
                     <AppStack.Screen name="SellerBookContent" component={SellerBookContent} />
                     <AppStack.Screen name="AllPaymentMode" component={AllPaymentMode} />
                     <AppStack.Screen name="CreatePaymentMode" component={CreatePaymentMode} />
+                    <AppStack.Screen name="QRCode" component={QRCode} />
                 </AppStack.Navigator>
             </NavigationContainer>
 

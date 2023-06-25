@@ -36,7 +36,7 @@ const ManageCollection = ({ route }) => {
             ServiceGetStoreOtherCollection(storeId).then(_response => {
                 const combinedCollection = [response?.data, ..._response?.data];
                 setCollections(combinedCollection);
-                console.log({combinedCollection});
+                console.log({ combinedCollection });
                 dispatch(setActivityIndicator(false));
             }).catch(e => {
                 showToastHandler(e, dispatch);
@@ -66,6 +66,15 @@ const ManageCollection = ({ route }) => {
         }
     }
 
+    const getOptionActions = (name) => {
+        let _options = [];
+        _options.push({ title: 'Edit collection', value: 'edit' });
+        if (name !== 'All') {
+            _options.push({ title: 'Delete collection', value: 'remove' });
+        }
+        return _options;
+    }
+
     const _renderItem = ({ item, index }) => {
         return (
             <View style={{ marginRight: index % 2 === 0 ? 16 : 0, marginBottom: 16 }}>
@@ -82,10 +91,7 @@ const ManageCollection = ({ route }) => {
                     SheetManager.show('example-two', {
                         payload: {
                             header: 'Choose your action',
-                            actions: [
-                                { title: 'Edit collection', value: 'edit' },
-                                { title: 'Delete collection', value: 'remove' },
-                            ],
+                            actions: getOptionActions(item?.name),
                             filterHandler: (_action) => filterHandler(_action, item)
                         }
                     });

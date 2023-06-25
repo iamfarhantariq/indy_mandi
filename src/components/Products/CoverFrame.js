@@ -1,15 +1,15 @@
-import { ImageBackground, StyleSheet, Text, View } from 'react-native'
+import { ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import AppStyle from '../../assets/styles/AppStyle'
 import AppConfig from '../../helpers/config'
+import { openLinkService } from '../../helpers/common'
 
 const CoverFrame = ({ item, index, detailed = true, flex = false, indyview = false }) => {
-
     const flexStyle = flex ? { ...styles.flexImageContainer } :
         { ...styles.imageContainer }
 
     return (
-        <View>
+        <TouchableOpacity onPress={()=> indyview && openLinkService(item?.website_url)}>
             <ImageBackground
                 resizeMode='cover'
                 source={{uri: item?.image}}
@@ -33,7 +33,7 @@ const CoverFrame = ({ item, index, detailed = true, flex = false, indyview = fal
                 </View>
                 <View style={{ ...styles.darkBackground, height: indyview ? 45 : 35 }} />
             </ImageBackground>
-        </View>
+        </TouchableOpacity>
     )
 }
 

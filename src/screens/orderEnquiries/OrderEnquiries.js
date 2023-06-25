@@ -9,8 +9,10 @@ import { ServiceGetOrders } from '../../services/AppService';
 import { useSelector } from 'react-redux';
 import { getLoginConfig } from '../../store/slices/loginConfigSlice';
 import { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 const OrderEnquiries = () => {
+    const navigation = useNavigation();
     const loginConfig = useSelector(getLoginConfig);
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
@@ -170,17 +172,17 @@ const OrderEnquiries = () => {
     )
 
     const ProductItem = ({ item, index }) => (
-        <View style={styles.pIContainer}>
+        <TouchableOpacity onPress={() => navigation.navigate('ProductDetailScreen', { productId: item?.id })} style={styles.pIContainer}>
             <View style={{ width: '70%', flexDirection: 'row' }}>
-                <Image source={item?.image} resizeMode='cover'
+                <Image source={{uri: item?.image}} resizeMode='cover'
                     style={styles.imageStyle} />
                 <View>
-                    <Text style={styles.pIHeading}>{item?.id}</Text>
+                    <Text style={styles.pIHeading}>{item?.name || 'Product name'}</Text>
                     <Text style={styles.pIPrice}>{item?.price}</Text>
                     <Text style={styles.pIPrice}>Quantity: {item?.quantity}</Text>
                 </View>
             </View>
-        </View>
+        </TouchableOpacity>
     )
 
     return (

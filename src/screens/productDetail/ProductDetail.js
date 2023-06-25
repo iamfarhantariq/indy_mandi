@@ -98,7 +98,8 @@ const ProductDetail = ({ route }) => {
                 }
                 <SellerDetails productDetail={productDetail} />
                 <HeadingAndDescription heading={'Product details'} description={productDetail?.product_detail} />
-                <HeadingAndDescription heading={'About the brand '} description={productDetail?.about_brand} />
+                <HeadingAndDescription heading={'About the brand'} description={productDetail?.about_brand} />
+                <HeadingAndDescription heading={'Return policy'} description={productDetail?.return_policy} />
                 <Reviews />
                 <View style={{ marginVertical: 25.5, minHeight: 190 }}>
                     <ProductSection items={moreProducts} title={'More products from this shop'} />

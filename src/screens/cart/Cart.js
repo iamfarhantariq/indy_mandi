@@ -10,44 +10,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getLoginConfig, removeFromCart, updateCounter } from '../../store/slices/loginConfigSlice'
 import AppConfig from '../../helpers/config';
 import { SheetManager } from 'react-native-actions-sheet';
+import { useNavigation } from '@react-navigation/native'
 
 const Cart = () => {
-  const { cart } = useSelector(getLoginConfig);
   const dispatch = useDispatch();
-
-  // const items = [
-  //   {
-  //     products: [
-  //       {
-  //         imageSource: require('../../assets/images/demo-category-image.jpeg'),
-  //         name: 'New Nike girl shoe', price: '$80.77', totalPrice: '$400'
-  //       },
-  //       {
-  //         imageSource: require('../../assets/images/demo-category-image.jpeg'),
-  //         name: 'New Nike girl shoe', price: '$80.77', totalPrice: '$400'
-  //       },
-  //     ],
-  //     seller: { name: 'Vedaka' }
-  //   },
-  //   {
-  //     products: [
-  //       {
-  //         imageSource: require('../../assets/images/demo-category-image.jpeg'),
-  //         name: 'New Nike girl shoe', price: '$80.77', totalPrice: '$400'
-  //       }
-  //     ],
-  //     seller: { name: 'Vedaka' }
-  //   },
-  //   {
-  //     products: [
-  //       {
-  //         imageSource: require('../../assets/images/demo-category-image.jpeg'),
-  //         name: 'New Nike girl shoe', price: '$80.77', totalPrice: '$400'
-  //       }
-  //     ],
-  //     seller: { name: 'Vedaka' }
-  //   }
-  // ];
+  const navigation = useNavigation();
+  const { cart } = useSelector(getLoginConfig);
 
   const getTotalSumPrice = () => {
     return cart.map(f => (
@@ -60,15 +28,16 @@ const Cart = () => {
 
     return (
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 16 }}>
-        <View style={{ width: '70%', flexDirection: 'row' }}>
-          <Image source={{ uri: item?.image }} resizeMode='cover'
+        <TouchableOpacity onPress={() => navigation.navigate('ProductDetailScreen', { productId: item?.id })}
+          style={{ width: '70%', flexDirection: 'row' }}>
+          <Image source={{ uri: item?.front_image }} resizeMode='cover'
             style={styles.imageStyle} />
           <View style={{ width: AppConfig.windowWidth / 2 }}>
             <Text style={styles.pIHeading}>{item.name?.trim()}</Text>
             <Text style={styles.pIPrice}>₹{priceToShow}</Text>
             <Text style={styles.pIPrice}>Total: ₹{priceToShow * item?.count}</Text>
           </View>
-        </View>
+        </TouchableOpacity>
         <View style={{ width: '30%', flexDirection: 'row', justifyContent: 'space-between' }}>
           <TouchableOpacity onPress={() => item?.count > 1 && dispatch(updateCounter({ id: item?.id, action: 'decrement' }))}>
             <Minus />
@@ -142,7 +111,7 @@ const Cart = () => {
         <FlatList
           data={cart}
           horizontal={false}
-          
+
           renderItem={ProductContainer}
           key={index => 'item' + index + 'product'}
           showsVerticalScrollIndicator={false}

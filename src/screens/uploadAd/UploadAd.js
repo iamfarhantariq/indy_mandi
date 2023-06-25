@@ -94,7 +94,7 @@ const UploadAd = ({ route }) => {
                 });
             });
         },
-        validationSchema: createIndyViewFormSchema,
+        // validationSchema: createIndyViewFormSchema,
     });
 
     const otherProps = { values, errors, touched, setFieldValue, setFieldTouched, handleBlur };
