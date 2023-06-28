@@ -20,8 +20,6 @@ const PaymentHistory = () => {
         getPaymentHistory();
     }, []);
 
-    console.log({ payments });
-
     const getPaymentHistory = () => {
         setLoading(true);
         ServiceGetUserPayments(page).then(response => {

@@ -32,10 +32,9 @@ function InputField({
     inputMode = 'text',
     keyboardType = 'default',
     editable = true,
-    onEndEditing = null,
-    defaultValue,
+    onEndEditing = null
 }) {
-    // const { values, errors, touched, setFieldTouched, setFieldValue, handleBlur } = otherProps;
+    const [tempValue, setTempValue] = useState(value);
 
     return (
         <View>
@@ -51,8 +50,7 @@ function InputField({
                 }}>
                     <TextInput style={styles.input}
                         secureTextEntry={secure}
-                        value={otherProps ? otherProps?.values[name] : value}
-                        defaultValue={defaultValue ? defaultValue : value}
+                        value={onEndEditing ? tempValue : otherProps ? otherProps?.values[name] : value}
                         placeholder={placeholder}
                         placeholderTextColor={otherProps &&
                             otherProps?.errors[name] && otherProps?.touched[name] ?
@@ -71,6 +69,10 @@ function InputField({
                             }
                         }}
                         onChangeText={(it) => {
+                            if (onEndEditing) {
+                                setTempValue(it);
+                                return;
+                            }
                             if (otherProps) {
                                 otherProps.setFieldValue(name, it, true);
                                 otherProps.setFieldTouched(name, true, true);
@@ -78,8 +80,8 @@ function InputField({
                                 onTextChange(it);
                             }
                         }}
-                        onEndEditing={()=> onEndEditing && onEndEditing()}
-                        />
+                        onEndEditing={() => onEndEditing && onTextChange(tempValue)}
+                    />
                     {(otherProps && otherProps?.values[name]?.length) || (value && editable) ?
                         <TouchableOpacity style={{ padding: 10 }}
                             onPress={() => {

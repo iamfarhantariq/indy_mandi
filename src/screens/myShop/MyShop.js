@@ -102,7 +102,7 @@ const MyShop = () => {
 
   const FirstRoute = () => (
     <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor, paddingTop: 18 }} >
-      <InputField defaultValue={search} onTextChange={(t) => searchValue = t} placeholder={'Search'} onEndEditing={() => setSearch(searchValue)} />
+      <InputField value={search} onTextChange={(t) => setSearch(t)} placeholder={'Search'} onEndEditing={(t) => setSearch(t)} />
       <ProductSectionStore
         collections={collections}
         selectedCollection={selectedCollection}

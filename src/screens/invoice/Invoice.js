@@ -13,6 +13,7 @@ const Invoice = ({ route }) => {
     const params = route?.params;
     const dispatch = useDispatch();
     const navigation = useNavigation();
+    const [loading, setLoading] = useState(true);
     const [invoice, setInvoice] = useState(null);
 
     // let data = {
@@ -51,17 +52,20 @@ const Invoice = ({ route }) => {
             console.log({ response });
             setInvoice(response?.data?.data);
             dispatch(setActivityIndicator(false));
+            setLoading(false);
         }).catch(e => {
+            console.log({ e });
+            setLoading(false);
             showToastHandler(e, dispatch);
         })
     }
 
     const getHeaders = (from, to) => {
-        return valuesVSHeaders.slice(from, to)?.map(h => h.headerName);
+        return valuesVSHeaders.slice(from, to)?.map(h => h?.headerName);
     }
 
     const getValues = (from, to) => {
-        return valuesVSHeaders.slice(from, to)?.map(h => invoice[h.dbName])
+        return valuesVSHeaders.slice(from, to)?.map(h => invoice[h?.dbName])
     }
 
     return (
@@ -86,7 +90,7 @@ const Invoice = ({ route }) => {
                         ))}
                     </View>
                     <View style={{ width: '60%' }}>
-                        {getValues(0, 5).map((_item, _index) => (
+                        {!loading && getValues(0, 5).map((_item, _index) => (
                             <Text numberOfLines={1} lineBreakMode='tail' key={_index} style={styles.itemDetailTextR}>
                                 {_item}
                             </Text>
@@ -105,7 +109,7 @@ const Invoice = ({ route }) => {
                         ))}
                     </View>
                     <View style={{ width: '60%' }}>
-                        {getValues(5, 8).map((_item, _index) => (
+                        {!loading && getValues(5, 8).map((_item, _index) => (
                             <Text numberOfLines={1} lineBreakMode='tail' key={_index} style={styles.itemDetailTextR}>
                                 {_item}
                             </Text>

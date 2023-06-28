@@ -87,7 +87,7 @@ import { ServiceGetAllConversations } from '../services/AppService';
 import { getAppConfig, setConversationsData } from '../store/slices/appConfigSlice';
 import AllPaymentMode from '../screens/paymentMode/AllPaymentMode';
 import CreatePaymentMode from '../screens/createPaymentMode/CreatePaymentMode';
-import QRCode from '../screens/qrCode/QRCode';
+import QRCodeScreen from '../screens/qrCode/QRCodeScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -483,7 +483,7 @@ const AppNavigation = () => {
                     <AppStack.Screen name="SellerBookContent" component={SellerBookContent} />
                     <AppStack.Screen name="AllPaymentMode" component={AllPaymentMode} />
                     <AppStack.Screen name="CreatePaymentMode" component={CreatePaymentMode} />
-                    <AppStack.Screen name="QRCode" component={QRCode} />
+                    <AppStack.Screen name="QRCodeScreen" component={QRCodeScreen} />
                 </AppStack.Navigator>
             </NavigationContainer>
 

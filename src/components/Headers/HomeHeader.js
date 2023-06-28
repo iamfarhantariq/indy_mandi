@@ -58,7 +58,7 @@ const HomeHeader = ({ filters = true, QR_Code = '' }) => {
                 <AppLogo height={26.35} width={69} />
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     {QR_Code &&
-                        <TouchableOpacity onPress={() => navigation.navigate('QRCode', { QR_Code })}>
+                        <TouchableOpacity onPress={() => navigation.navigate('QRCodeScreen', { QR_Code })}>
                             <QRCode />
                         </TouchableOpacity>
                     }
