@@ -13,7 +13,8 @@
     "build:android": "cd android && ./gradlew assembleDebug && cd ..",
     "release:android": "cd android && ./gradlew assembleRelease && cd ..",
     "bundle:android": "cd android && ./gradlew bundleRelease && cd ..",
-    "resource:android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res"
+    "android:bundle:debug": "react-native bundle --platform android --dev true --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/",
+    "android:bundle:release": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/build/intermediates/res/merged/release/"
   },
   "dependencies": {
     "@pusher/pusher-websocket-react-native": "^1.2.1",
