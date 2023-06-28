@@ -5,7 +5,7 @@ import ImageHeader from '../../components/Headers/ImageHeader'
 import { useDispatch } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
 import { setActivityIndicator } from '../../store/slices/appConfigSlice'
-import { showToastHandler } from '../../helpers/common'
+import { commonStyle, showToastHandler } from '../../helpers/common'
 import { ServiceGetSingleStory } from '../../services/AppService';
 import RenderHtml from 'react-native-render-html';
 
@@ -39,6 +39,7 @@ const SellerStoryContent = ({ route }) => {
         <View style={{ backgroundColor: AppStyle.colorSet.BGColor, flex: 1 }}>
             <ImageHeader image={story?.image} description={story?.title} />
             <ScrollView showsVerticalScrollIndicator={false}>
+                <Text style={styles.timeText}>{story?.publish_time}</Text>
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                     <RenderHtml
                         tagsStyles={styles.htmlBody}
@@ -64,5 +65,11 @@ const styles = StyleSheet.create({
             lineHeight: 19.07,
             color: AppStyle.colorSet.primaryColorA,
         }
-    }
+    },
+    timeText: {
+        ...commonStyle('400', 12, 'textSecondary'),
+        marginHorizontal: 16,
+        marginTop: 8,
+        textAlign: 'right'
+    },
 })

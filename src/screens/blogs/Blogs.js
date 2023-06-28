@@ -131,7 +131,7 @@ const Blogs = () => {
                 showsVerticalScrollIndicator={false} style={{ marginHorizontal: 16 }}>
                 {blogs?.map((item, index) => {
                     return (
-                        <TouchableOpacity onPress={() => navigation.navigate('BlogContentScreen')} key={index} style={{ marginBottom: 16 }}>
+                        <TouchableOpacity onPress={() => navigation.navigate('BlogContentScreen', { slug: item?.slug })} key={index} style={{ marginBottom: 16 }}>
                             <CoverFrame item={item} key={index} index={index} detailed={false} flex={true} />
                         </TouchableOpacity>
                     )
