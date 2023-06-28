@@ -118,6 +118,7 @@ const ManageProducts = ({ route }) => {
 
     const updateProductStatus = (status, productId) => {
         const payload = { productid: productId, status };
+        console.log({payload});
         ServiceUpdateProductStatus(payload).then(response => {
             console.log({ response });
             const _products = [...products];

@@ -100,7 +100,7 @@ const ProductsToCollection = ({ route }) => {
         <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }}>
             <HeaderWithBack title={'Add products to collection'} />
 
-            <View style={{ marginHorizontal: 16, marginTop: 16 }}>
+            <View style={{ marginHorizontal: 16, marginTop: 16, flex: 1 }}>
                 <View style={styles.checkboxContainer}>
                     <CheckBox
                         value={selectAll}
@@ -118,21 +118,24 @@ const ProductsToCollection = ({ route }) => {
                     <Text style={styles.label}>Select all</Text>
                 </View>
 
-                <FlatList
-                    data={products}
-                    nestedScrollEnabled
-                    key={index => 'category' + index + 'main-product'}
-                    renderItem={_renderItem}
-                    horizontal={false}
-                    numColumns={2}
-                    scrollEnabled
-                    showsVerticalScrollIndicator={false}
-                    style={{ paddingVertical: 16 }}
-                    onEndReached={info => {
-                        if (page > lastPage) return;
-                        setPage(page + 1);
-                    }}
-                />
+                <View style={{ marginBottom: 128 }}>
+                    <FlatList
+                        data={products}
+                        nestedScrollEnabled
+                        key={index => 'category' + index + 'main-product'}
+                        renderItem={_renderItem}
+                        horizontal={false}
+                        numColumns={2}
+                        scrollEnabled
+                        showsVerticalScrollIndicator={false}
+                        style={{ paddingVertical: 16 }}
+                        onEndReached={info => {
+                            if (page > lastPage) return;
+                            setPage(page + 1);
+                        }}
+                    />
+                </View>
+
                 {loading &&
                     <View style={{ marginBottom: 20 }}>
                         <ActivityIndicator size={'large'} />

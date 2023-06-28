@@ -36,7 +36,7 @@ const GeneralProduct = (
 
   const toggleSwitch = () => {
     setIsEnabled(!isEnabled);
-    handleToggle(isEnabled === 1 ? 0 : 1);
+    handleToggle(isEnabled ? 0 : 1);
   };
 
   const flexStyle = flex ? { ...styles.flexImageContainer } :
@@ -59,7 +59,7 @@ const GeneralProduct = (
   }
 
   const getWishListListing = () => {
-    if (!liked && loginConfig?.user?.role === 'u') {
+    if (loginConfig?.user?.role === 'u') {
       ServiceGetWishListListingForUser().then(response => {
         console.log({ response });
         const data = response?.data?.data;
@@ -87,7 +87,7 @@ const GeneralProduct = (
           style={flexStyle}
           imageStyle={{ borderRadius: 8 }}
         >
-          {!checkBox && !optionIcon &&
+          {!checkBox && !optionIcon && 
             <TouchableOpacity
               onPress={() => loginConfig?.isLogin ? getWishListListing() : navigation.navigate('Profile')}
               style={{ position: 'absolute', right: 0, top: 0 }}

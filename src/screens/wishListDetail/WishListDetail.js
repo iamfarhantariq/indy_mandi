@@ -19,7 +19,7 @@ import { setAddToCart } from '../../store/slices/loginConfigSlice';
 import Share from 'react-native-share';
 
 const WishListDetail = ({ route }) => {
-    const { wishListId, wishListName, wishlists } = route?.params;
+    const { wishListId, wishListName, wishlists, share_link } = route?.params;
     console.log({ wishListName });
     const dispatch = useDispatch();
     const navigation = useNavigation();
@@ -75,7 +75,7 @@ const WishListDetail = ({ route }) => {
                         });
                     } else if (_action === 'share') {
                         try {
-                            const response = await Share.open({url: 'www.google.com'});
+                            const response = await Share.open({url: share_link});
                             console.log({response});
                           } catch (error) {
                             console.log(error);

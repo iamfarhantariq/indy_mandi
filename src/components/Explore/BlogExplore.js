@@ -6,28 +6,55 @@ import AppStyle from '../../assets/styles/AppStyle'
 import CoverFrame from '../Products/CoverFrame'
 import { ServiceExploreData } from '../../services/ExploreService'
 import { showToastHandler } from '../../helpers/common'
+import { ServiceGetBlogsCategories } from '../../services/AppService'
 
 const BlogExplore = ({ searchType, search }) => {
+    const colors = ['#C5F1C4', '#CCDFD6', '#E8CDDE', '#E9DBD7', '#D3E8EB']
     const navigation = useNavigation();
-    const categories = [
-        { name: 'All', color: '#C5F1C4', value: '' },
-        { name: 'Fashion', color: '#CCDFD6', value: 'Fashion' },
-        { name: 'Article', color: '#E8CDDE', value: 'Article' },
-    ]
+    // const categories = [
+    //     { name: 'All', color: '#C5F1C4', value: '' },
+    //     { name: 'Fashion', color: '#CCDFD6', value: 'Fashion' },
+    //     { name: 'Article', color: '#E8CDDE', value: 'Article' },
+    // ]
 
     const [page, setPage] = useState(1);
     const [lastPage, setLastPage] = useState(2);
-    const [category, setCategory] = useState('');
+    // const [category, setCategory] = useState('');
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [categories, setCategories] = useState([])
+    const [selectedCategory, setSelectedCategory] = useState(null);
 
     useEffect(() => {
-        ExploreSearch();
-    }, [page, category]);
+        GetCategoriesList();
+    }, []);
+
+    useEffect(() => {
+        if (selectedCategory) {
+            ExploreSearch();
+        }
+    }, [page, selectedCategory]);
+
+    const GetCategoriesList = () => {
+        ServiceGetBlogsCategories().then(response => {
+            console.log({ response });
+            let _items = [{ name: 'All', color: colors[0], value: '' }];
+            let colorIndex = 1;
+            response?.data?.data?.forEach((_item, index) => {
+                _items.push({ name: _item?.name, color: colors[colorIndex], value: _item?.name });
+                colorIndex < 4 ? colorIndex++ : colorIndex = 0;
+            })
+            setSelectedCategory(_items[0]);
+            setCategories(_items);
+        }).catch(e => {
+            showToastHandler(e);
+        });
+    }
 
     const ExploreSearch = () => {
         setLoading(true);
-        const payload = { type: searchType, category: category, search_keywords: search }
+        const payload = { type: searchType, category: selectedCategory?.value, search_keywords: search };
+        console.log({ payload });
         ServiceExploreData(payload, page).then((response) => {
             console.log({ response });
             if (page === 1) {
@@ -44,9 +71,10 @@ const BlogExplore = ({ searchType, search }) => {
     }
 
     const _renderItem = ({ item, index }) => {
+        const selectedStyle = selectedCategory?.name === item?.name ? { borderColor: AppStyle.colorSet.primaryColorB, borderWidth: 1 } : {}
         return (
-            <TouchableOpacity onPress={() => setCategory(item?.value)}>
-                <View style={{ ...styles.chipContainer, backgroundColor: item?.color, marginLeft: index === 0 ? 16 : 0 }}>
+            <TouchableOpacity onPress={() => setSelectedCategory(item)}>
+                <View style={{ ...selectedStyle, ...styles.chipContainer, backgroundColor: item?.color, marginLeft: index === 0 ? 16 : 0 }}>
                     <Text style={styles.chipText}>{item?.name}</Text>
                 </View>
             </TouchableOpacity>

@@ -32,6 +32,8 @@ function InputField({
     inputMode = 'text',
     keyboardType = 'default',
     editable = true,
+    onEndEditing = null,
+    defaultValue,
 }) {
     // const { values, errors, touched, setFieldTouched, setFieldValue, handleBlur } = otherProps;
 
@@ -50,6 +52,7 @@ function InputField({
                     <TextInput style={styles.input}
                         secureTextEntry={secure}
                         value={otherProps ? otherProps?.values[name] : value}
+                        defaultValue={defaultValue ? defaultValue : value}
                         placeholder={placeholder}
                         placeholderTextColor={otherProps &&
                             otherProps?.errors[name] && otherProps?.touched[name] ?
@@ -74,7 +77,9 @@ function InputField({
                             } else {
                                 onTextChange(it);
                             }
-                        }} />
+                        }}
+                        onEndEditing={()=> onEndEditing && onEndEditing()}
+                        />
                     {(otherProps && otherProps?.values[name]?.length) || (value && editable) ?
                         <TouchableOpacity style={{ padding: 10 }}
                             onPress={() => {

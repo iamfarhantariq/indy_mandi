@@ -41,6 +41,7 @@ const MyShop = () => {
   const [collections, setCollections] = useState([]);
   const [selectedCollection, setSelectedCollection] = useState(null);
   const [products, setProducts] = useState([]);
+  let searchValue = ''
 
   useEffect(() => {
     if (storeId) {
@@ -101,7 +102,7 @@ const MyShop = () => {
 
   const FirstRoute = () => (
     <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor, paddingTop: 18 }} >
-      <InputField value={search} onTextChange={(t) => setSearch(t)} placeholder={'Search'} />
+      <InputField defaultValue={search} onTextChange={(t) => searchValue = t} placeholder={'Search'} onEndEditing={() => setSearch(searchValue)} />
       <ProductSectionStore
         collections={collections}
         selectedCollection={selectedCollection}
@@ -110,7 +111,7 @@ const MyShop = () => {
         storeId={storeId}
         search={search}
       />
-    </View> 
+    </View>
   );
 
   const SecondRoute = () => (
@@ -127,7 +128,7 @@ const MyShop = () => {
 
   const FourthRoute = () => (
     <View style={{ flex: 1, backgroundColor: AppStyle.colorSet.BGColor }} >
-      <PolicySectionStore />
+      <PolicySectionStore policies={storeData?.return_policy} />
     </View>
   );
 

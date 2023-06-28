@@ -38,13 +38,13 @@ const RaiseDispute = () => {
     onSubmit: (values) => {
       console.log({ values });
 
-      if (!values.disputefile) {
-        return Toast.show({
-          type: 'error',
-          text1: 'Required',
-          text2: 'Image required',
-        });
-      }
+      // if (!values.disputefile) {
+      //   return Toast.show({
+      //     type: 'error',
+      //     text1: 'Required',
+      //     text2: 'Image required',
+      //   });
+      // }
 
       const formData = convertToFormDataObject(values);
       console.log({ formData });

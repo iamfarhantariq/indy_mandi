@@ -1,4 +1,4 @@
-import { post } from "./HttpClient";
+import { get, post } from "./HttpClient";
 import { API_POST_EXPLORE } from "./ApisRoutes";
 
 export const ServiceExploreData = (formData, page) => {

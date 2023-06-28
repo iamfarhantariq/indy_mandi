@@ -126,9 +126,9 @@ const OrderEnquiries = () => {
     const SingleOrder = ({ item, index }) => (
         <View style={{ marginBottom: 16 }}>
             <View style={styles.storeContainer}>
-                <Text style={styles.sTitle}>Nike</Text>
+                {/* <Text style={styles.sTitle}>Nike</Text> */}
                 <TouchableOpacity style={styles.sButtonContainer}>
-                    <Text style={styles.sButtonText}>Contact Seller</Text>
+                    <Text style={styles.sButtonText}>Contact {loginConfig?.user?.role === 'u' ? 'Seller' : 'Customer'}</Text>
                 </TouchableOpacity>
             </View>
 
@@ -172,7 +172,7 @@ const OrderEnquiries = () => {
     )
 
     const ProductItem = ({ item, index }) => (
-        <TouchableOpacity onPress={() => navigation.navigate('ProductDetailScreen', { productId: item?.id })} style={styles.pIContainer}>
+        <TouchableOpacity onPress={() => item?.should_redirect === '1' && navigation.navigate('ProductDetailScreen', { productId: item?.id })} style={styles.pIContainer}>
             <View style={{ width: '70%', flexDirection: 'row' }}>
                 <Image source={{uri: item?.image}} resizeMode='cover'
                     style={styles.imageStyle} />

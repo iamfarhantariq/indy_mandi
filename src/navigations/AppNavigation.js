@@ -378,6 +378,7 @@ const AppNavigation = () => {
 
     useEffect(() => {
         SplashScreen.hide();
+        // FacebookSdk.sdkInitialize();
         async function fetchUserDetails() {
             loginConfig?.isLogin && await UpdatedUserInTheApp(dispatch);
         }

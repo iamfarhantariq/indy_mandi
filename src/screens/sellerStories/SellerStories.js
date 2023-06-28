@@ -72,6 +72,12 @@ const SellerStories = () => {
         )
     }
 
+    const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
+        const paddingToBottom = 20;
+        return layoutMeasurement.height + contentOffset.y >=
+            contentSize.height - paddingToBottom;
+    };
+
     return (
         <View style={{ backgroundColor: AppStyle.colorSet.BGColor, flex: 1 }}>
             <HeaderWithBack title={'Seller Stories'} />

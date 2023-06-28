@@ -60,10 +60,10 @@ const Blogs = () => {
         dispatch(setActivityIndicator(true));
         ServiceGetBlogsCategories().then(response => {
             console.log({ response });
-            let _items = [];
-            let colorIndex = 0;
+            let _items = [{ name: 'All', color: colors[0], value: '' }];
+            let colorIndex = 1;
             response?.data?.data?.forEach((_item, index) => {
-                _items.push({ name: _item?.name, color: colors[colorIndex] });
+                _items.push({ name: _item?.name, color: colors[colorIndex], value: _item?.name });
                 colorIndex < 4 ? colorIndex++ : colorIndex = 0;
             })
             setSelectedCategory(_items[0]);
@@ -76,7 +76,8 @@ const Blogs = () => {
 
     const getBlogsForCategory = () => {
         setLoading(true);
-        const payload = { type: 'blogs', search_keywords: search, category: selectedCategory };
+        const payload = { type: 'blogs', search_keywords: search, category: selectedCategory.value };
+        console.log({payload});
         ServiceGetBlogsToExplore(payload, page).then(response => {
             console.log({ response });
             if (page === 1) {
