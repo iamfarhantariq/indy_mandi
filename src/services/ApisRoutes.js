@@ -77,6 +77,8 @@ export const API_GET_UPDATE_PRODUCT_STATUS = `${BASE_URL}/vendor/updateproductst
 export const API_UPLOAD_STORE_IMAGE = `${BASE_URL}/vendor/product/crop-image/store`;
 export const API_POST_CREATE_PRODUCT = `${BASE_URL}/vendor/product/store`;
 export const API_POST_UPDATE_PRODUCT = `${BASE_URL}/vendor/product/update`;
+export const API_POST_PROMPT_ACTION = `${BASE_URL}/prompt-submit`;
+export const API_POST_PROMPT_ACTION_BACK = `${BASE_URL}/prompt-submit-back`;
 
 // Collection
 export const API_POST_NEW_COLLECTION = `${BASE_URL}/vendor/collection/store`;

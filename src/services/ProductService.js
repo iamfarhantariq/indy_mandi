@@ -1,5 +1,5 @@
 import { get, post, postMultipartData } from "./HttpClient"
-import { API_GET_CIRCLE_CATEGORY, API_GET_HOME_INDY_BLOGS_STORY, API_GET_PRODUCT_CATEGORIES, API_GET_PRODUCT_DETAIL, API_GET_PRODUCT_HOME_PAGE_TYPES, API_GET_STORE_COLLECTION_SORTED_PRODUCTS, API_GET_STORE_DETAIL, API_GET_STORE_FIRST_COLLECTION, API_GET_STORE_OTHER_COLLECTION, API_GET_STORE_PRODUCTS, API_GET_UPDATE_PRODUCT_STATUS, API_POST_CREATE_PRODUCT, API_POST_UPDATE_PRODUCT, API_UPLOAD_STORE_IMAGE } from "./ApisRoutes";
+import { API_GET_CIRCLE_CATEGORY, API_GET_HOME_INDY_BLOGS_STORY, API_GET_PRODUCT_CATEGORIES, API_GET_PRODUCT_DETAIL, API_GET_PRODUCT_HOME_PAGE_TYPES, API_GET_STORE_COLLECTION_SORTED_PRODUCTS, API_GET_STORE_DETAIL, API_GET_STORE_FIRST_COLLECTION, API_GET_STORE_OTHER_COLLECTION, API_GET_STORE_PRODUCTS, API_GET_UPDATE_PRODUCT_STATUS, API_POST_CREATE_PRODUCT, API_POST_PROMPT_ACTION, API_POST_PROMPT_ACTION_BACK, API_POST_UPDATE_PRODUCT, API_UPLOAD_STORE_IMAGE } from "./ApisRoutes";
 
 export const ServiceGetCategories = () => {
     return new Promise((resolve, reject) => {
@@ -141,3 +141,22 @@ export const ServiceUpdateProductToStore = (payload) => {
     });
 }
 
+export const ServicePostActionPrompt = (payload) => {
+    return new Promise((resolve, reject) => {
+        postMultipartData(`${API_POST_PROMPT_ACTION}`, payload).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
+
+export const ServicePostActionPromptBack = (payload) => {
+    return new Promise((resolve, reject) => {
+        postMultipartData(`${API_POST_PROMPT_ACTION_BACK}`, payload).then(response => {
+            resolve(response);
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}

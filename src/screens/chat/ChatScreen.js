@@ -33,7 +33,7 @@ const ChatScreen = () => {
             setChats(
                 [...conversationsData?.conversations].filter(f =>
                     f?.sender?.name?.toLowerCase()?.includes(search) ||
-                    f?.last_chat[0]?.message?.toLowerCase()?.includes(search)))
+                    f?.last_message?.toLowerCase()?.includes(search)))
         }
     }, [search, conversationsData]);
 

@@ -9,8 +9,8 @@ const SmallButton = ({ fill = false, text, handleClick = null, isDisable = false
             onPress={() => handleClick && handleClick()}
             style={{
                 ...styles.container,
-                backgroundColor: fill ? AppStyle.colorSet.primaryColorB : 'transparent',
-                borderColor: isPrompt ? AppStyle.colorSet.borderLightGrayColor : AppStyle.colorSet.primaryColorB,
+                backgroundColor: fill ? isDisable ? 'gray' : AppStyle.colorSet.primaryColorB : 'transparent',
+                borderColor: isDisable ? 'transparent' : AppStyle.colorSet.primaryColorB,
                 marginTop: isPrompt ? 5 : 0
             }}
             disabled={isDisable}

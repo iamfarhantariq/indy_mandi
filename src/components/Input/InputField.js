@@ -46,7 +46,7 @@ function InputField({
                         otherProps && otherProps?.errors[name] && otherProps?.touched[name] ?
                             '#E67F7F' : AppStyle.colorSet.primaryColorB :
                         AppStyle.colorSet.borderLightGrayColor,
-                    backgroundColor: !editable ? AppStyle.colorSet.borderLightGrayColor + '90' : 'transparent'
+                    backgroundColor: !editable ? AppStyle.colorSet.borderLightGrayColor + '90' : AppStyle.colorSet.BGColor
                 }}>
                     <TextInput style={styles.input}
                         secureTextEntry={secure}
@@ -98,7 +98,7 @@ function InputField({
                         </TouchableOpacity> : null}
                     {leftButton &&
                         <View style={{ marginRight: 10 }}>
-                            <SmallButton text={leftButtonText} fill={true} handleClick={handleLeftButton} />
+                            <SmallButton text={leftButtonText} fill={true} isDisable={!editable} handleClick={handleLeftButton} />
                         </View>}
                 </View>
                 {filterIcon &&
