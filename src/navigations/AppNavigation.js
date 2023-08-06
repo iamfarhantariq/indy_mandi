@@ -88,6 +88,8 @@ import { getAppConfig, setConversationsData } from '../store/slices/appConfigSli
 import AllPaymentMode from '../screens/paymentMode/AllPaymentMode';
 import CreatePaymentMode from '../screens/createPaymentMode/CreatePaymentMode';
 import QRCodeScreen from '../screens/qrCode/QRCodeScreen';
+import messaging from '@react-native-firebase/messaging';
+import { requestUserPermission, NotificationListener } from '../helpers/PushNotificationHelper';
 
 const Tab = createBottomTabNavigator();
 
@@ -379,21 +381,52 @@ const AppNavigation = () => {
     useEffect(() => {
         SplashScreen.hide();
         // FacebookSdk.sdkInitialize();
+
         async function fetchUserDetails() {
             loginConfig?.isLogin && await UpdatedUserInTheApp(dispatch);
         }
+        
         fetchUserDetails();
+        requestUserPermission();
+        NotificationListener();
     }, []);
 
     useEffect(() => {
         if (loginConfig.isLogin && loginConfig.isAutherized) {
             initializePusher();
+            // initializeFCM();
         }
 
         return async () => {
             // await pusher.unsubscribe({ channelName: 'global-chat-message' });
         }
     }, [loginConfig.isAutherized]);
+
+    const initializeFCM = async () => {
+        await messaging().registerDeviceForRemoteMessages();
+        const fcmToken = await messaging().getToken();
+        console.log(fcmToken);
+        // Register background handler
+        messaging().setBackgroundMessageHandler(async remoteMessage => {
+            console.log('Message handled in the background!', remoteMessage);
+        });
+
+        messaging().onNotificationOpenedApp(remoteMessage => {
+            console.log(
+                'Notification caused app to open from background state:',
+                remoteMessage,
+            );
+        });
+
+        messaging()
+            .getInitialNotification()
+            .then(remoteMessage => {
+                console.log(
+                    'Notification caused app to open from quit state:',
+                    remoteMessage,
+                );
+            });
+    }
 
     const initializePusher = async () => {
         try {

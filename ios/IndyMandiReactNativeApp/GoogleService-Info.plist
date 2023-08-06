@@ -6,9 +6,31 @@
 	<string>1085172821890-13b3vk6v6sc94t18eiua2ji3rp2o4ruv.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
 	<string>com.googleusercontent.apps.1085172821890-13b3vk6v6sc94t18eiua2ji3rp2o4ruv</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>1085172821890-ltlqfo2ksihofp29fio4sv7c73bvnk31.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyACS8I8iHHaOogAjTV9aHWospw3GCTEuVc</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1085172821890</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.indymandi.app</string>
+	<key>PROJECT_ID</key>
+	<string>indymandi</string>
+	<key>STORAGE_BUCKET</key>
+	<string>indymandi.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1085172821890:ios:0833f9e83eea199c8b299b</string>
 </dict>
 </plist>

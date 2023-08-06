@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">Indy Mandi</string>
-    <string name="default_web_client_id">1085172821890-n17m44c3iigbink292hmsthqrp59vt2t.apps.googleusercontent.com</string>
+    <!-- <string name="default_web_client_id" translatable="false">1085172821890-m210dk82cieq062n99d890uu3bsos42p.apps.googleusercontent.com</string> -->
 </resources>
