@@ -24,43 +24,45 @@ const Register = ({ setView }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  useEffect(async () => {
     GoogleSignin.configure({
-        scopes: ['email', 'profile'],
-        webClientId: AppConfig.googleWebClient,
-        offlineAccess: true, // if you want to access user data while offline
+      scopes: ['email', 'profile'],
+      webClientId: AppConfig.googleWebClient,
+      offlineAccess: true, // if you want to access user data while offline
     });
-}, []);
+    const fcmToken = await AsyncStorage.getItem('fcmToken')
+    setFieldValue('fcm_token', fcmToken);
+  }, []);
 
   const googleSignIn = async () => {
     try {
-        dispatch(setActivityIndicator(true));
-        await GoogleSignin.hasPlayServices();
-        const userInfo = await GoogleSignin.signIn();
-        console.log(JSON.stringify(userInfo));
-        console.log({ userInfo });
-        ServiceVerifySocialAuth(userInfo).then(response => {
-            dispatch(setActivityIndicator(false));
-            Toast.show({
-                type: 'success',
-                text1: userInfo?.user?.name,
-                text2: userInfo?.user?.email,
-            });
-            console.log({response});
-        }).catch(e => {
-            dispatch(setActivityIndicator(false));
-            console.log({ e });
-        });
-    } catch (error) {
-        console.log({ error });
+      dispatch(setActivityIndicator(true));
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      console.log(JSON.stringify(userInfo));
+      console.log({ userInfo });
+      ServiceVerifySocialAuth(userInfo).then(response => {
         dispatch(setActivityIndicator(false));
         Toast.show({
-            type: 'error',
-            text1: 'Google sign in error',
-            text2: 'Something happened while, signing you up.',
+          type: 'success',
+          text1: userInfo?.user?.name,
+          text2: userInfo?.user?.email,
         });
+        console.log({ response });
+      }).catch(e => {
+        dispatch(setActivityIndicator(false));
+        console.log({ e });
+      });
+    } catch (error) {
+      console.log({ error });
+      dispatch(setActivityIndicator(false));
+      Toast.show({
+        type: 'error',
+        text1: 'Google sign in error',
+        text2: 'Something happened while, signing you up.',
+      });
     }
-};
+  };
 
   const {
     errors,
@@ -72,7 +74,7 @@ const Register = ({ setView }) => {
     handleSubmit,
     handleReset,
   } = useFormik({
-    initialValues: { name: "", email: "", mobile: "", password: "", password_confirmation: "", device_name: DeviceInfo.getBrand() },
+    initialValues: { name: "", email: "", mobile: "", password: "", password_confirmation: "", device_name: DeviceInfo.getBrand(), fcm_token: "" },
     onSubmit: (values) => {
       console.log({ values });
       dispatch(setActivityIndicator(true));
@@ -183,10 +185,10 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     flexDirection: 'row',
     alignItems: 'center'
-},
-socialText: {
+  },
+  socialText: {
     ...commonStyle('500', 16, 'primaryColorB'),
     textAlign: 'center',
     flex: 1,
-},
+  },
 })

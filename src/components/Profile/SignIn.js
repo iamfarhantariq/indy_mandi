@@ -27,12 +27,14 @@ const SignIn = ({ setView }) => {
     const dispatch = useDispatch();
     const [staySigned, setStaySigned] = useState(true);
 
-    useEffect(() => {
+    useEffect(async () => {
         GoogleSignin.configure({
             scopes: ['email', 'profile'],
             webClientId: AppConfig.googleWebClient,
             offlineAccess: true, // if you want to access user data while offline
         });
+        const fcmToken = await AsyncStorage.getItem('fcmToken')
+        setFieldValue('fcm_token', fcmToken);
     }, []);
 
     const googleSignIn = async () => {
@@ -75,10 +77,11 @@ const SignIn = ({ setView }) => {
         handleSubmit,
         handleReset,
     } = useFormik({
-        initialValues: { email: "", password: "", device_name: DeviceInfo.getBrand() },
+        initialValues: { email: "", password: "", device_name: DeviceInfo.getBrand(), fcm_token: "" },
         onSubmit: (values) => {
             console.log({ values });
             dispatch(setActivityIndicator(true));
+
             ServiceLoginUser(values).then(async (response) => {
                 console.log({ response });
                 dispatch(setActivityIndicator(false));
